@@ -2,6 +2,8 @@
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HANDYCAM DV-2000</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{color-scheme:light;--page:#e9ecf0;--camc:#f5f6f8;--camb:0 solid transparent;--camr:0;--deck:#fff;--deckb:#dfe3e8;--ink:#1f2328;--mut:#6b7280;--btn:#fff;--btnb:#cdd3dc;--btnk:#1f2328;--btnts:none;--btnsh:none;--act:#374151;--actb:#374151;--actk:#fff;--actts:none;--actsh:none;--lcdb:#e3e7ec;--lcdw:3px;--lcdsh:0 1px 3px rgba(0,0,0,.18);--menu:#fff;--menub:#dfe3e8;--menuink:var(--ink);--menumut:var(--mut);--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;--rad:8px;--crad:12px;--bbw:1px;--ls:.02em;--acc:#374151;--shr:#cfd5dd;--shbg:#fff;--shi:#e5484d;--shp:#4b5563;--stitch:none}
@@ -14,6 +16,31 @@ body.skin-linen{--lin:repeating-linear-gradient(45deg,rgba(255,255,255,.12) 0 1p
 body.skin-wood{color-scheme:dark;--wood:repeating-linear-gradient(90deg,rgba(0,0,0,.11) 0 2px,transparent 2px 9px),repeating-linear-gradient(90deg,rgba(255,220,170,.08) 0 1px,transparent 1px 5px),repeating-linear-gradient(180deg,rgba(0,0,0,.05) 0 1px,transparent 1px 3px);--page:#3a2312;--camc:var(--wood),linear-gradient(#97653b,#74492a);--deck:var(--wood),linear-gradient(#603b20,#432710);--deckb:#24130a;--ink:#f4e8d0;--mut:#d0b78f;--btn:linear-gradient(#8f6644,#5e3d24 50%,#472a1a 51%,#63422b);--btnb:#20110a;--btnk:#f8ecd5;--btnts:0 -1px rgba(0,0,0,.55);--btnsh:0 1px 0 rgba(255,255,255,.15),inset 0 1px 0 rgba(255,255,255,.28);--act:linear-gradient(#ffdc92,#eaad40 50%,#d68f1f 51%,#f1ba5c);--actb:#7a4a08;--actk:#3a2000;--actts:0 1px rgba(255,255,255,.5);--menu:linear-gradient(#f8f0da,#eadfc0);--menub:#24130a;--menuink:#3a2a18;--menumut:#8a7656;--shr:#c9a86a;--shbg:#3a2210}
 body.skin-metal{--brush:repeating-linear-gradient(90deg,rgba(255,255,255,.2) 0 1px,rgba(0,0,0,.05) 1px 2px,transparent 2px 4px);--page:#6f747b;--camc:var(--brush),linear-gradient(#d6d9dd,#aaaeb4);--deck:var(--brush),linear-gradient(#e4e6e9,#c5c8cd);--deckb:#7d8188;--ink:#1e2126;--mut:#555a63;--btn:linear-gradient(#64666a,#2e2f32 50%,#19191b 51%,#323336);--btnb:#09090a;--btnk:#f2f2f2;--btnts:0 -1px #000;--btnsh:0 1px 0 rgba(255,255,255,.5),inset 0 1px 0 rgba(255,255,255,.25);--menu:var(--brush),#e8eaed;--menub:#7d8188;--shr:#8f9298;--shbg:#2a2b2d}
 body.skin-paper{--font:'Marker Felt','Noteworthy','Chalkboard SE','Comic Sans MS','Segoe Print','PingFang SC','Microsoft YaHei',cursive;--page:#d8c97a;--camc:linear-gradient(90deg,transparent 30px,rgba(214,70,60,.5) 30px 32px,transparent 32px),repeating-linear-gradient(transparent 0 23px,rgba(100,150,200,.35) 23px 24px),#f8f0a8;--deck:linear-gradient(#fdf8c8,#f1e691);--deckb:#b2a24a;--ink:#3a3320;--mut:#7a6f45;--btn:linear-gradient(#fffce4,#efe5a6);--btnb:#a89a45;--btnk:#4a3a10;--btnsh:0 1px 1px rgba(0,0,0,.2);--act:linear-gradient(#ffe587,#f2c230);--actb:#a07b0a;--actk:#3a2a00;--actts:none;--lcdb:#6b4b2b;--menu:repeating-linear-gradient(transparent 0 23px,rgba(100,150,200,.3) 23px 24px),#fcf6bd;--menub:#b2a24a;--shr:#b2a24a;--shbg:#fdf8c8}
+/* ===== iOS6 拟物皮肤 ===== */
+body.skin-ios6{
+  color-scheme:light;
+  --page:radial-gradient(ellipse at 50% -10%,#8fa9cc,#3a4a63 60%,#1c2431);
+  --camc:linear-gradient(#fbfcfd,#e6e9ee 42%,#d6dae1 43%,#f2f4f7);
+  --camb:1px solid #6d7076;--camr:14px;
+  --deck:linear-gradient(#fdfdfe,#eceef2 46%,#dcdfe5 54%,#f4f5f8);
+  --deckb:#8b9098;
+  --ink:#1c1c1e;--mut:#6b7078;
+  --btn:linear-gradient(#ffffff,#f4f5f7 49%,#e0e3e8 50%,#fafbfc);
+  --btnb:#9298a1;--btnk:#1c1c1e;
+  --btnts:0 1px 0 rgba(255,255,255,.9);
+  --btnsh:inset 0 1px 0 #fff,0 1px 1px rgba(0,0,0,.16);
+  --act:linear-gradient(#a6cff5,#5b9ce4 48%,#2f79cf 52%,#63a8ee);
+  --actb:#1d4f96;--actk:#fff;--actts:0 -1px rgba(0,0,0,.42);
+  --actsh:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(0,0,0,.3);
+  --lcdb:#2f3238;--lcdw:5px;
+  --lcdsh:inset 0 0 16px rgba(0,0,0,.92),0 1px 0 #fff;
+  --menu:linear-gradient(#fbfcfd,#eef0f4);
+  --menub:#8b9098;--acc:#4a90e2;
+  --rad:9px;--crad:13px;--bbw:1px;--ls:0;
+  --shr:#a4a9b1;--shbg:linear-gradient(#fdfdff,#dfe2e7);
+  --shi:radial-gradient(circle at 38% 30%,#ff9d92,#e0402f 55%,#a5140a);
+  --shp:radial-gradient(circle at 38% 30%,#ffffff,#d2d7df 60%,#9aa1ac);
+}
 html{height:100%}
 body{height:100%;margin:0;background:var(--page);color:var(--ink);font-family:var(--font);overflow:hidden}
 .cam{--pv:8px;--ph:8px;position:relative;height:100%;display:flex;flex-direction:column;gap:6px;padding:var(--pv) var(--ph);box-sizing:border-box;max-width:560px;margin:0 auto;background:var(--camc);border:var(--camb);border-radius:var(--camr);overflow:hidden}
@@ -21,9 +48,11 @@ body.skin-w7 .cam{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .tbar{display:none;flex:none;align-items:center;justify-content:space-between;margin:calc(var(--pv)*-1) calc(var(--ph)*-1) 0}
 body.skin-xp .tbar{display:flex;height:30px;padding:0 5px 0 8px;background:linear-gradient(#0997ff,#0053ee 8%,#0050ee 40%,#06f 88%,#06f 93%,#005bff 95%,#003dd7);border-radius:6px 6px 0 0}
 body.skin-w7 .tbar{display:flex;height:28px;padding:0 0 0 8px;align-items:flex-start}
+body.skin-ios6 .tbar{display:flex;height:26px;padding:0 8px;align-items:center;background:linear-gradient(#f4f5f7,#d9dde3 49%,#c8cdd5 50%,#e6e9ee);border-radius:8px 8px 0 0;border-bottom:1px solid #9aa0a8}
 .ti{font-size:13px;font-weight:bold;display:flex;align-items:center;height:100%}
 body.skin-xp .ti{color:#fff;text-shadow:1px 1px #0f1089}
 body.skin-w7 .ti{color:#000;font-weight:normal;text-shadow:0 0 8px #fff,0 0 3px #fff}
+body.skin-ios6 .ti{color:#3a3f47;text-shadow:0 1px 0 #fff;font-weight:600}
 .ti::before{content:'';width:14px;height:14px;border-radius:3px;margin-right:7px;background:radial-gradient(circle at 35% 30%,#fff,#7fb2ff 45%,#1c4fc4)}
 .wc{display:flex;gap:2px}
 .wc i{display:block;font-style:normal;text-align:center;color:#fff;font-weight:bold}
@@ -31,13 +60,14 @@ body.skin-xp .wc i{width:21px;height:21px;border:1px solid #fff;border-radius:3p
 body.skin-xp .wc i:last-child{background:linear-gradient(#ee9a7c,#d8532f 50%,#c53c1a)}
 body.skin-w7 .wc i{width:27px;height:18px;border:1px solid rgba(0,0,0,.45);border-top:none;border-radius:0 0 4px 4px;font:12px/16px 'Segoe UI';color:#222;background:linear-gradient(rgba(255,255,255,.75),rgba(200,215,235,.6) 50%,rgba(165,190,222,.6) 51%,rgba(205,222,242,.75))}
 body.skin-w7 .wc i:last-child{width:47px;color:#fff;background:linear-gradient(#e9a395,#c8503c 50%,#b4301a 51%,#d86a58)}
+body.skin-ios6 .wc i{width:24px;height:20px;border:1px solid #8b9098;border-radius:5px;font:bold 12px/18px Helvetica;color:#3a3f47;background:linear-gradient(#fff,#e2e5ea 50%,#cfd4db 51%,#f2f4f7);box-shadow:inset 0 1px 0 #fff}
 .top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
 .tb{display:flex;gap:5px}
 .lcd{flex:1;min-height:0;position:relative;background:#000;border-radius:var(--crad);border:var(--lcdw) solid var(--lcdb);box-shadow:var(--lcdsh);overflow:hidden}
 #out{width:100%;height:100%;object-fit:contain;display:block;background:#000}
 #flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .35s}
 #flash.on{opacity:.9;transition:none}
-#pw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#000;text-align:center;padding:16px;font-size:12px;line-height:1.6;color:#9a9a92}
+#pw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#000;text-align:center;padding:16px;font-size:12px;line-height:1.6;color:#9a9a92;z-index:5}
 .deck,#menu{outline:var(--stitch);outline-offset:-5px}
 .deck{background:var(--deck);border-radius:var(--crad);padding:7px 10px;display:flex;flex-direction:column;gap:6px;border:1px solid var(--deckb)}
 .ctl{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -61,6 +91,8 @@ body:not(.mob) #ori{display:none}
 body.skin-xp .tabs .btn,body.skin-w7 .tabs .btn{border-radius:3px 3px 0 0}
 body.skin-xp .tabs .btn.act{background:#fcfcfe;border-top:3px solid #ffc83c;box-shadow:none}
 body.skin-w7 .tabs .btn.act{background:linear-gradient(#fff,#eaf3fc);border-top:2px solid #3a8dde}
+body.skin-ios6 .tabs .btn{border-radius:8px 8px 0 0}
+body.skin-ios6 .tabs .btn.act{background:linear-gradient(#fff,#eef0f4);border-top:3px solid #4a90e2;box-shadow:none}
 .pane{display:none}.pane.on{display:block}
 .gh{font-size:11px;color:var(--menumut);margin:12px 0 5px;letter-spacing:.1em}
 .chips{display:flex;gap:5px;flex-wrap:wrap;margin:4px 0}
@@ -71,13 +103,42 @@ body.skin-w7 .tabs .btn.act{background:linear-gradient(#fff,#eaf3fc);border-top:
 .ms i{width:34px;text-align:right;font-style:normal;color:var(--menumut);font-size:11px}
 #lvl{height:8px;background:rgba(128,128,128,.3);border-radius:4px;overflow:hidden;margin:6px 0}
 #lvl b{display:block;height:100%;width:0;background:#3fae6a}
+/* ===== LCD HUD ===== */
+#focal{position:absolute;top:8px;right:10px;z-index:4;font:600 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.06em;color:#efe9d8;background:rgba(0,0,0,.38);padding:4px 7px;border-radius:4px;text-shadow:0 1px 2px #000;pointer-events:none;opacity:0;transition:opacity .3s}
+#focal.on{opacity:1}
+#torchhud{position:absolute;top:8px;left:10px;z-index:4;font:600 11px/1 ui-monospace,monospace;color:#ffd977;background:rgba(0,0,0,.38);padding:4px 7px;border-radius:4px;display:none}
+body.torch #torchhud{display:block}
+#recHud{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:4;display:none;align-items:center;gap:6px;font:700 11px/1 ui-monospace,monospace;letter-spacing:.14em;color:#ff5a4a;text-shadow:0 1px 3px #000}
+body.rec #recHud{display:flex}
+#recHud i{width:9px;height:9px;border-radius:50%;background:#ff3b30;animation:bl 1s steps(2) infinite}
+@keyframes bl{50%{opacity:.15}}
+/* ===== 滤镜面板 ===== */
+#fx{position:absolute;inset:0;z-index:18;background:rgba(10,10,12,.92);display:none;flex-direction:column;padding:12px;box-sizing:border-box;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#fx.on{display:flex}
+#fx .fxh{display:flex;justify-content:space-between;align-items:center;color:#e8e6df;font-size:12px;letter-spacing:.14em;margin-bottom:10px}
+#fxGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:9px;overflow-y:auto;align-content:start;padding-bottom:10px}
+.fchip{border:2px solid #4a4c52;border-radius:8px;background:none;padding:0;cursor:pointer;overflow:hidden;aspect-ratio:1/1;position:relative;display:flex;align-items:flex-end}
+.fchip .sw{position:absolute;inset:0}
+.fchip .lb{position:relative;width:100%;font:600 10px/1 -apple-system,sans-serif;color:#fff;text-shadow:0 1px 2px #000;background:linear-gradient(transparent,rgba(0,0,0,.65));padding:10px 4px 4px;text-align:center;letter-spacing:.04em}
+.fchip.on{border-color:#f2c230;box-shadow:0 0 0 2px rgba(242,194,48,.35)}
+/* ===== 图库（重做） ===== */
 #gal{position:absolute;inset:0;background:var(--menu);color:var(--menuink);z-index:20;display:none;flex-direction:column}
 #gal.on{display:flex}
-#gal header{display:flex;justify-content:space-between;align-items:center;padding:10px;font-size:12px;letter-spacing:.1em}
-#gl{flex:1;overflow:auto;padding:0 10px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;align-content:start}
-#gl .it{background:rgba(128,128,128,.18);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
-#gl img,#gl video{width:100%;display:block;background:#000}
-#gl .btn{border-radius:0;border-width:1px 0 0;text-align:center}
+#gal header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;font-size:12px;letter-spacing:.16em;border-bottom:1px solid var(--menub);flex:none}
+#gal header b{font-weight:700}
+#gal .gcount{font-size:10px;color:var(--menumut);margin-left:8px;letter-spacing:.08em}
+#gl{flex:1;overflow:auto;padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;align-content:start}
+#gl .empty{grid-column:1/-1;text-align:center;padding:40px 20px;font-size:12px;color:var(--menumut);line-height:1.8}
+#gl .it{background:rgba(128,128,128,.14);border:1px solid rgba(128,128,128,.28);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+#gl .th{position:relative;aspect-ratio:4/3;background:#000;overflow:hidden;cursor:pointer}
+#gl .th img,#gl .th video{width:100%;height:100%;object-fit:cover;display:block}
+#gl .badge{position:absolute;left:6px;top:6px;font:700 9px/1 ui-monospace,monospace;letter-spacing:.1em;padding:3px 5px;border-radius:3px;background:rgba(0,0,0,.62);color:#ff7a6a}
+#gl .badge.v{color:#7ad0ff}
+#gl .meta{padding:6px 8px;font-size:10px;color:var(--menumut);display:flex;justify-content:space-between;letter-spacing:.04em}
+#gl .save{display:block;width:100%;border:none;padding:10px 8px;font:700 12px/1 -apple-system,sans-serif;letter-spacing:.1em;cursor:pointer;background:linear-gradient(#4fc47a,#2f9d59);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+#gl .save:active{transform:translateY(1px)}
+#gl .del{display:block;width:100%;border:none;padding:7px 8px;font:600 10px/1 -apple-system,sans-serif;letter-spacing:.1em;cursor:pointer;background:rgba(128,128,128,.18);color:var(--menumut)}
+/* ===== 横屏 ===== */
 body.land .cam{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) 176px;grid-template-rows:auto auto minmax(0,1fr);gap:5px 6px}
 body.land .cam.menu{grid-template-columns:minmax(0,1fr) 300px}
 body.land .tbar{grid-column:1/3;grid-row:1}
@@ -102,11 +163,24 @@ body.rotl .cam{transform:translateY(100vh) rotate(-90deg);transform:translateY(1
 <div class="cam">
   <div class="tbar"><span class="ti">Handycam DV-2000</span><span class="wc" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
   <div class="top">
-    <div class="tb"><button class="btn" id="bar">4:3</button><button class="btn" id="bre">360p</button></div>
-    <div class="tb"><button class="btn" id="gb">GALLERY 0</button><button class="btn" id="mb">MENU</button></div>
+    <div class="tb">
+      <button class="btn" id="bar">4:3</button>
+      <button class="btn" id="bre">360p</button>
+    </div>
+    <div class="tb">
+      <button class="btn" id="fxb">FILTER</button>
+      <button class="btn" id="tch">FLASH</button>
+    </div>
+    <div class="tb">
+      <button class="btn" id="gb">GALLERY 0</button>
+      <button class="btn" id="mb">MENU</button>
+    </div>
   </div>
   <div class="lcd">
     <canvas id="out" width="640" height="480"></canvas>
+    <div id="focal">24mm</div>
+    <div id="torchhud">⚡ FLASH</div>
+    <div id="recHud"><i></i><span>REC</span></div>
     <div id="flash"></div>
     <div id="pw"><div>点 POWER 开机并允许使用摄像头</div><button class="btn act" id="pwb">⏻ POWER</button></div>
   </div>
@@ -126,338 +200,692 @@ body.rotl .cam{transform:translateY(100vh) rotate(-90deg);transform:translateY(1
     <div class="tabs" id="tabs"></div>
     <div id="panes"></div>
   </div>
-  <div id="gal"><header><span>TAPE LIBRARY</span><button class="btn" id="gc">CLOSE</button></header><div id="gl"></div></div>
+  <!-- 滤镜面板 -->
+  <div id="fx">
+    <div class="fxh"><b>FILTER</b><button class="btn" id="fxc">CLOSE</button></div>
+    <div id="fxGrid"></div>
+  </div>
+  <!-- 图库 -->
+  <div id="gal">
+    <header>
+      <span><b>TAPE LIBRARY</b><span class="gcount" id="gcount">0</span></span>
+      <button class="btn" id="gc">CLOSE</button>
+    </header>
+    <div id="gl"></div>
+  </div>
 </div>
 
 <script>
 const $=s=>document.querySelector(s);
 const cam=$('.cam');
 const out=$('#out'),oc=out.getContext('2d');
-const gc=document.createElement('canvas'),gl=gc.getContext('webgl');
-const VS='attribute vec2 a;varying vec2 u;void main(){u=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}';
-const FS=`precision highp float;
-uniform sampler2D t;uniform vec2 r,cr;
-uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh;
-varying vec2 u;
-vec2 PX;
-float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
-vec3 S(vec2 p){p=(p-.5)*cr/z+.5;p.x=mix(p.x,1.-p.x,m);
- if(rot>1.5)p=vec2(p.y,1.-p.x);else if(rot>.5)p=vec2(1.-p.y,p.x);
- return texture2D(t,clamp(p,0.,1.)).rgb;}
-vec3 Sb(vec2 p){vec2 o=PX*.35;return (S(p+o)+S(p+vec2(-o.x,o.y))+S(p+vec2(o.x,-o.y))+S(p-o))*.25;}
-float Yf(vec3 c){return dot(c,vec3(.299,.587,.114));}
-void main(){
- vec2 sc=u;float L=floor(sc.y*240.);float f=floor(T*30.);
- PX=1./r;
- float jit=h(vec2(L,f))-.5;
- vec2 uv=sc;
- uv.x+=jit*.0025*jt+sin(sc.y*8.+T*1.5)*.0006*jt;
- vec2 c=sc-.5;float asp=r.x/r.y;
- vec2 c2=c*(.008+dot(c,c)*.04)*ca+vec2(.0012*ca,0.);
- vec3 col=vec3(Sb(uv+c2).r,Sb(uv).g,Sb(uv-c2*1.3).b);
- float rr=bl*.003+fb;
- if(rr>.0002){vec3 bk=(col+S(uv+vec2(rr,0.))+S(uv-vec2(rr,0.))+S(uv+vec2(0.,rr*asp))+S(uv-vec2(0.,rr*asp)))*.2;col=mix(col,bk,clamp(rr*400.,0.,.9));}
- vec3 sm=(S(uv-vec2(.003,0.))+S(uv-vec2(.007,0.))+S(uv-vec2(.011,0.))+S(uv-vec2(.015,0.)))*.25;
- vec3 cm=mix(col,sm,clamp(.8*bd,0.,1.));
- float Y0=Yf(col);
- col=Y0+(cm-Yf(cm))*1.15;
- float yl=Yf(Sb(uv-vec2(PX.x,0.))),yr=Yf(Sb(uv+vec2(PX.x,0.)));
- float yu=Yf(Sb(uv-vec2(0.,PX.y))),yd=Yf(Sb(uv+vec2(0.,PX.y)));
- col+=((Y0*2.-yl-yr)*.4+(Y0*2.-yu-yd)*.2)*sh;
- float ya=Yf(S(uv+vec2(.005,0.))),yb=Yf(S(uv-vec2(.005,0.)));
- float pu=smoothstep(.04,.3,abs(ya-yb))*(.35+.65*smoothstep(.4,.9,max(ya,yb)));
- col+=vec3(.55,.05,1.)*pu*.7*pf;col.g-=pu*.12*pf;
- vec3 b=vec3(0.);
- for(int i=0;i<12;i++){float a=float(i)*.5236;vec2 d=vec2(cos(a),sin(a)*asp);
-  b+=max(S(uv+d*.012)-.55,0.)+max(S(uv+d*.03)-.55,0.)*.8;}
- col+=b*.14*bm*vec3(.85,.92,1.);
- col=(col-.5)*1.1+.5;col=mix(vec3(Yf(col)),col,1.1*sat);
- col+=vec3(.01,.02,.07)*(1.-clamp(Yf(col),0.,1.));
- col*=vec3(.93,.96,1.12);
- col=max(col,vec3(.04));
- float Y=Yf(col);float nk=1.;
- if(F==1.){col=mix(vec3(Y),col,.75)*vec3(1.05,.96,1.1);nk=1.6;}
- else if(F==2.){col=vec3(.25,1.,.3)*min(Y*2.2,1.3);nk=2.4;}
- else if(F==3.){col=vec3(Y)*1.12+.02;nk=1.3;}
- else if(F==4.){col=vec3(Y)*vec3(1.25,1.,.72)*1.05+(col-Y)*.35;}
- else if(F==5.){col=mix(col,mix(vec3(0.,.3,.4),vec3(1.,.4,.8),smoothstep(.1,.9,Y)),.65);}
- else if(F==6.){col=mix(vec3(Y),col,.72);col=(col-.5)*.85+.55;col*=vec3(1.04,1.,.93);col+=vec3(0.,.02,.04)*(1.-Y);nk=1.4;}
- else if(F==7.){col=vec3(Y)*vec3(.55,.85,1.25)+vec3(0.,.02,.06);nk=1.2;}
- else if(F==8.){float px=mod(gl_FragCoord.x,3.);vec3 mk=vec3(px<1.?1.:.55,(px>=1.&&px<2.)?1.:.55,px>=2.?1.:.55);col*=mk*1.25;col*=1.-.2*(.5+.5*sin(sc.y*r.y*3.1416));nk=.8;}
- else if(F==9.){float q=clamp(Y*1.15,0.,1.);vec3 c1=vec3(.02,0.,.25),c2=vec3(.55,0.,.55),c3=vec3(.95,.25,.1),c4=vec3(1.,.9,.2);
-  col=q<.25?mix(c1,c2,q*4.):q<.5?mix(c2,c3,(q-.25)*4.):q<.75?mix(c3,c4,(q-.5)*4.):mix(c4,vec3(1.),(q-.75)*4.);nk=.7;}
- else if(F==10.){col=floor(col*5.+.5)/5.*vec3(1.05,1.,1.1);nk=.3;}
- else if(F==11.){col=1.-col;}
- else if(F==12.){col*=mix(vec3(.75,1.,1.15),vec3(1.2,.95,.75),smoothstep(.3,.75,Y));}
- else if(F==13.){col+=b*.35*bm;col=mix(vec3(Yf(col)),col,1.2)*vec3(1.06,.98,1.1);col=col*.9+.1;nk=.6;}
- col*=vec3(1.+wb*.14,1.+wb*.03,1.-wb*.18);
- col*=1.-.05*sn*(.5+.5*sin(sc.y*240.*6.2832));
- col*=1.-.02*sn*mod(f,2.);
- float n=h(sc*r+T)-.5;col+=n*.22*nz*nk*(1.-Yf(col)*.5);
- col+=(vec3(h(sc*r*.5+T+1.),h(sc*r*.5+T+2.),h(sc*r*.5+T+3.))-.5)*.08*nz*nk;
- col*=max(1.-dot(c,c)*1.1*vg,0.);
- gl_FragColor=vec4(col,1.);}`;
-function mk(ty,s){const o=gl.createShader(ty);gl.shaderSource(o,s);gl.compileShader(o);return o}
-const pg=gl.createProgram();
-gl.attachShader(pg,mk(gl.VERTEX_SHADER,VS));gl.attachShader(pg,mk(gl.FRAGMENT_SHADER,FS));
-gl.linkProgram(pg);gl.useProgram(pg);
-gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
-gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-const la=gl.getAttribLocation(pg,'a');gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
-const tx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tx);
-[[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
-const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
 
-/* settings */
-const D={wb:-.25,sh:1,pf:1.2,ca:1,bl:0,bd:.8,bm:.8,nz:1,sn:1,vg:1,jt:1,sat:1};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light'};
-let P={...D},S={...DS};
-try{Object.assign(P,JSON.parse(localStorage.getItem('dvP2')||'{}'))}catch(e){}
-try{Object.assign(S,JSON.parse(localStorage.getItem('dvS')||'{}'))}catch(e){}
-if(P.wb===-.15)P.wb=D.wb;
-const save=()=>{try{localStorage.setItem('dvP2',JSON.stringify(P));localStorage.setItem('dvS',JSON.stringify(S))}catch(e){}};
+/* =====================================================================
+   0. 全局状态
+   ===================================================================== */
+const S = {
+  ratio:'4:3',
+  ratioOrder:['4:3','16:9','1:1','3:4','9:16'],
+  zoom:1,                 // 0.5x ~ 4x（<1 为广角）
+  filter:'clean',
+  mode:'video',
+  torch:false,
+  mirror:false,
+  stretch:false,          // 是否拉伸填满（不保持比例）
+  skin:'light',
+  wm:{
+    on:true,
+    items:{date:true,time:true,mode:true,mm:true,rec:true,brand:true},
+    text:'',
+    color:'#f4efe0',
+    font:'pixel',         // pixel | retro | mono | serif
+    size:1
+  }
+};
+const RATIOS = {'4:3':[4,3],'16:9':[16,9],'1:1':[1,1],'3:4':[3,4],'9:16':[9,16]};
 
-/* skins */
-const SK=['light','dv','xp','w7','leather','linen','wood','metal','paper'];
-const SKN=['清淡','DV 摄像机','Windows XP','Windows 7','iOS 皮革','iOS 亚麻','iOS 木纹','iOS 金属','iOS 便签'];
-if(!SK.includes(S.skin))S.skin='light';
-function applySkin(){const b=document.body.classList;SK.forEach(s=>b.remove('skin-'+s));b.add('skin-'+S.skin);save()}
-applySkin();
+/* =====================================================================
+   1. 胶片滤镜
+   ===================================================================== */
+const FILTERS = {
+  clean:{ label:'原色', sw:'linear-gradient(135deg,#e2e8ef,#a9b6c6)', css:'saturate(.97) contrast(1.01) brightness(1.015)' },
+  soft :{ label:'柔光', sw:'linear-gradient(135deg,#f5e9dc,#d8c2ac)', css:'saturate(.92) contrast(.97) brightness(1.06) sepia(.05)', tint:'rgba(255,236,214,.08)', vig:.14 },
+  fuji :{ label:'富士', sw:'linear-gradient(135deg,#cfe6db,#6f9c8b)', css:'saturate(1.05) contrast(1.05) brightness(1.03) sepia(.06)', tint:'rgba(110,200,170,.09)', grain:.05, vig:.18 },
+  kodak:{ label:'柯达', sw:'linear-gradient(135deg,#ffe1ab,#d18e3f)', css:'saturate(1.10) contrast(1.04) brightness(1.04)', tint:'rgba(255,190,110,.11)', grain:.05, vig:.16 },
+  portra:{ label:'波特拉', sw:'linear-gradient(135deg,#f6dfd0,#cf9f8a)', css:'saturate(.95) contrast(1.02) brightness(1.05) sepia(.08)', tint:'rgba(255,205,180,.10)', grain:.04, vig:.12 },
+  mono :{ label:'黑白', sw:'linear-gradient(135deg,#e8e8e8,#3a3a3a)', css:'grayscale(1) contrast(1.08) brightness(1.02)', grain:.07, vig:.22 },
+  cold :{ label:'冷调', sw:'linear-gradient(135deg,#cfe3f7,#4c7fb5)', css:'saturate(.95) contrast(1.04) brightness(1.02) hue-rotate(-8deg)', tint:'rgba(90,150,235,.10)', grain:.04, vig:.16 },
+  warm :{ label:'暖调', sw:'linear-gradient(135deg,#ffe0bd,#c47a3a)', css:'saturate(1.06) contrast(1.03) brightness(1.03)', tint:'rgba(255,160,70,.10)', grain:.04, vig:.15 },
+  super8:{ label:'超8', sw:'linear-gradient(135deg,#e8d2a0,#7a5f31)', css:'saturate(1.14) contrast(1.12) brightness(1.02) sepia(.14)', tint:'rgba(255,205,120,.13)', grain:.10, vig:.30 },
+  night:{ label:'夜行', sw:'linear-gradient(135deg,#8ea6c9,#1e2638)', css:'saturate(1.05) contrast(1.1) brightness(.92) hue-rotate(-6deg)', tint:'rgba(60,90,180,.12)', grain:.08, vig:.30 }
+};
 
-/* state */
-const mob=matchMedia('(pointer:coarse)').matches;
-const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
-let stream,facing='environment',on=false,mode='video',rec,chunks=[],t0=0,items=[],last=0,W=640,H=480,cw=0,ch=0,rot=0,szKey='',cr=[1,1];
-let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=1;
-const FN=['DV','VHS','夜视','黑白','家庭','赛博','胶片','蓝晒','CRT','热成像','海报','负片','青橙','梦幻'];
-const FO=['DV','VHS','NIGHT','B&W','HOME','CYBER','FILM','CYANO','CRT','THERMAL','POSTER','NEG','TEAL','DREAM'];
-const RATIOS=[['4:3',4/3],['16:9',16/9],['1:1',1],['2.35:1',2.35],['原始',0]];
-const RES=[240,360,480,720];
-const recing=()=>rec&&rec.state==='recording';
-
-/* menu builder */
-const panes=[],chipFns=[];
-const syncChips=()=>chipFns.forEach(f=>f());
-function mkPane(name){const d=document.createElement('div');d.className='pane';d.sy=[];d.rk=[];
-  const b=document.createElement('button');b.className='btn';b.textContent=name;b.onclick=()=>showPane(d);
-  $('#tabs').append(b);d.tab=b;$('#panes').append(d);panes.push(d);return d}
-function showPane(d){panes.forEach(p=>{p.classList.toggle('on',p===d);p.tab.classList.toggle('act',p===d)})}
-function head(p,t){const e=document.createElement('div');e.className='gh';e.textContent=t;p.append(e)}
-function note(p,t){const e=document.createElement('div');e.className='note';e.textContent=t;p.append(e)}
-function addSlider(p,label,lo,hi,st,obj,key,cb){
-  const l=document.createElement('label');l.className='ms';
-  l.innerHTML=`<span>${label}</span><input type="range" min="${lo}" max="${hi}" step="${st}"><i></i>`;
-  const i=l.children[1],v=l.children[2];
-  const sync=()=>{i.value=obj[key];v.textContent=(+obj[key]).toFixed(2)};
-  i.oninput=()=>{obj[key]=+i.value;v.textContent=(+i.value).toFixed(2);save();cb&&cb()};
-  sync();p.append(l);p.sy.push(sync);p.rk.push([obj,key,(obj===P?D:DS)[key],cb]);
+/* 噪声贴图 */
+let grainC=null;
+function grainTile(){
+  if(grainC) return grainC;
+  const n=160, c=document.createElement('canvas'); c.width=c.height=n;
+  const g=c.getContext('2d'), d=g.createImageData(n,n);
+  for(let i=0;i<d.data.length;i+=4){
+    const v=Math.random()*255|0;
+    d.data[i]=d.data[i+1]=d.data[i+2]=v; d.data[i+3]=255;
+  }
+  g.putImageData(d,0,0); grainC=c; return c;
 }
-function addToggle(p,label,obj,key,cb){
-  const w=document.createElement('div');w.className='chips';
-  const b=document.createElement('button');b.className='btn';
-  const sync=()=>{b.classList.toggle('act',!!obj[key]);b.textContent=label+' '+(obj[key]?'开':'关')};
-  b.onclick=()=>{obj[key]=!obj[key];sync();save();cb&&cb()};
-  sync();w.append(b);p.append(w);p.sy.push(sync);p.rk.push([obj,key,DS[key],cb]);
+function drawGrain(W,H,a){
+  oc.save();
+  oc.globalAlpha=a; oc.globalCompositeOperation='overlay';
+  const pat=oc.createPattern(grainTile(),'repeat');
+  const ox=(Math.random()*160)|0, oy=(Math.random()*160)|0;
+  oc.translate(-ox,-oy);
+  oc.fillStyle=pat;
+  oc.fillRect(0,0,W+160,H+160);
+  oc.restore();
 }
-function addChips(p,labels,get,set){
-  const w=document.createElement('div');w.className='chips';
-  const bs=labels.map((n,i)=>{const b=document.createElement('button');b.className='btn';b.textContent=n;b.onclick=()=>{set(i);syncChips()};w.append(b);return b});
-  chipFns.push(()=>bs.forEach((b,i)=>b.classList.toggle('act',get()===i)));p.append(w);
+function drawVignette(W,H,a){
+  const g=oc.createRadialGradient(W/2,H/2,Math.min(W,H)*0.30,W/2,H/2,Math.max(W,H)*0.75);
+  g.addColorStop(0,'rgba(0,0,0,0)');
+  g.addColorStop(1,'rgba(0,0,0,'+a+')');
+  oc.save(); oc.fillStyle=g; oc.fillRect(0,0,W,H); oc.restore();
 }
-function addReset(p){const b=document.createElement('button');b.className='btn';b.textContent='重置本页';b.style.marginTop='14px';
-  b.onclick=()=>{p.rk.forEach(([o,k,d,cb])=>{o[k]=d;cb&&cb()});save();p.sy.forEach(f=>f())};p.append(b)}
 
-function setRes(i){if(recing())return;si=i;$('#bre').textContent=RES[si]+'p'}
-function setRatio(i){if(recing())return;ri=i;$('#bar').textContent=RATIOS[ri][0]}
-$('#bre').onclick=()=>{setRes((si+1)%RES.length);syncChips()};
-$('#bar').onclick=()=>{setRatio((ri+1)%RATIOS.length);syncChips()};
+/* =====================================================================
+   2. 焦段换算
+   ===================================================================== */
+const MMS=[12,14,16,18,21,24,28,35,50,85,105];
+const BASE_MM=26;
+function focalMM(){
+  const raw=BASE_MM*S.zoom;
+  return MMS.reduce((a,b)=>Math.abs(b-raw)<Math.abs(a-raw)?b:a);
+}
+let focalTimer=0;
+function flashFocal(){
+  const el=$('#focal');
+  el.textContent=focalMM()+'mm';
+  el.classList.add('on');
+  clearTimeout(focalTimer);
+  focalTimer=setTimeout(()=>el.classList.remove('on'),1400);
+}
+function setZoom(z){
+  S.zoom=Math.max(.5,Math.min(4,+z.toFixed(2)));
+  $('#zr').textContent=S.zoom.toFixed(1)+'×';
+  flashFocal();
+}
 
-/* mic */
-const AC=window.AudioContext||window.webkitAudioContext;
-let ac,astream,aDst,aHP,aLP,aGain,aAn,aSrc,pS;
-const lvBuf=new Uint8Array(512);
-function nodes(){if(!aGain)return;aGain.gain.value=S.gain;aHP.frequency.value=S.lofi?250:20;aLP.frequency.value=S.lofi?4800:20000}
-function stopMic(){if(astream)astream.getTracks().forEach(t=>t.stop());astream=aDst=aSrc=aAn=aGain=null}
-function updMic(){$('#mic').textContent=S.mic?'MIC ON':'MIC OFF';$('#mic').classList.toggle('act',S.mic)}
-async function startMic(){
+/* =====================================================================
+   3. 比例 / 画布尺寸
+   ===================================================================== */
+function setRatio(r){
+  S.ratio=r;
+  const [a,b]=RATIOS[r];
+  const W=640;
+  out.width=W; out.height=Math.round(W*b/a);
+  $('#bar').textContent = S.stretch ? r+' ⇔' : r;
+}
+$('#bar').onclick=()=>{
+  // 长按不变，普通点击切换比例；右键/双击切换拉伸
+  const i=S.ratioOrder.indexOf(S.ratio);
+  setRatio(S.ratioOrder[(i+1)%S.ratioOrder.length]);
+};
+$('#bar').addEventListener('dblclick',()=>{
+  S.stretch=!S.stretch;
+  $('#bar').classList.toggle('act',S.stretch);
+  $('#bar').textContent = S.stretch ? S.ratio+' ⇔' : S.ratio;
+});
+
+/* =====================================================================
+   4. 主渲染循环
+   ===================================================================== */
+let videoEl=null;      // 你的 <video> 元素
+let stream=null;
+let rafId=0;
+
+function drawFrame(src){
+  const W=out.width, H=out.height;
+  const p=FILTERS[S.filter]||FILTERS.clean;
+  const vw=src.videoWidth||src.width||W, vh=src.videoHeight||src.height||H;
+
+  let sx,sy,sw,sh;
+  if(S.stretch){
+    sx=0; sy=0; sw=vw; sh=vh;
+  }else{
+    const ta=W/H;
+    if(vw/vh>ta){ sh=vh; sw=vh*ta; } else { sw=vw; sh=vw/ta; }
+    sw/=S.zoom; sh/=S.zoom;
+    sx=(vw-sw)/2; sy=(vh-sh)/2;
+  }
+
+  oc.save();
+  if(S.mirror){ oc.translate(W,0); oc.scale(-1,1); }
+  try{ oc.filter = p.css || 'none'; }catch(e){}
+  oc.drawImage(src, sx,sy,sw,sh, 0,0,W,H);
+  oc.filter='none';
+  oc.restore();
+
+  // 调色叠加
+  if(p.tint){
+    oc.save(); oc.globalCompositeOperation='overlay';
+    oc.fillStyle=p.tint; oc.fillRect(0,0,W,H); oc.restore();
+  }
+  if(p.grain) drawGrain(W,H,p.grain);
+  if(p.vig)   drawVignette(W,H,p.vig);
+
+  // 水印（会被烧进导出画面）
+  drawWatermark(W,H);
+}
+
+function tick(){
+  if(videoEl && videoEl.readyState>=2) drawFrame(videoEl);
+  rafId=requestAnimationFrame(tick);
+}
+
+/* =====================================================================
+   5. 水印
+   ===================================================================== */
+const WM_FONTS={
+  pixel:"'Silkscreen','Courier New',monospace",
+  retro:"'VT323','Courier New',monospace",
+  mono :"ui-monospace,Menlo,monospace",
+  serif:"'Courier New',Courier,serif"
+};
+const p2=n=>String(n).padStart(2,'0');
+
+function drawWatermark(W,H){
+  const wm=S.wm;
+  if(!wm.on) return;
+  const s=W/640;
+  const size=Math.max(9,Math.round(13*wm.size*s));
+  const pad=Math.round(14*s);
+  const now=new Date();
+
+  const lines=[];               // {text, x, y, align, color, size}
+  const leftBottom=[], rightBottom=[];
+
+  if(wm.items.date) leftBottom.push(`${now.getFullYear()}.${p2(now.getMonth()+1)}.${p2(now.getDate())}`);
+  if(wm.items.time) leftBottom.push(`${p2(now.getHours())}:${p2(now.getMinutes())}:${p2(now.getSeconds())}`);
+  if(wm.items.mm)   rightBottom.push(focalMM()+'mm');
+  if(wm.items.mode) rightBottom.push(S.mode==='video'?'VIDEO':'PHOTO');
+
+  oc.save();
+  oc.textBaseline='alphabetic';
+
+  const paint=(txt,x,y,align,fs,col)=>{
+    oc.font=`${fs}px ${WM_FONTS[wm.font]||WM_FONTS.pixel}`;
+    oc.textAlign=align;
+    oc.fillStyle='rgba(0,0,0,.55)';
+    oc.fillText(txt,x+1,y+1);
+    oc.fillStyle=col;
+    oc.fillText(txt,x,y);
+  };
+
+  // 左下：日期 / 时间
+  if(leftBottom.length){
+    paint(leftBottom.join('  '),pad,H-pad,'left',size,wm.color);
+  }
+  // 右下：焦段 / 模式
+  if(rightBottom.length){
+    paint(rightBottom.join('  '),W-pad,H-pad,'right',size,wm.color);
+  }
+  // 左上：品牌
+  if(wm.items.brand){
+    paint('DV-2000',pad,pad+size*0.9,'left',Math.round(size*0.92),wm.color);
+  }
+  // 右上：REC 点
+  if(wm.items.rec && S.mode==='video'){
+    const r=Math.round(4*s);
+    const cx=W-pad-r, cy=pad+size*0.55;
+    oc.beginPath(); oc.arc(cx,cy,r,0,7); oc.fillStyle='#e5372c'; oc.fill();
+    paint('REC',cx-r-Math.round(7*s),cy+r,'right',Math.round(size*0.9),wm.color);
+  }
+  // 自定义文字（居中偏下）
+  if(wm.text && wm.text.trim()){
+    paint(wm.text.trim(),W/2,H-pad-size*1.9,'center',Math.round(size*1.05),wm.color);
+  }
+  oc.restore();
+}
+
+/* =====================================================================
+   6. IndexedDB 持久化
+   ===================================================================== */
+const DB_NAME='dv2000', STORE='media';
+let dbPromise=null;
+function db(){
+  if(dbPromise) return dbPromise;
+  dbPromise=new Promise((res,rej)=>{
+    const r=indexedDB.open(DB_NAME,1);
+    r.onupgradeneeded=()=>{
+      const d=r.result;
+      if(!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE,{keyPath:'id'});
+    };
+    r.onsuccess=()=>res(r.result);
+    r.onerror=()=>rej(r.error);
+  });
+  return dbPromise;
+}
+async function putMedia(rec){
+  const d=await db();
+  return new Promise((res,rej)=>{
+    const tx=d.transaction(STORE,'readwrite');
+    tx.objectStore(STORE).put(rec);
+    tx.oncomplete=()=>res(rec);
+    tx.onerror=()=>rej(tx.error);
+  });
+}
+async function allMedia(){
+  const d=await db();
+  return new Promise((res,rej)=>{
+    const tx=d.transaction(STORE,'readonly');
+    const rq=tx.objectStore(STORE).getAll();
+    rq.onsuccess=()=>res(rq.result.sort((a,b)=>b.ts-a.ts));
+    rq.onerror=()=>rej(rq.error);
+  });
+}
+async function delMedia(id){
+  const d=await db();
+  return new Promise((res,rej)=>{
+    const tx=d.transaction(STORE,'readwrite');
+    tx.objectStore(STORE).delete(id);
+    tx.oncomplete=()=>res();
+    tx.onerror=()=>rej(tx.error);
+  });
+}
+
+/* 保存到设备 */
+async function saveBlob(blob,name){
+  const file=new File([blob],name,{type:blob.type||'application/octet-stream'});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({files:[file]}); return; }
+    catch(e){ if(e && e.name==='AbortError') return; }
+  }
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);   // 延迟释放，避免下载中断
+}
+
+/* =====================================================================
+   7. 图库 UI（重做）
+   ===================================================================== */
+const urlCache=new Map();
+function urlFor(rec){
+  if(!urlCache.has(rec.id)) urlCache.set(rec.id,URL.createObjectURL(rec.blob));
+  return urlCache.get(rec.id);
+}
+function releaseUrls(){
+  for(const u of urlCache.values()) URL.revokeObjectURL(u);
+  urlCache.clear();
+}
+
+function fileName(rec){
+  const d=new Date(rec.ts);
+  const stamp=`${d.getFullYear()}${p2(d.getMonth()+1)}${p2(d.getDate())}_${p2(d.getHours())}${p2(d.getMinutes())}${p2(d.getSeconds())}`;
+  return `DV2000_${stamp}.${rec.type==='photo'?'jpg':'webm'}`;
+}
+
+async function renderGallery(){
+  const items=await allMedia();
+  const gl=$('#gl');
+  gl.innerHTML='';
+  $('#gcount').textContent=items.length+' ITEM'+(items.length===1?'':'S');
+  $('#gb').textContent='GALLERY '+items.length;
+
+  if(!items.length){
+    gl.innerHTML='<div class="empty">胶带是空的<br>按快门录一段吧</div>';
+    return;
+  }
+
+  for(const rec of items){
+    const url=urlFor(rec);
+    const el=document.createElement('div');
+    el.className='it';
+
+    const th=document.createElement('div');
+    th.className='th';
+    if(rec.type==='photo'){
+      const img=new Image(); img.src=url; img.alt=''; th.appendChild(img);
+    }else{
+      const v=document.createElement('video');
+      v.src=url; v.muted=true; v.playsInline=true; v.preload='metadata';
+      v.addEventListener('loadeddata',()=>{ try{v.currentTime=0.05;}catch(e){} },{once:true});
+      th.appendChild(v);
+    }
+    const badge=document.createElement('span');
+    badge.className='badge'+(rec.type==='photo'?'':' v');
+    badge.textContent=rec.type==='photo'?'PHOTO':'VIDEO';
+    th.appendChild(badge);
+    th.addEventListener('click',()=>window.open(url,'_blank'));
+
+    const meta=document.createElement('div');
+    meta.className='meta';
+    const d=new Date(rec.ts);
+    meta.innerHTML=`<span>${d.getMonth()+1}/${d.getDate()} ${p2(d.getHours())}:${p2(d.getMinutes())}</span><span>${rec.mm||''}mm</span>`;
+
+    const save=document.createElement('button');
+    save.className='save';
+    save.textContent='⤓ 保存到设备';
+    save.addEventListener('click',async ()=>{
+      const old=save.textContent;
+      save.textContent='保存中…'; save.disabled=true;
+      try{ await saveBlob(rec.blob,fileName(rec)); save.textContent='✓ 已保存'; }
+      catch(e){ save.textContent='✕ 失败，重试'; }
+      setTimeout(()=>{ save.textContent=old; save.disabled=false; },1600);
+    });
+
+    const del=document.createElement('button');
+    del.className='del';
+    del.textContent='删除';
+    del.addEventListener('click',async ()=>{
+      if(!confirm('删除这条素材？')) return;
+      await delMedia(rec.id);
+      if(urlCache.has(rec.id)){ URL.revokeObjectURL(urlCache.get(rec.id)); urlCache.delete(rec.id); }
+      renderGallery();
+    });
+
+    el.append(th,meta,save,del);
+    gl.appendChild(el);
+  }
+}
+
+$('#gb').onclick=async ()=>{
+  $('#gal').classList.add('on');
+  await renderGallery();
+};
+$('#gc').onclick=()=>{
+  $('#gal').classList.remove('on');
+  releaseUrls();
+  $('#gb').textContent='GALLERY '+(window.__count||0);
+};
+
+/* =====================================================================
+   8. 拍照 / 录像 保存
+   ===================================================================== */
+function canvasToBlob(c,type,q){
+  return new Promise(res=>c.toBlob(res,type,q));
+}
+
+async function shootPhoto(){
+  // 闪光效果
+  const f=$('#flash');
+  f.classList.add('on'); setTimeout(()=>f.classList.remove('on'),60);
+
+  const blob=await canvasToBlob(out,'image/jpeg',0.92);
+  const rec={
+    id:'p_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+    type:'photo', blob, ts:Date.now(),
+    mm:focalMM(), filter:S.filter, ratio:S.ratio
+  };
+  await putMedia(rec);
+  await refreshCount();
+}
+
+let recorder=null, chunks=[], recStart=0;
+async function startRecording(){
+  if(!out.captureStream){ return; }
+  chunks=[];
+  const cstream=out.captureStream(30);
+  if(stream && stream.getAudioTracks().length){
+    stream.getAudioTracks().forEach(t=>cstream.addTrack(t));
+  }
+  const mime=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm']
+    .find(m=>MediaRecorder.isTypeSupported(m)) || '';
+  recorder=new MediaRecorder(cstream,{mimeType:mime,videoBitsPerSecond:4_000_000});
+  recorder.ondataavailable=e=>{ if(e.data && e.data.size) chunks.push(e.data); };
+  recorder.onstop=async ()=>{
+    const blob=new Blob(chunks,{type:chunks[0]?.type||'video/webm'});
+    chunks=[];
+    if(blob.size>0){
+      await putMedia({
+        id:'v_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+        type:'video', blob, ts:Date.now(),
+        mm:focalMM(), filter:S.filter, ratio:S.ratio,
+        dur:Math.round((Date.now()-recStart)/1000)
+      });
+      await refreshCount();
+    }
+    document.body.classList.remove('rec');
+  };
+  recStart=Date.now();
+  recorder.start(250);
+  document.body.classList.add('rec');
+}
+function stopRecording(){
+  if(recorder && recorder.state!=='inactive') recorder.stop();
+}
+
+async function refreshCount(){
+  const items=await allMedia();
+  window.__count=items.length;
+  $('#gb').textContent='GALLERY '+items.length;
+}
+
+/* =====================================================================
+   9. 闪光灯
+   ===================================================================== */
+async function toggleTorch(){
+  const t=stream && stream.getVideoTracks()[0];
+  const want=!S.torch;
+  if(t){
+    const caps=t.getCapabilities?t.getCapabilities():{};
+    if(caps && caps.torch){
+      try{
+        await t.applyConstraints({advanced:[{torch:want}]});
+        S.torch=want;
+        document.body.classList.toggle('torch',S.torch);
+        $('#tch').classList.toggle('act',S.torch);
+        $('#tch').textContent=S.torch?'FLASH ON':'FLASH';
+        return;
+      }catch(e){}
+    }
+  }
+  // 回退：仅屏幕补光
+  const f=$('#flash');
+  f.classList.add('on'); setTimeout(()=>f.classList.remove('on'),90);
+  alert('此设备不支持硬件闪光灯，已使用屏幕补光。');
+}
+
+/* =====================================================================
+   10. 滤镜面板
+   ===================================================================== */
+function buildFilterPanel(){
+  const g=$('#fxGrid');
+  g.innerHTML='';
+  for(const [key,p] of Object.entries(FILTERS)){
+    const b=document.createElement('button');
+    b.className='fchip'+(S.filter===key?' on':'');
+    b.dataset.k=key;
+    b.innerHTML=`<span class="sw" style="background:${p.sw}"></span><span class="lb">${p.label}</span>`;
+    b.onclick=()=>{
+      S.filter=key;
+      g.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x.dataset.k===key));
+    };
+    g.appendChild(b);
+  }
+}
+$('#fxb').onclick=()=>{ buildFilterPanel(); $('#fx').classList.add('on'); };
+$('#fxc').onclick=()=>$('#fx').classList.remove('on');
+
+/* =====================================================================
+   11. 菜单（二级菜单改造）
+   —— 这里给出皮肤/水印面板的构建方式，接入你原有的 tabs/panes 逻辑即可
+   ===================================================================== */
+const SKINS=[
+  ['light','简约白'],['skin-dv','DV 黑'],['skin-ios6','iOS 6'],
+  ['skin-xp','XP'],['skin-w7','Win7'],['skin-leather','皮革'],
+  ['skin-linen','亚麻'],['skin-wood','木纹'],['skin-metal','金属'],
+  ['skin-paper','纸张']
+];
+
+function applySkin(cls){
+  document.body.className=document.body.className
+    .split(/\s+/).filter(c=>c && !c.startsWith('skin-')).join(' ');
+  if(cls && cls!=='light') document.body.classList.add(cls);
+  S.skin=cls;
+}
+
+/* —— 一级菜单只留：模式 / 比例 / 分辨率 / 麦克风 / 图库
+      二级菜单（点「更多 / ADVANCED」进入）放：皮肤、水印、滤镜细化、画质
+      下面给的是「皮肤」和「水印」两个面板的构造函数                    */
+
+function panelSkin(){
+  const wrap=document.createElement('div');
+  wrap.innerHTML='<div class="gh">外观 SKIN</div>';
+  const chips=document.createElement('div');
+  chips.className='chips';
+  SKINS.forEach(([cls,label])=>{
+    const b=document.createElement('button');
+    b.className='btn'+(S.skin===cls?' act':'');
+    b.textContent=label;
+    b.onclick=()=>{
+      applySkin(cls);
+      chips.querySelectorAll('.btn').forEach(x=>x.classList.remove('act'));
+      b.classList.add('act');
+    };
+    chips.appendChild(b);
+  });
+  wrap.appendChild(chips);
+  return wrap;
+}
+
+function panelWatermark(){
+  const wrap=document.createElement('div');
+  wrap.innerHTML='<div class="gh">水印 WATERMARK</div>';
+
+  // 开关
+  const onRow=document.createElement('div');
+  onRow.className='ms';
+  onRow.innerHTML='<span>显示水印</span>';
+  const onBtn=document.createElement('button');
+  onBtn.className='btn'+(S.wm.on?' act':'');
+  onBtn.textContent=S.wm.on?'ON':'OFF';
+  onBtn.onclick=()=>{ S.wm.on=!S.wm.on; onBtn.classList.toggle('act',S.wm.on); onBtn.textContent=S.wm.on?'ON':'OFF'; };
+  onRow.appendChild(onBtn);
+  wrap.appendChild(onRow);
+
+  // 项目选择
+  const ITEMS=[['date','日期'],['time','时间'],['mode','模式'],['mm','焦段'],['rec','REC 点'],['brand','品牌']];
+  const itemWrap=document.createElement('div');
+  itemWrap.className='chips';
+  ITEMS.forEach(([k,label])=>{
+    const b=document.createElement('button');
+    b.className='btn'+(S.wm.items[k]?' act':'');
+    b.textContent=label;
+    b.onclick=()=>{ S.wm.items[k]=!S.wm.items[k]; b.classList.toggle('act',S.wm.items[k]); };
+    itemWrap.appendChild(b);
+  });
+  wrap.appendChild(itemWrap);
+
+  // 字体
+  const FONTS=[['pixel','像素 Silkscreen'],['retro','复古 VT323'],['mono','等宽 Mono'],['serif','打字机 Serif']];
+  const fw=document.createElement('div');
+  fw.className='chips';
+  FONTS.forEach(([k,label])=>{
+    const b=document.createElement('button');
+    b.className='btn'+(S.wm.font===k?' act':'');
+    b.style.fontFamily=WM_FONTS[k];
+    b.textContent=label;
+    b.onclick=()=>{ S.wm.font=k; fw.querySelectorAll('.btn').forEach(x=>x.classList.remove('act')); b.classList.add('act'); };
+    fw.appendChild(b);
+  });
+  wrap.appendChild(fw);
+
+  // 颜色
+  const COLORS=['#f4efe0','#ffffff','#ffd166','#7ad0ff','#ff8a7a','#111111'];
+  const cw=document.createElement('div');
+  cw.className='chips';
+  COLORS.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='btn';
+    b.style.cssText=`background:${c};width:30px;height:26px;border-radius:6px;border:2px solid ${S.wm.color===c?'#f2c230':'rgba(0,0,0,.35)'}`;
+    b.onclick=()=>{
+      S.wm.color=c;
+      cw.querySelectorAll('.btn').forEach(x=>x.style.borderColor='rgba(0,0,0,.35)');
+      b.style.borderColor='#f2c230';
+    };
+    cw.appendChild(b);
+  });
+  wrap.appendChild(cw);
+
+  // 字号
+  const sizeRow=document.createElement('div');
+  sizeRow.className='ms';
+  sizeRow.innerHTML='<span>字号</span>';
+  const rng=document.createElement('input');
+  rng.type='range'; rng.min='0.7'; rng.max='2'; rng.step='0.1'; rng.value=S.wm.size;
+  const val=document.createElement('i'); val.textContent=S.wm.size.toFixed(1)+'×';
+  rng.oninput=()=>{ S.wm.size=+rng.value; val.textContent=S.wm.size.toFixed(1)+'×'; };
+  sizeRow.append(rng,val);
+  wrap.appendChild(sizeRow);
+
+  // 自定义文字
+  const textRow=document.createElement('div');
+  textRow.className='ms';
+  textRow.innerHTML='<span>自定义文字</span>';
+  const inp=document.createElement('input');
+  inp.type='text'; inp.placeholder='例如：2024 夏 / DV-2000';
+  inp.value=S.wm.text;
+  inp.style.cssText='flex:1;min-width:0;padding:6px 8px;border-radius:6px;border:1px solid var(--menub);background:rgba(255,255,255,.06);color:inherit;font:inherit';
+  inp.oninput=()=>S.wm.text=inp.value;
+  textRow.appendChild(inp);
+  wrap.appendChild(textRow);
+
+  wrap.insertAdjacentHTML('beforeend','<div class="note">水印会直接烧录进照片/视频画面，导出后依然存在。</div>');
+  return wrap;
+}
+
+/* =====================================================================
+   12. 开机
+   ===================================================================== */
+async function powerOn(){
   try{
-    const s=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:S.ec,noiseSuppression:S.ns,autoGainControl:S.agc}});
-    if(!S.mic){s.getTracks().forEach(t=>t.stop());return}
-    astream=s;await ac.resume();
-    aSrc=ac.createMediaStreamSource(s);
-    aHP=ac.createBiquadFilter();aHP.type='highpass';aLP=ac.createBiquadFilter();aLP.type='lowpass';
-    aGain=ac.createGain();aAn=ac.createAnalyser();aAn.fftSize=512;aDst=ac.createMediaStreamDestination();
-    aSrc.connect(aHP);aHP.connect(aLP);aLP.connect(aGain);aGain.connect(aDst);aGain.connect(aAn);nodes();
-  }catch(e){S.mic=false;save();updMic();pS&&pS.sy.forEach(f=>f());alert('无法使用麦克风：'+(e.name||e))}
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:{ideal:'environment'}, width:{ideal:1920}, height:{ideal:1080} },
+      audio:false
+    });
+  }catch(e){
+    alert('无法访问摄像头：'+e.message);
+    return;
+  }
+  if(!videoEl){
+    videoEl=document.createElement('video');
+    videoEl.autoplay=true; videoEl.muted=true; videoEl.playsInline=true;
+  }
+  videoEl.srcObject=stream;
+  await videoEl.play().catch(()=>{});
+  $('#pw').style.display='none';
+  setRatio(S.ratio);
+  setZoom(1);
+  cancelAnimationFrame(rafId); tick();
+  await refreshCount();
 }
-function applyMic(){stopMic();if(S.mic){if(!ac&&AC)ac=new AC();if(ac&&ac.resume)ac.resume();startMic()}updMic()}
-const guard=k=>()=>{if(recing()){S[k]=!S[k];pS.sy.forEach(f=>f());return}applyMic()};
-$('#mic').onclick=()=>{if(recing())return;S.mic=!S.mic;save();pS.sy.forEach(f=>f());applyMic()};
 
-/* menu panes */
-const pF=mkPane('滤镜');head(pF,'选择滤镜');addChips(pF,FN,()=>fi,i=>{fi=i});
-const pQ=mkPane('画质');
-head(pQ,'分辨率');addChips(pQ,RES.map(n=>n+'p'),()=>si,setRes);
-head(pQ,'画面比例');addChips(pQ,RATIOS.map(r=>r[0]),()=>ri,setRatio);
-head(pQ,'清晰度');
-addSlider(pQ,'锐化',0,2,.01,P,'sh');addSlider(pQ,'色彩拖影',0,2,.01,P,'bd');addSlider(pQ,'后期模糊',0,2,.01,P,'bl');addReset(pQ);
-const pC=mkPane('色彩');
-addSlider(pC,'白平衡 蓝↔黄',-1,1,.01,P,'wb');addSlider(pC,'饱和度',0,2,.01,P,'sat');addSlider(pC,'紫边',0,3,.01,P,'pf');
-addSlider(pC,'色散(红蓝边)',0,3,.01,P,'ca');addSlider(pC,'高光扩散',0,3,.01,P,'bm');addSlider(pC,'暗角',0,2,.01,P,'vg');addReset(pC);
-const pR=mkPane('复古');
-addSlider(pR,'噪点',0,3,.01,P,'nz');addSlider(pR,'扫描线',0,3,.01,P,'sn');addSlider(pR,'画面抖动',0,3,.01,P,'jt');addReset(pR);
-pS=mkPane('声音');
-note(pS,'iPhone 上开启麦克风通常会让其他 App 的音乐暂停。想边听歌边录像，请保持麦克风关闭（录出来没有声音）。电脑和安卓一般不受影响。');
-head(pS,'麦克风');addToggle(pS,'麦克风',S,'mic',guard('mic'));
-head(pS,'输入电平');{const l=document.createElement('div');l.id='lvl';l.innerHTML='<b></b>';pS.append(l)}
-addSlider(pS,'输入增益',0,4,.05,S,'gain',nodes);
-head(pS,'处理');
-addToggle(pS,'降噪',S,'ns',guard('ns'));addToggle(pS,'自动增益',S,'agc',guard('agc'));addToggle(pS,'回声消除',S,'ec',guard('ec'));
-addToggle(pS,'复古音质（窄频）',S,'lofi',nodes);
-head(pS,'录音码率');addChips(pS,['64k 低','128k 标准','256k 高'],()=>S.abr,i=>{S.abr=i;save()});
-addReset(pS);
-const pK=mkPane('外观');head(pK,'界面皮肤');addChips(pK,SKN,()=>SK.indexOf(S.skin),i=>{S.skin=SK[i];applySkin()});
-showPane(pF);syncChips();updMic();
+$('#pwb').onclick=powerOn;
+$('#tch').onclick=toggleTorch;
+$('#zi').onclick=()=>setZoom(S.zoom+0.1);
+$('#zo').onclick=()=>setZoom(S.zoom-0.1);
+$('#fl').onclick=()=>{ S.mirror=!S.mirror; $('#fl').classList.toggle('act',S.mirror); };
+
+$('#sh').onclick=async ()=>{
+  if(!videoEl){ powerOn(); return; }
+  if(S.mode==='photo'){ await shootPhoto(); }
+  else{
+    if(document.body.classList.contains('rec')) stopRecording();
+    else await startRecording();
+  }
+};
+
+$('#mV').onclick=()=>{ S.mode='video'; $('#mV').classList.add('act'); $('#mP').classList.remove('act'); $('#sh').classList.remove('photo'); };
+$('#mP').onclick=()=>{ S.mode='photo'; $('#mP').classList.add('act'); $('#mV').classList.remove('act'); $('#sh').classList.add('photo'); };
+
+/* 菜单开关 */
 $('#mb').onclick=()=>cam.classList.toggle('menu');
 $('#mc').onclick=()=>cam.classList.remove('menu');
 
-/* orientation */
-let lastDp=innerHeight>=innerWidth,land=!lastDp;
-function layout(){
-  const dp=innerHeight>=innerWidth,b=document.body.classList;
-  b.toggle('mob',mob);b.toggle('land',land);
-  b.toggle('rotr',mob&&land&&dp);b.toggle('rotl',mob&&!land&&!dp);
-  $('#ori').textContent=land?'竖屏':'横屏';
-}
-addEventListener('resize',()=>{const dp=innerHeight>=innerWidth;if(dp!==lastDp){lastDp=dp;land=!dp}layout()});
-$('#ori').onclick=()=>{if(recing())return;land=!land;layout()};
-layout();
-
-/* camera (video only; mic is separate) */
-async function start(){
-  if(stream)stream.getTracks().forEach(t=>t.stop());
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){pwMsg('此环境不支持摄像头，请用 Chrome / Edge / Safari 打开 https 链接。');return}
-  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1280},height:{ideal:720}},audio:false})}
-  catch(e){pwMsg('无法使用摄像头：'+e.name+'。请检查浏览器权限。');return}
-  vid.srcObject=stream;await vid.play();on=true;$('#pw').style.display='none';
-}
-function pwMsg(s){$('#pw').firstElementChild.textContent=s}
-$('#pwb').onclick=()=>{if(S.mic)applyMic();start()};
-$('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';if(on)start()};
-
-/* zoom buttons: hold to zoom */
-function zb(id,d){const e=$(id);
-  e.addEventListener('pointerdown',ev=>{ev.preventDefault();zdir=d;zT=performance.now();try{e.setPointerCapture(ev.pointerId)}catch(_){}});
-  ['pointerup','pointercancel','lostpointercapture'].forEach(n=>e.addEventListener(n,()=>{zdir=0}));
-  e.addEventListener('contextmenu',ev=>ev.preventDefault());
-}
-zb('#zi',1);zb('#zo',-1);
-
-function size(){
-  const vw=vid.videoWidth,vh=vid.videoHeight;if(!vw)return false;
-  const outL=mob?land:true;
-  rot=(outL&&vw<vh)?1:(!outL&&vw>vh)?2:0;
-  const sa=rot?vh/vw:vw/vh;
-  let ta=RATIOS[ri][1];if(!ta)ta=sa;else if(!outL)ta=1/ta;
-  const N=RES[si];let w,h;
-  if(ta>=1){h=N;w=Math.round(N*ta)}else{w=N;h=Math.round(N/ta)}
-  w&=~1;h&=~1;
-  const s=Math.max(1,Math.round(720/N));
-  const key=w+'x'+h+'x'+s;
-  if(key!==szKey){szKey=key;cw=w;ch=h;gc.width=w;gc.height=h;out.width=W=w*s;out.height=H=h*s;gl.viewport(0,0,w,h)}
-  cr=ta>sa?[1,sa/ta]:[ta/sa,1];
-  return true;
-}
-function fmt(s){s=Math.floor(s);return Math.floor(s/3600)+':'+String(Math.floor(s/60)%60).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
-function ov(T){
-  const f=Math.max(12,Math.min(W,H)*.05),m=f*.9,isRec=recing();
-  oc.font=`bold ${f}px ui-monospace,Menlo,monospace`;oc.textBaseline='top';
-  const tx=(s,x,y,al)=>{oc.textAlign=al||'left';
-    oc.fillStyle='rgba(255,40,60,.75)';oc.fillText(s,x-1.6,y);
-    oc.fillStyle='rgba(40,200,255,.75)';oc.fillText(s,x+1.6,y);
-    oc.shadowColor='#fff';oc.shadowBlur=f*.35;oc.fillStyle='#f4f4ee';oc.fillText(s,x,y);oc.shadowBlur=0};
-  const blink=Math.floor(T*1.5)%2===0;
-  if(mode==='photo')tx('PHOTO',m,m);
-  else tx(isRec?(blink?'● REC':'  REC'):'STBY',m,m);
-  if(fi)tx(FO[fi],m,m+f*1.25);
-  tx('SP ▮▮▮▯',W-m,m,'right');
-  if(zdir||Math.abs(zt-zc)>.005||performance.now()-zT<1500){
-    const n=Math.max(0,Math.min(8,Math.round(Math.log(zc)/Math.log(6)*8)));
-    tx('W '+'▮'.repeat(n)+'▯'.repeat(8-n)+' T',W/2,H-m-f*3.4,'center');
-  }
-  const d=new Date();
-  tx(d.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).toUpperCase(),m,H-m-f*2.2);
-  tx(d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),m,H-m-f);
-  tx(isRec?fmt((performance.now()-t0)/1000):'0:00:00',W-m,H-m-f,'right');
-}
-function loop(ts){
-  requestAnimationFrame(loop);
-  if(aAn&&cam.classList.contains('menu')){
-    aAn.getByteTimeDomainData(lvBuf);let pk=0;for(let i=0;i<lvBuf.length;i++)pk=Math.max(pk,Math.abs(lvBuf[i]-128));
-    $('#lvl b').style.width=Math.min(100,pk/128*100)+'%';
-  }
-  if(!on||vid.readyState<2||ts-last<33||!size())return;
-  const dt=Math.min(.1,(ts-last)/1000);last=ts;const T=ts/1000;
-  if(zdir){zt=Math.min(6,Math.max(1,zt*Math.exp(zdir*dt*.85)));zT=performance.now()}
-  const lz=Math.log(zc),lt=Math.log(zt);
-  zc=Math.exp(lz+(lt-lz)*(1-Math.exp(-dt*7)));if(Math.abs(zc-zt)<.002)zc=zt;
-  $('#zr').textContent=zc.toFixed(1)+'×';
-  gl.bindTexture(gl.TEXTURE_2D,tx);
-  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,vid);
-  gl.uniform2f(UL.r,cw,ch);gl.uniform2f(UL.cr,cr[0],cr[1]);gl.uniform1f(UL.T,T%1000);
-  gl.uniform1f(UL.m,facing==='user'?1:0);gl.uniform1f(UL.z,zc);
-  gl.uniform1f(UL.fb,Math.min(Math.abs(zt-zc)*.0015,.008));
-  gl.uniform1f(UL.F,fi);gl.uniform1f(UL.rot,rot);
-  for(const k in D)gl.uniform1f(UL[k],P[k]);
-  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  oc.imageSmoothingEnabled=false;oc.drawImage(gc,0,0,W,H);ov(T);
-}
-oc.fillStyle='#000';oc.fillRect(0,0,640,480);requestAnimationFrame(loop);
-
-function setMode(m){
-  if(recing())return;
-  mode=m;$('#mV').classList.toggle('act',m==='video');$('#mP').classList.toggle('act',m==='photo');
-  $('#sh').className='shut'+(m==='photo'?' photo':'');
-}
-$('#mV').onclick=()=>setMode('video');$('#mP').onclick=()=>setMode('photo');
-function add(it){items.unshift(it);$('#gb').textContent='GALLERY '+items.length}
-$('#sh').onclick=()=>{
-  if(!on)return;
-  if(mode==='photo'){
-    const fl=$('#flash');fl.classList.add('on');setTimeout(()=>fl.classList.remove('on'),60);
-    out.toBlob(b=>add({k:'img',blob:b,url:URL.createObjectURL(b)}),'image/jpeg',.92);
-    return;
-  }
-  if(recing()){rec.stop();return}
-  if(typeof MediaRecorder==='undefined'){alert('此浏览器不支持录像');return}
-  const cs=out.captureStream(30);
-  if(aDst)aDst.stream.getAudioTracks().forEach(a=>cs.addTrack(a));
-  const mt=['video/mp4','video/webm;codecs=vp9,opus','video/webm'].find(x=>MediaRecorder.isTypeSupported(x))||'';
-  const o={videoBitsPerSecond:4e6,audioBitsPerSecond:[64e3,128e3,256e3][S.abr]};if(mt)o.mimeType=mt;
-  chunks=[];rec=new MediaRecorder(cs,o);
-  rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
-  rec.onstop=()=>{const b=new Blob(chunks,{type:rec.mimeType||'video/mp4'});add({k:'vid',blob:b,url:URL.createObjectURL(b)});$('#sh').classList.remove('rec')};
-  rec.start(500);t0=performance.now();$('#sh').classList.add('rec');
-};
-async function saveItem(it){
-  const ext=it.k==='img'?'jpg':(it.blob.type.includes('mp4')?'mp4':'webm');
-  const f=new File([it.blob],'DV_'+Date.now()+'.'+ext,{type:it.blob.type});
-  try{if(mob&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}
-  catch(e){if(e.name==='AbortError')return}
-  const a=document.createElement('a');a.href=it.url;a.download=f.name;a.click();
-}
-function render(){
-  const g=$('#gl');g.innerHTML='';
-  if(!items.length){g.textContent='NO TAPE';return}
-  items.forEach(it=>{
-    const d=document.createElement('div');d.className='it';
-    const el=document.createElement(it.k==='img'?'img':'video');el.src=it.url;
-    if(it.k==='vid'){el.controls=true;el.playsInline=true}
-    const b=document.createElement('button');b.className='btn';b.textContent='SAVE / SHARE';b.onclick=()=>saveItem(it);
-    d.append(el,b);g.append(d);
-  });
-}
-$('#gb').onclick=()=>{render();$('#gal').classList.add('on')};
-$('#gc').onclick=()=>$('#gal').classList.remove('on');
+/* 初始化 */
+setRatio('4:3');
+applySkin('light');
+refreshCount();
 </script>
 </body></html>
