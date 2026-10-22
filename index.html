@@ -16,16 +16,16 @@ body{height:100%;margin:0;background:#0d0d0f;color:var(--ink);font-family:ui-mon
 #pw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#000;text-align:center;padding:16px;font-size:12px;line-height:1.6;color:#9a9a92}
 .deck{background:linear-gradient(#2d2f35,#1f2024);border-radius:12px;padding:7px 10px;display:flex;flex-direction:column;gap:6px;border:1px solid #3b3d44}
 .ctl{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.seg{display:flex;gap:4px}
-.btn{background:#3a3c43;color:var(--ink);border:1px solid #55575f;border-bottom-width:3px;border-radius:7px;padding:6px 9px;font:inherit;font-size:11px;letter-spacing:.08em;cursor:pointer}
+.seg{display:flex;gap:4px;align-items:center}
+.btn{background:#3a3c43;color:var(--ink);border:1px solid #55575f;border-bottom-width:3px;border-radius:7px;padding:6px 9px;font:inherit;font-size:11px;letter-spacing:.08em;cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .btn.act{background:#c9c9c0;color:#111;border-color:#e8e8e0}
 .btn:active{transform:translateY(1px)}
+.zb{width:46px;font-size:16px;padding:4px 0;touch-action:none}
+.zr{min-width:48px;text-align:center;font-size:12px;color:#c9c9c0}
 .shut{width:58px;height:58px;border-radius:50%;border:4px solid #9a9a96;background:#18181b;position:relative;cursor:pointer;padding:0;flex:none}
 .shut::after{content:'';position:absolute;inset:6px;border-radius:50%;background:var(--red);transition:.15s}
 .shut.photo::after{background:#e4e4dc}
 .shut.rec::after{inset:16px;border-radius:5px;background:var(--red)}
-.sl{display:flex;align-items:center;gap:7px;font-size:11px;color:#8b8d92;flex:1}
-.sl input{flex:1;accent-color:#c9c9c0;min-width:0;margin:0}
 body:not(.mob) #ori{display:none}
 body.land .cam{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) 160px;grid-template-rows:auto minmax(0,1fr)}
 body.land .lcd{grid-row:1/3;grid-column:1}
@@ -36,15 +36,22 @@ body.land .seg{flex-wrap:wrap;justify-content:center}
 body.rotr .cam,body.rotl .cam{position:fixed;top:0;left:0;width:100vh;width:100dvh;height:100vw;height:100dvw;transform-origin:0 0;padding:14px 22px}
 body.rotr .cam{transform:translateX(100vw) rotate(90deg);transform:translateX(100dvw) rotate(90deg)}
 body.rotl .cam{transform:translateY(100vh) rotate(-90deg);transform:translateY(100dvh) rotate(-90deg)}
-#menu{position:absolute;z-index:15;display:none;background:rgba(16,16,18,.93);overflow-y:auto;padding:10px 12px 16px;box-sizing:border-box;left:0;right:0;bottom:0;height:55%;border-top:2px solid #3b3d44;border-radius:14px 14px 0 0}
-body.land #menu{left:auto;top:0;height:auto;width:52%;border-top:0;border-left:2px solid #3b3d44;border-radius:14px 0 0 14px}
+#menu{position:absolute;z-index:15;display:none;background:rgba(16,16,18,.95);overflow-y:auto;padding:10px 12px 16px;box-sizing:border-box;left:0;right:0;bottom:0;height:58%;border-top:2px solid #3b3d44;border-radius:14px 14px 0 0}
+body.land #menu{left:auto;top:0;height:auto;width:55%;border-top:0;border-left:2px solid #3b3d44;border-radius:14px 0 0 14px}
 #menu.on{display:block}
 .mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px;letter-spacing:.1em}
-.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px}
+.tabs{display:flex;gap:4px;margin-bottom:8px;overflow-x:auto}
+.tabs .btn{flex:none}
+.pane{display:none}.pane.on{display:block}
+.gh{font-size:11px;color:#8b8d92;margin:12px 0 5px;letter-spacing:.1em}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin:4px 0}
+.note{font-size:11px;line-height:1.6;color:#8b8d92;margin:4px 0}
 .ms{display:flex;align-items:center;gap:8px;font-size:12px;margin:10px 0}
 .ms span{width:84px;flex:none}
 .ms input{flex:1;min-width:0;accent-color:#c9c9c0;margin:0}
 .ms i{width:34px;text-align:right;font-style:normal;color:#8b8d92;font-size:11px}
+#lvl{height:8px;background:#26272b;border-radius:4px;overflow:hidden;margin:6px 0}
+#lvl b{display:block;height:100%;width:0;background:#8fd8b0}
 #gal{position:absolute;inset:0;background:#111;z-index:20;display:none;flex-direction:column}
 #gal.on{display:flex}
 #gal header{display:flex;justify-content:space-between;align-items:center;padding:10px;font-size:12px;letter-spacing:.1em}
@@ -62,10 +69,13 @@ body.land #menu{left:auto;top:0;height:auto;width:52%;border-top:0;border-left:2
   <div class="lcd">
     <canvas id="out" width="640" height="480"></canvas>
     <div id="flash"></div>
-    <div id="pw"><div>点 POWER 开机并允许使用摄像头 / 麦克风</div><button class="btn act" id="pwb">⏻ POWER</button></div>
+    <div id="pw"><div>点 POWER 开机并允许使用摄像头</div><button class="btn act" id="pwb">⏻ POWER</button></div>
   </div>
   <div class="deck">
-    <label class="sl">W<input type="range" id="zm" min="1" max="6" step=".01" value="1">T</label>
+    <div class="ctl">
+      <div class="seg"><button class="btn zb" id="zo">－</button><span class="zr" id="zr">1.0×</span><button class="btn zb" id="zi">＋</button></div>
+      <button class="btn" id="mic">MIC OFF</button>
+    </div>
     <div class="ctl">
       <div class="seg"><button class="btn act" id="mV">VIDEO</button><button class="btn" id="mP">PHOTO</button></div>
       <button class="shut" id="sh" aria-label="shutter"></button>
@@ -73,11 +83,9 @@ body.land #menu{left:auto;top:0;height:auto;width:52%;border-top:0;border-left:2
     </div>
   </div>
   <div id="menu">
-    <div class="mh"><b>MENU</b><span><button class="btn" id="rs">RESET</button> <button class="btn" id="mc">CLOSE</button></span></div>
-    <div class="chips" id="chips">
-      <button class="btn act" data-f="0">DV</button><button class="btn" data-f="1">VHS</button><button class="btn" data-f="2">NIGHT</button><button class="btn" data-f="3">B&amp;W</button><button class="btn" data-f="4">HOME</button><button class="btn" data-f="5">CYBER</button>
-    </div>
-    <div id="mp"></div>
+    <div class="mh"><b>MENU</b><button class="btn" id="mc">CLOSE</button></div>
+    <div class="tabs" id="tabs"></div>
+    <div id="panes"></div>
   </div>
   <div id="gal"><header><span>TAPE LIBRARY</span><button class="btn" id="gc">CLOSE</button></header><div id="gl"></div></div>
 </div>
@@ -93,17 +101,16 @@ uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh;
 varying vec2 u;
 vec2 PX;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
-vec3 S(vec2 p){p.x=mix(p.x,1.-p.x,m);
+vec3 S(vec2 p){p=(p-.5)*cr/z+.5;p.x=mix(p.x,1.-p.x,m);
  if(rot>1.5)p=vec2(p.y,1.-p.x);else if(rot>.5)p=vec2(1.-p.y,p.x);
  return texture2D(t,clamp(p,0.,1.)).rgb;}
 vec3 Sb(vec2 p){vec2 o=PX*.35;return (S(p+o)+S(p+vec2(-o.x,o.y))+S(p+vec2(o.x,-o.y))+S(p-o))*.25;}
 float Yf(vec3 c){return dot(c,vec3(.299,.587,.114));}
 void main(){
- vec3 w=vec3(.299,.587,.114);
  vec2 sc=u;float L=floor(sc.y*240.);float f=floor(T*30.);
- PX=(1./r)*cr/z;
+ PX=1./r;
  float jit=h(vec2(L,f))-.5;
- vec2 uv=(sc-.5)*cr/z+.5;
+ vec2 uv=sc;
  uv.x+=jit*.0025*jt+sin(sc.y*8.+T*1.5)*.0006*jt;
  vec2 c=sc-.5;float asp=r.x/r.y;
  vec2 c2=c*(.008+dot(c,c)*.04)*ca+vec2(.0012*ca,0.);
@@ -141,9 +148,9 @@ void main(){
  col+=(vec3(h(sc*r*.5+T+1.),h(sc*r*.5+T+2.),h(sc*r*.5+T+3.))-.5)*.08*nz*nk;
  col*=max(1.-dot(c,c)*1.1*vg,0.);
  gl_FragColor=vec4(col,1.);}`;
-function sh(ty,s){const o=gl.createShader(ty);gl.shaderSource(o,s);gl.compileShader(o);return o}
+function mk(ty,s){const o=gl.createShader(ty);gl.shaderSource(o,s);gl.compileShader(o);return o}
 const pg=gl.createProgram();
-gl.attachShader(pg,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pg,sh(gl.FRAGMENT_SHADER,FS));
+gl.attachShader(pg,mk(gl.VERTEX_SHADER,VS));gl.attachShader(pg,mk(gl.FRAGMENT_SHADER,FS));
 gl.linkProgram(pg);gl.useProgram(pg);
 gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
 gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
@@ -152,34 +159,110 @@ const tx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tx);
 [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
 const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
 
-/* params + menu */
+/* settings */
 const D={wb:-.15,sh:1,pf:1.2,ca:1,bl:0,bd:.8,bm:.8,nz:1,sn:1,vg:1,jt:1,sat:1};
-let P={...D};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1};
+let P={...D},S={...DS};
 try{Object.assign(P,JSON.parse(localStorage.getItem('dvP2')||'{}'))}catch(e){}
-const store=()=>{try{localStorage.setItem('dvP2',JSON.stringify(P))}catch(e){}};
-const PR=[['wb','白平衡 蓝↔黄',-1,1],['sh','锐化',0,2],['pf','紫边',0,3],['ca','色散(红蓝边)',0,3],['bl','后期模糊',0,2],['bd','色彩拖影',0,2],['bm','高光扩散',0,3],['nz','噪点',0,3],['sn','扫描线',0,3],['vg','暗角',0,2],['jt','画面抖动',0,3],['sat','饱和度',0,2]];
-const rows={};
-PR.forEach(([k,n,lo,hi])=>{
-  const l=document.createElement('label');l.className='ms';
-  l.innerHTML=`<span>${n}</span><input type="range" min="${lo}" max="${hi}" step=".01" value="${P[k]}"><i>${(+P[k]).toFixed(2)}</i>`;
-  const i=l.children[1],v=l.children[2];rows[k]=[i,v];
-  i.oninput=()=>{P[k]=+i.value;v.textContent=P[k].toFixed(2);store()};
-  $('#mp').append(l);
-});
-$('#rs').onclick=()=>{P={...D};PR.forEach(([k])=>{rows[k][0].value=P[k];rows[k][1].textContent=P[k].toFixed(2)});store()};
-$('#mb').onclick=()=>$('#menu').classList.toggle('on');
-$('#mc').onclick=()=>$('#menu').classList.remove('on');
+try{Object.assign(S,JSON.parse(localStorage.getItem('dvS')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('dvP2',JSON.stringify(P));localStorage.setItem('dvS',JSON.stringify(S))}catch(e){}};
 
 /* state */
 const mob=matchMedia('(pointer:coarse)').matches;
 const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
 let stream,facing='environment',on=false,mode='video',rec,chunks=[],t0=0,items=[],last=0,W=640,H=480,cw=0,ch=0,rot=0,szKey='',cr=[1,1];
-let zt=1,zc=1,zT=0,fi=0,ri=0,si=1;
+let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=1;
 const FN=['DV','VHS','NIGHT','B&W','HOME','CYBER'];
 const RATIOS=[['4:3',4/3],['16:9',16/9],['1:1',1],['2.35:1',2.35],['原始',0]];
 const RES=[240,360,480,720];
 const recing=()=>rec&&rec.state==='recording';
 
+/* menu builder */
+const panes=[],chipFns=[];
+const syncChips=()=>chipFns.forEach(f=>f());
+function mkPane(name){const d=document.createElement('div');d.className='pane';d.sy=[];d.rk=[];
+  const b=document.createElement('button');b.className='btn';b.textContent=name;b.onclick=()=>showPane(d);
+  $('#tabs').append(b);d.tab=b;$('#panes').append(d);panes.push(d);return d}
+function showPane(d){panes.forEach(p=>{p.classList.toggle('on',p===d);p.tab.classList.toggle('act',p===d)})}
+function head(p,t){const e=document.createElement('div');e.className='gh';e.textContent=t;p.append(e)}
+function note(p,t){const e=document.createElement('div');e.className='note';e.textContent=t;p.append(e)}
+function addSlider(p,label,lo,hi,st,obj,key,cb){
+  const l=document.createElement('label');l.className='ms';
+  l.innerHTML=`<span>${label}</span><input type="range" min="${lo}" max="${hi}" step="${st}"><i></i>`;
+  const i=l.children[1],v=l.children[2];
+  const sync=()=>{i.value=obj[key];v.textContent=(+obj[key]).toFixed(2)};
+  i.oninput=()=>{obj[key]=+i.value;v.textContent=(+i.value).toFixed(2);save();cb&&cb()};
+  sync();p.append(l);p.sy.push(sync);p.rk.push([obj,key,(obj===P?D:DS)[key],cb]);
+}
+function addToggle(p,label,obj,key,cb){
+  const w=document.createElement('div');w.className='chips';
+  const b=document.createElement('button');b.className='btn';
+  const sync=()=>{b.classList.toggle('act',!!obj[key]);b.textContent=label+' '+(obj[key]?'开':'关')};
+  b.onclick=()=>{obj[key]=!obj[key];sync();save();cb&&cb()};
+  sync();w.append(b);p.append(w);p.sy.push(sync);p.rk.push([obj,key,DS[key],cb]);
+}
+function addChips(p,labels,get,set){
+  const w=document.createElement('div');w.className='chips';
+  const bs=labels.map((n,i)=>{const b=document.createElement('button');b.className='btn';b.textContent=n;b.onclick=()=>{set(i);syncChips()};w.append(b);return b});
+  chipFns.push(()=>bs.forEach((b,i)=>b.classList.toggle('act',get()===i)));p.append(w);
+}
+function addReset(p){const b=document.createElement('button');b.className='btn';b.textContent='重置本页';b.style.marginTop='14px';
+  b.onclick=()=>{p.rk.forEach(([o,k,d,cb])=>{o[k]=d;cb&&cb()});save();p.sy.forEach(f=>f())};p.append(b)}
+
+function setRes(i){if(recing())return;si=i;$('#bre').textContent=RES[si]+'p'}
+function setRatio(i){if(recing())return;ri=i;$('#bar').textContent=RATIOS[ri][0]}
+$('#bre').onclick=()=>{setRes((si+1)%RES.length);syncChips()};
+$('#bar').onclick=()=>{setRatio((ri+1)%RATIOS.length);syncChips()};
+
+/* mic */
+const AC=window.AudioContext||window.webkitAudioContext;
+let ac,astream,aDst,aHP,aLP,aGain,aAn,aSrc,pS;
+const lvBuf=new Uint8Array(512);
+function nodes(){if(!aGain)return;aGain.gain.value=S.gain;aHP.frequency.value=S.lofi?250:20;aLP.frequency.value=S.lofi?4800:20000}
+function stopMic(){if(astream)astream.getTracks().forEach(t=>t.stop());astream=aDst=aSrc=aAn=aGain=null}
+function updMic(){$('#mic').textContent=S.mic?'MIC ON':'MIC OFF';$('#mic').classList.toggle('act',S.mic)}
+async function startMic(){
+  try{
+    const s=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:S.ec,noiseSuppression:S.ns,autoGainControl:S.agc}});
+    if(!S.mic){s.getTracks().forEach(t=>t.stop());return}
+    astream=s;await ac.resume();
+    aSrc=ac.createMediaStreamSource(s);
+    aHP=ac.createBiquadFilter();aHP.type='highpass';aLP=ac.createBiquadFilter();aLP.type='lowpass';
+    aGain=ac.createGain();aAn=ac.createAnalyser();aAn.fftSize=512;aDst=ac.createMediaStreamDestination();
+    aSrc.connect(aHP);aHP.connect(aLP);aLP.connect(aGain);aGain.connect(aDst);aGain.connect(aAn);nodes();
+  }catch(e){S.mic=false;save();updMic();pS&&pS.sy.forEach(f=>f());alert('无法使用麦克风：'+(e.name||e))}
+}
+function applyMic(){stopMic();if(S.mic){if(!ac&&AC)ac=new AC();if(ac&&ac.resume)ac.resume();startMic()}updMic()}
+const guard=k=>()=>{if(recing()){S[k]=!S[k];pS.sy.forEach(f=>f());return}applyMic()};
+$('#mic').onclick=()=>{if(recing())return;S.mic=!S.mic;save();pS.sy.forEach(f=>f());applyMic()};
+
+/* menu panes */
+const pF=mkPane('滤镜');head(pF,'选择滤镜');addChips(pF,FN,()=>fi,i=>{fi=i});
+const pQ=mkPane('画质');
+head(pQ,'分辨率（越低越有 VHS 感）');addChips(pQ,RES.map(n=>n+'p'),()=>si,setRes);
+head(pQ,'画面比例');addChips(pQ,RATIOS.map(r=>r[0]),()=>ri,setRatio);
+head(pQ,'清晰度');
+addSlider(pQ,'锐化',0,2,.01,P,'sh');addSlider(pQ,'色彩拖影',0,2,.01,P,'bd');addSlider(pQ,'后期模糊',0,2,.01,P,'bl');addReset(pQ);
+const pC=mkPane('色彩');
+addSlider(pC,'白平衡 蓝↔黄',-1,1,.01,P,'wb');addSlider(pC,'饱和度',0,2,.01,P,'sat');addSlider(pC,'紫边',0,3,.01,P,'pf');
+addSlider(pC,'色散(红蓝边)',0,3,.01,P,'ca');addSlider(pC,'高光扩散',0,3,.01,P,'bm');addSlider(pC,'暗角',0,2,.01,P,'vg');addReset(pC);
+const pR=mkPane('复古');
+addSlider(pR,'噪点',0,3,.01,P,'nz');addSlider(pR,'扫描线',0,3,.01,P,'sn');addSlider(pR,'画面抖动',0,3,.01,P,'jt');addReset(pR);
+pS=mkPane('声音');
+note(pS,'iPhone 上开启麦克风通常会让其他 App 的音乐暂停。想边听歌边录像，请保持麦克风关闭（录出来没有声音）。电脑和安卓一般不受影响。');
+head(pS,'麦克风');addToggle(pS,'麦克风',S,'mic',guard('mic'));
+head(pS,'输入电平');{const l=document.createElement('div');l.id='lvl';l.innerHTML='<b></b>';pS.append(l)}
+addSlider(pS,'输入增益',0,4,.05,S,'gain',nodes);
+head(pS,'处理');
+addToggle(pS,'降噪',S,'ns',guard('ns'));addToggle(pS,'自动增益',S,'agc',guard('agc'));addToggle(pS,'回声消除',S,'ec',guard('ec'));
+addToggle(pS,'复古音质（窄频）',S,'lofi',nodes);
+head(pS,'录音码率');addChips(pS,['64k 低','128k 标准','256k 高'],()=>S.abr,i=>{S.abr=i;save()});
+addReset(pS);
+showPane(pF);syncChips();updMic();
+$('#mb').onclick=()=>$('#menu').classList.toggle('on');
+$('#mc').onclick=()=>$('#menu').classList.remove('on');
+
+/* orientation */
 let lastDp=innerHeight>=innerWidth,land=!lastDp;
 function layout(){
   const dp=innerHeight>=innerWidth,b=document.body.classList;
@@ -190,24 +273,26 @@ function layout(){
 addEventListener('resize',()=>{const dp=innerHeight>=innerWidth;if(dp!==lastDp){lastDp=dp;land=!dp}layout()});
 $('#ori').onclick=()=>{if(recing())return;land=!land;layout()};
 layout();
-$('#bar').onclick=()=>{if(recing())return;ri=(ri+1)%RATIOS.length;$('#bar').textContent=RATIOS[ri][0]};
-$('#bre').onclick=()=>{if(recing())return;si=(si+1)%RES.length;$('#bre').textContent=RES[si]+'p'};
 
+/* camera (video only; mic is separate) */
 async function start(){
   if(stream)stream.getTracks().forEach(t=>t.stop());
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){pwMsg('此环境不支持摄像头，请用 Chrome / Edge / Safari 打开 https 链接。');return}
-  const c={video:{facingMode:facing,width:{ideal:1280},height:{ideal:720}},audio:true};
-  try{stream=await navigator.mediaDevices.getUserMedia(c)}
-  catch(e){try{c.audio=false;stream=await navigator.mediaDevices.getUserMedia(c)}
-  catch(e2){pwMsg('无法使用摄像头：'+e2.name+'。请检查浏览器权限。');return}}
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1280},height:{ideal:720}},audio:false})}
+  catch(e){pwMsg('无法使用摄像头：'+e.name+'。请检查浏览器权限。');return}
   vid.srcObject=stream;await vid.play();on=true;$('#pw').style.display='none';
 }
 function pwMsg(s){$('#pw').firstElementChild.textContent=s}
-$('#pwb').onclick=start;
+$('#pwb').onclick=()=>{if(S.mic)applyMic();start()};
 $('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';if(on)start()};
-$('#zm').oninput=e=>{zt=+e.target.value;zT=performance.now()};
-$('#chips').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;fi=+b.dataset.f;
-  document.querySelectorAll('#chips .btn').forEach(x=>x.classList.toggle('act',x===b))};
+
+/* zoom buttons: hold to zoom */
+function zb(id,d){const e=$(id);
+  e.addEventListener('pointerdown',ev=>{ev.preventDefault();zdir=d;zT=performance.now();try{e.setPointerCapture(ev.pointerId)}catch(_){}});
+  ['pointerup','pointercancel','lostpointercapture'].forEach(n=>e.addEventListener(n,()=>{zdir=0}));
+  e.addEventListener('contextmenu',ev=>ev.preventDefault());
+}
+zb('#zi',1);zb('#zo',-1);
 
 function size(){
   const vw=vid.videoWidth,vh=vid.videoHeight;if(!vw)return false;
@@ -237,8 +322,8 @@ function ov(T){
   else tx(isRec?(blink?'● REC':'  REC'):'STBY',m,m);
   if(fi)tx(FN[fi],m,m+f*1.25);
   tx('SP ▮▮▮▯',W-m,m,'right');
-  if(performance.now()-zT<1800||Math.abs(zt-zc)>.01){
-    const n=Math.max(0,Math.min(8,Math.round((zc-1)/5*8)));
+  if(zdir||Math.abs(zt-zc)>.005||performance.now()-zT<1500){
+    const n=Math.max(0,Math.min(8,Math.round(Math.log(zc)/Math.log(6)*8)));
     tx('W '+'▮'.repeat(n)+'▯'.repeat(8-n)+' T',W/2,H-m-f*3.4,'center');
   }
   const d=new Date();
@@ -248,9 +333,16 @@ function ov(T){
 }
 function loop(ts){
   requestAnimationFrame(loop);
+  if(aAn&&$('#menu').classList.contains('on')){
+    aAn.getByteTimeDomainData(lvBuf);let pk=0;for(let i=0;i<lvBuf.length;i++)pk=Math.max(pk,Math.abs(lvBuf[i]-128));
+    $('#lvl b').style.width=Math.min(100,pk/128*100)+'%';
+  }
   if(!on||vid.readyState<2||ts-last<33||!size())return;
-  last=ts;const T=ts/1000;
-  zc+=(zt-zc)*.08;if(Math.abs(zt-zc)<.002)zc=zt;
+  const dt=Math.min(.1,(ts-last)/1000);last=ts;const T=ts/1000;
+  if(zdir){zt=Math.min(6,Math.max(1,zt*Math.exp(zdir*dt*.85)));zT=performance.now()}
+  const lz=Math.log(zc),lt=Math.log(zt);
+  zc=Math.exp(lz+(lt-lz)*(1-Math.exp(-dt*7)));if(Math.abs(zc-zt)<.002)zc=zt;
+  $('#zr').textContent=zc.toFixed(1)+'×';
   gl.bindTexture(gl.TEXTURE_2D,tx);
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,vid);
   gl.uniform2f(UL.r,cw,ch);gl.uniform2f(UL.cr,cr[0],cr[1]);gl.uniform1f(UL.T,T%1000);
@@ -280,14 +372,15 @@ $('#sh').onclick=()=>{
   if(recing()){rec.stop();return}
   if(typeof MediaRecorder==='undefined'){alert('此浏览器不支持录像');return}
   const cs=out.captureStream(30);
-  stream.getAudioTracks().forEach(a=>cs.addTrack(a));
+  if(aDst)aDst.stream.getAudioTracks().forEach(a=>cs.addTrack(a));
   const mt=['video/mp4','video/webm;codecs=vp9,opus','video/webm'].find(x=>MediaRecorder.isTypeSupported(x))||'';
-  chunks=[];rec=new MediaRecorder(cs,mt?{mimeType:mt,videoBitsPerSecond:4e6}:{});
+  const o={videoBitsPerSecond:4e6,audioBitsPerSecond:[64e3,128e3,256e3][S.abr]};if(mt)o.mimeType=mt;
+  chunks=[];rec=new MediaRecorder(cs,o);
   rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
   rec.onstop=()=>{const b=new Blob(chunks,{type:rec.mimeType||'video/mp4'});add({k:'vid',blob:b,url:URL.createObjectURL(b)});$('#sh').classList.remove('rec')};
   rec.start(500);t0=performance.now();$('#sh').classList.add('rec');
 };
-async function save(it){
+async function saveItem(it){
   const ext=it.k==='img'?'jpg':(it.blob.type.includes('mp4')?'mp4':'webm');
   const f=new File([it.blob],'DV_'+Date.now()+'.'+ext,{type:it.blob.type});
   try{if(mob&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}
@@ -301,7 +394,7 @@ function render(){
     const d=document.createElement('div');d.className='it';
     const el=document.createElement(it.k==='img'?'img':'video');el.src=it.url;
     if(it.k==='vid'){el.controls=true;el.playsInline=true}
-    const b=document.createElement('button');b.className='btn';b.textContent='SAVE / SHARE';b.onclick=()=>save(it);
+    const b=document.createElement('button');b.className='btn';b.textContent='SAVE / SHARE';b.onclick=()=>saveItem(it);
     d.append(el,b);g.append(d);
   });
 }
