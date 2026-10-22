@@ -1,337 +1,207 @@
 <!doctype html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#202329">
-<title>HANDYCAM DV-2000</title>
+<meta name="theme-color" content="#24272c">
+<title>HANDYCAM DV-2000 · Retro Camera</title>
 <style>
-:root{color-scheme:dark;--page:#0d0e11;--cam:#202329;--edge:#50545d;--deck:linear-gradient(#383c43,#202329);--ink:#f1f2f4;--mut:#a1a6ae;--btn:linear-gradient(#555a62,#292c32 50%,#17191d);--btn-edge:#696f78;--btn-ink:#fff;--accent:linear-gradient(#c8e5ff,#7db9ee 50%,#4289ce);--accent-ink:#102b45;--menu:#25282e;--radius:12px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+:root{color-scheme:dark;--page:#101114;--shell:#292d33;--shell-hi:#424750;--edge:#666d77;--ink:#f5f5f2;--mut:#b2b8c0;--panel:#202329;--button-top:#626873;--button-bottom:#25282e;--button-edge:#777e88;--button-ink:#f8f8f8;--accent-top:#d7efff;--accent-bottom:#5498d6;--accent-ink:#122c42;--screen-edge:#17191d;--radius:12px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 *{box-sizing:border-box}
-html,body{height:100%;margin:0}
-body{background:var(--page);color:var(--ink);font-family:var(--font);overflow:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:radial-gradient(ellipse at 50% 0%,#454b54,#101114 72%);color:var(--ink);font-family:var(--font);padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
 button,input,select{font:inherit}
-button{cursor:pointer;touch-action:manipulation}
-.cam{position:relative;display:flex;flex-direction:column;gap:8px;width:min(100%,620px);height:100%;margin:auto;padding:10px;background:var(--cam);border:2px solid var(--edge);border-radius:var(--radius);overflow:hidden}
-.tbar{display:none;flex:none;align-items:center;justify-content:space-between;margin:-10px -10px 0;padding:0 10px;height:30px;background:linear-gradient(#4d535d,#282b31);font-size:12px;font-weight:700}
-.top{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;flex:none}
-.tb{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.btn{appearance:none;border:1px solid var(--btn-edge);border-bottom-width:2px;border-radius:7px;background:var(--btn);color:var(--btn-ink);padding:7px 9px;font-size:11px;letter-spacing:.02em;box-shadow:inset 0 1px 1px #ffffff20,0 1px 2px #0005;transition:filter .14s,transform .14s,box-shadow .14s;user-select:none}
-.btn:active{filter:brightness(.86);transform:translateY(1px) scale(.985)}
-.btn.act{background:var(--accent);color:var(--accent-ink);border-color:#83b9e6;box-shadow:inset 0 1px 1px #fff9,0 1px 3px #0005}
-.lcd{position:relative;flex:1;min-height:100px;background:#000;border:5px solid #454a53;border-radius:13px;box-shadow:inset 0 0 22px #000;overflow:hidden}
-#out{display:block;width:100%;height:100%;object-fit:contain;background:#000}
+button{touch-action:manipulation;cursor:pointer;user-select:none}
+.app{position:relative;width:min(100%,660px);height:100%;margin:auto;display:flex;flex-direction:column;gap:8px;padding:10px;background:linear-gradient(145deg,var(--shell-hi),var(--shell) 34%,#191b20);border:2px solid var(--edge);border-radius:var(--radius);box-shadow:inset 0 1px 0 #ffffff24,0 12px 35px #0007;overflow:hidden}
+.brandbar{height:24px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 4px;color:var(--mut);font-size:10px;font-weight:800;letter-spacing:.15em;text-shadow:0 1px 1px #000}
+.brand{color:var(--ink);font-size:12px;letter-spacing:.18em}
+.led{display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:50%;background:#4ed26c;box-shadow:0 0 6px #4ed26c88}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex:none;flex-wrap:wrap}
+.group{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--button-edge);border-bottom-width:2px;border-radius:6px;padding:7px 9px;color:var(--button-ink);background:linear-gradient(var(--button-top),var(--button-bottom));font-size:11px;font-weight:650;box-shadow:inset 0 1px 0 #ffffff38,0 2px 2px #0005;text-shadow:0 1px 1px #0006;transition:filter .12s,transform .12s}
+.btn:active{filter:brightness(.84);transform:translateY(1px)}
+.btn.active{background:linear-gradient(var(--accent-top),var(--accent-bottom));color:var(--accent-ink);border-color:#a9d9ff;text-shadow:0 1px #fff8;box-shadow:inset 0 1px 0 #fff,0 2px 4px #0005}
+.btn.big{padding:10px 14px;font-size:12px}
+.btn.save{background:linear-gradient(#fff3bd,#ffc44e 46%,#d77c16);color:#422706;border-color:#ffe0a0;text-shadow:0 1px #fff8;font-weight:850;font-size:12px;padding:10px 8px}
+.btn.danger{background:linear-gradient(#8a4b4b,#4c2528);border-color:#a36c6c}
+.viewport{position:relative;flex:1;min-height:80px;overflow:hidden;border:5px solid var(--screen-edge);border-radius:9px;background:#000;box-shadow:inset 0 0 0 1px #7c838b,inset 0 0 22px #000;isolation:isolate}
+#view{display:block;width:100%;height:100%;background:#000}
 #flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
-#flash.on{opacity:.92}
-#pw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px;text-align:center;background:#000;color:#b5bac2;font-size:12px;line-height:1.6}
-#pw .btn{font-size:13px;padding:11px 18px}
-.deck{flex:none;background:var(--deck);border:1px solid var(--edge);border-radius:12px;padding:9px;display:flex;flex-direction:column;gap:9px;box-shadow:inset 0 1px 1px #fff1}
-.ctl{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.seg{display:flex;align-items:center;gap:4px;min-width:0}
-.zb{width:38px;padding:5px 0;font-size:16px}
-.zr{font-size:11px;min-width:40px;text-align:center;color:var(--mut)}
-.shut{position:relative;flex:none;width:58px;height:58px;border-radius:50%;padding:0;border:4px solid #9ca4ae;background:linear-gradient(#4c525b,#22262b);box-shadow:inset 0 2px 3px #fff4,0 2px 5px #0008;transition:transform .12s}
-.shut:after{content:"";position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle at 32% 25%,#ff8d83,#d92d22 54%,#8f140e);box-shadow:inset 0 2px 3px #fff6,0 1px 3px #0007}
-.shut.photo:after{background:radial-gradient(circle at 32% 25%,#fff,#d5dbe4 58%,#8593a5)}
-.shut.rec:after{inset:16px;border-radius:5px}
-.shut:active{transform:scale(.93)}
-#menu{display:none;flex:none;max-height:44%;overflow:auto;background:var(--menu);border:1px solid var(--edge);border-radius:10px;padding:10px}
-.cam.menu #menu{display:block}
-.cam.menu .deck{display:none}
-.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:12px;letter-spacing:.1em}
-.tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:7px}
-.tabs .btn{flex:none}
-.pane{display:none}.pane.on{display:block}
-.gh{font-size:11px;color:var(--mut);margin:12px 0 6px;letter-spacing:.08em}
-.chips{display:flex;gap:5px;flex-wrap:wrap;margin:5px 0}
-.note{font-size:11px;line-height:1.55;color:var(--mut);margin:5px 0}
-.ms{display:flex;align-items:center;gap:8px;font-size:12px;margin:10px 0}
-.ms span{width:100px;flex:none}.ms input{flex:1;min-width:0;accent-color:#78b8ee}.ms i{width:42px;text-align:right;color:var(--mut);font-size:11px;font-style:normal}
-.field{display:flex;align-items:center;gap:8px;margin:9px 0;font-size:12px}.field label{width:100px;flex:none}.field input[type=text],.field select{min-width:0;flex:1;background:#111318;color:var(--ink);border:1px solid var(--edge);border-radius:6px;padding:7px}
-.field input[type=color]{width:42px;height:32px;border:0;background:transparent;padding:0}
-.checks{display:flex;flex-wrap:wrap;gap:8px 12px;margin:8px 0}.checks label{display:flex;align-items:center;gap:5px;font-size:12px}.checks input{accent-color:#78b8ee}
-#lvl{height:6px;background:#555;border-radius:5px;overflow:hidden;margin:7px 0}#lvl b{display:block;width:0;height:100%;background:#54d58b}
-#gal{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;background:linear-gradient(145deg,#292d34,#101114);animation:fadeIn .2s ease-out}
-#gal.on{display:flex}
-#gal header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;border-bottom:1px solid #4c515a;font-size:12px;letter-spacing:.1em}
-.gtitle small{display:block;margin-top:4px;color:#aeb5bf;font-size:10px;letter-spacing:0}
-#gl{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;align-content:start;padding:13px}
-#gl .it{display:flex;flex-direction:column;gap:6px;min-width:0;padding:6px;border:1px solid #50555e;border-radius:11px;background:linear-gradient(#3a3f47,#202329);box-shadow:0 3px 10px #0005;animation:thumbIn .24s ease-out both}
-#gl .preview{position:relative;overflow:hidden;border-radius:7px;background:#050505;aspect-ratio:4/3}
-#gl img,#gl video{width:100%;height:100%;object-fit:contain;display:block}
-.meta{font-size:10px;line-height:1.5;color:#c5cad2;display:flex;justify-content:space-between;gap:6px}
-.savebtn{border:1px solid #a5d2ff!important;border-radius:8px!important;padding:11px 7px!important;background:linear-gradient(#d8edff,#86c5fa 48%,#388bd4)!important;color:#102b45!important;font-size:12px!important;font-weight:800;box-shadow:inset 0 1px 1px #fff,0 2px 4px #0006}
-.danger{background:linear-gradient(#6c4144,#48272a);border-color:#98666b}
-.empty{grid-column:1/-1;text-align:center;padding:48px 12px;color:#aeb5bf;font-size:12px;line-height:1.8}
-.empty .reel{font-size:36px;opacity:.8;margin-bottom:10px}
-.toast{position:absolute;z-index:30;left:50%;bottom:20px;transform:translate(-50%,12px);opacity:0;pointer-events:none;padding:10px 14px;border:1px solid #ffffff55;border-radius:20px;background:#222a;color:white;font-size:12px;box-shadow:0 4px 18px #0008;transition:opacity .2s,transform .2s;white-space:nowrap}
-.toast.on{opacity:1;transform:translate(-50%,0)}
-body.skin-xp{--page:linear-gradient(#2f6fd6,#7db0ee 55%,#6fb25a 56%,#44842f);--cam:#ece9d8;--edge:#0831d9;--deck:#ece9d8;--ink:#000;--mut:#4a4a4a;--btn:linear-gradient(#fff,#ecebe5 86%,#d8d0c4);--btn-edge:#003c74;--btn-ink:#000;--accent:linear-gradient(#cdcab8,#e6e3d3);--accent-ink:#000;--menu:#fcfcfe;--radius:8px;--font:Tahoma,"Segoe UI",sans-serif}
-body.skin-w7{--page:radial-gradient(ellipse at 25% 15%,#8fd3ff,#2a7fc4 45%,#0a2f5e);--cam:linear-gradient(#f4f6f9,#d8e2ef);--edge:#8c9caf;--deck:linear-gradient(#f4f6f9,#dce4ed);--ink:#111;--mut:#505a66;--btn:linear-gradient(#fff,#ececec 49%,#dcdcdc 50%,#cfcfcf);--btn-edge:#707070;--btn-ink:#111;--accent:linear-gradient(#cfe6fa,#9ccbf0 49%,#6fb1e8 50%,#8cc4f2);--accent-ink:#000;--menu:#f0f0f0;--radius:7px}
-body.skin-metal{--page:radial-gradient(ellipse at top,#777d85,#24272d 75%);--cam:#c9cdd2;--edge:#eef0f2;--deck:linear-gradient(#edf0f3,#aeb4bc 48%,#d9dde2);--ink:#20242a;--mut:#626a74;--btn:linear-gradient(#fff,#e1e4e8 48%,#bcc2ca 50%,#e6e8eb);--btn-edge:#858c96;--btn-ink:#252a31;--accent:linear-gradient(#fff,#c9e3f8 50%,#8bbbe7);--accent-ink:#102b45;--menu:#e5e8ec}
-body.skin-black{--page:radial-gradient(ellipse at top,#33383e,#08090b 80%);--cam:#202328;--edge:#555a62;--deck:linear-gradient(#383c42,#17191d);--ink:#f2f3f5;--mut:#a1a6ae;--btn:linear-gradient(#555a62,#292c32 50%,#17191d);--btn-edge:#696f78;--btn-ink:#fff;--accent:linear-gradient(#f9fafb,#b7c0cb);--accent-ink:#17191d;--menu:#22252a}
-body.skin-ceramic{--page:linear-gradient(145deg,#e5e4df,#a7a8a8);--cam:#f5f4ef;--edge:#fff;--deck:linear-gradient(#fff,#e5e3dd);--ink:#33343a;--mut:#7e7f84;--btn:linear-gradient(#fff,#f1f0eb 52%,#d7d6d0);--btn-edge:#c3c2bb;--btn-ink:#33343a;--accent:linear-gradient(#fff,#d8e5f5);--accent-ink:#24354d;--menu:#f7f6f1}
-body.skin-champagne{--page:radial-gradient(ellipse at top,#b9a27c,#514333 80%);--cam:#e6d4b1;--edge:#fff0cf;--deck:linear-gradient(#f8e8c9,#c9b38c);--ink:#453723;--mut:#817054;--btn:linear-gradient(#fff5dd,#e7d3aa 50%,#cbb487);--btn-edge:#a18a60;--btn-ink:#453723;--accent:linear-gradient(#fff8e8,#edce8b);--accent-ink:#46351d;--menu:#f3e7cf}
-body.skin-leather{--page:radial-gradient(ellipse at top,#513a2d,#17100d 80%);--cam:#39271e;--edge:#725442;--deck:linear-gradient(#5a4030,#2b1c15);--ink:#f1e2cc;--mut:#c1a78b;--btn:linear-gradient(#77553d,#4a3022 50%,#342116);--btn-edge:#967356;--btn-ink:#fff0dc;--accent:linear-gradient(#f3dfb9,#c8a675);--accent-ink:#362318;--menu:#38271e}
-body.skin-champagne .lcd,body.skin-ceramic .lcd,body.skin-metal .lcd{border-color:#747b84}
-body.skin-leather .cam{background-image:repeating-linear-gradient(35deg,#ffffff03 0 2px,#00000008 2px 4px)}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes thumbIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
-@keyframes shutterFlash{0%{opacity:0}15%{opacity:.95}100%{opacity:0}}
+#flash.fire{animation:flash .35s ease-out}
+@keyframes flash{0%{opacity:0}18%{opacity:.9}100%{opacity:0}}
+.powercover{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:18px;background:radial-gradient(ellipse at center,#15181c,#000);color:#b7c0ca;font:12px/1.6 ui-monospace,monospace}
+.powercover .power{font-size:14px;padding:12px 20px}
+.deck{flex:none;display:flex;flex-direction:column;gap:9px;padding:9px;border:1px solid var(--edge);border-radius:9px;background:linear-gradient(#484e57,#24272d);box-shadow:inset 0 1px #ffffff20,0 2px 3px #0004}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.zoomread{font:11px ui-monospace,monospace;color:var(--mut);min-width:38px;text-align:center}
+.zoombtn{font-size:17px;min-width:36px;padding:4px}
+.shutter{position:relative;flex:none;width:58px;height:58px;border-radius:50%;padding:0;border:4px solid #a8afb8;background:linear-gradient(#737b85,#262a30);box-shadow:inset 0 2px 3px #fff6,0 3px 5px #0008}
+.shutter:after{content:"";position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle at 32% 25%,#ffaaa2,#df3229 54%,#82130f);box-shadow:inset 0 2px 3px #fff7,0 1px 2px #0008}
+.shutter.photo:after{background:radial-gradient(circle at 32% 25%,#fff,#d3d9e1 58%,#7e8996)}
+.shutter.recording:after{inset:17px;border-radius:4px}
+.shutter:active{transform:scale(.94)}
+.settings{display:none;flex:none;max-height:46%;overflow:auto;padding:10px;border:1px solid var(--edge);border-radius:9px;background:linear-gradient(#30343b,#1b1d22);box-shadow:inset 0 1px #ffffff16}
+.app.menu .settings{display:block}
+.app.menu .deck{display:none}
+.settingshead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font-size:12px;letter-spacing:.1em}
+.tabs{display:flex;gap:5px;overflow-x:auto;padding:0 0 8px}
+.tabs .btn{white-space:nowrap;flex:none}
+.pane{display:none}
+.pane.show{display:block}
+.section{margin:10px 0 6px;padding-bottom:4px;border-bottom:1px solid #ffffff1a;color:var(--mut);font-size:10px;font-weight:800;letter-spacing:.12em}
+.hint{color:var(--mut);font-size:11px;line-height:1.5;margin:6px 0}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}
+.sliderrow{display:grid;grid-template-columns:95px minmax(60px,1fr) 42px;gap:7px;align-items:center;margin:8px 0;font-size:11px}
+.sliderrow input{width:100%;min-width:0;accent-color:#82c4fa}
+.sliderrow output{color:var(--mut);font:10px ui-monospace,monospace;text-align:right}
+.field{display:grid;grid-template-columns:95px minmax(0,1fr);gap:8px;align-items:center;margin:8px 0;font-size:11px}
+.field select,.field input[type=text]{width:100%;min-width:0;padding:7px;background:#121418;color:var(--ink);border:1px solid var(--edge);border-radius:5px}
+.field input[type=color]{width:44px;height:30px;padding:0;border:0;background:transparent}
+.checks{display:flex;gap:8px 12px;flex-wrap:wrap;margin:8px 0}
+.checks label{font-size:11px;display:flex;align-items:center;gap:5px}
+.checks input{accent-color:#82c4fa}
+.gallery{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;background:linear-gradient(145deg,#343941,#15171b);animation:appear .18s ease-out}
+.gallery.open{display:flex}
+@keyframes appear{from{opacity:0;transform:scale(.99)}to{opacity:1;transform:scale(1)}}
+.galleryhead{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid #59616c;font-size:12px;letter-spacing:.12em}
+.galleryhead small{display:block;margin-top:4px;color:var(--mut);font-size:10px;letter-spacing:0}
+.gallerylist{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;align-content:start;padding:12px}
+.item{min-width:0;display:flex;flex-direction:column;gap:7px;padding:6px;border:1px solid #5b636e;border-radius:8px;background:linear-gradient(#414751,#23262c);box-shadow:0 3px 8px #0006;animation:appear .2s ease-out}
+.preview{aspect-ratio:4/3;background:#000;border-radius:4px;overflow:hidden}
+.preview img,.preview video{width:100%;height:100%;object-fit:contain;display:block}
+.meta{display:flex;justify-content:space-between;gap:6px;color:#c5cbd3;font:10px ui-monospace,monospace}
+.item .btn{width:100%}
+.empty{grid-column:1/-1;text-align:center;padding:40px 12px;color:var(--mut);font:12px/1.8 ui-monospace,monospace}
+.toast{position:absolute;z-index:20;bottom:16px;left:50%;transform:translate(-50%,10px);opacity:0;pointer-events:none;padding:9px 13px;border-radius:18px;border:1px solid #ffffff45;background:#171a20;color:#fff;font-size:11px;box-shadow:0 4px 16px #0008;transition:.2s;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+/* Horizontal layout rearranges the interface; it never rotates or stretches the preview. */
+@media (orientation:landscape) and (min-width:560px){
+.app{width:100%;max-width:none;display:grid;grid-template-columns:minmax(0,1fr) 205px;grid-template-rows:25px auto minmax(0,1fr);gap:7px;padding:8px}
+.brandbar{grid-column:1/3;grid-row:1}
+.topbar{grid-column:2;grid-row:2;align-content:center;justify-content:center}
+.viewport{grid-column:1;grid-row:2/4;min-height:0}
+.deck{grid-column:2;grid-row:3;align-self:stretch;justify-content:center;padding:7px}
+.row{flex-wrap:wrap;justify-content:center}
+.group{justify-content:center}
+.shutter{width:52px;height:52px}
+.btn{padding:6px 7px;font-size:10px}
+.settings{grid-column:2;grid-row:3;max-height:none;height:100%;min-height:0}
+.app.menu{grid-template-columns:minmax(0,1fr) 285px}
+.app.menu .topbar{grid-column:2;grid-row:2}
+.app.menu .viewport{grid-column:1;grid-row:2/4}
+.app.menu .settings{grid-column:2;grid-row:3}
+.app.menu .deck{display:none}
+}
+@media(max-width:380px){
+.app{padding:7px;gap:6px}
+.btn{padding:6px 7px;font-size:10px}
+.deck{padding:7px}
+.shutter{width:52px;height:52px}
+.sliderrow{grid-template-columns:82px minmax(45px,1fr) 38px}
+.field{grid-template-columns:82px minmax(0,1fr)}
+}
+/* Skeuomorphic classic desktop themes */
+body.xp{--page:#3b79c7;--shell:#ece9d8;--shell-hi:#fffdf4;--edge:#174ea6;--ink:#1a1a1a;--mut:#53565b;--panel:#f8f7f1;--button-top:#fffef8;--button-bottom:#d7d3c6;--button-edge:#7f9db9;--button-ink:#101010;--accent-top:#fff;--accent-bottom:#b8d7f6;--accent-ink:#081d38;--screen-edge:#8c8b83;--font:Tahoma,"Segoe UI",sans-serif;--radius:7px;background:linear-gradient(#1763be 0%,#82b9ec 55%,#65a849 56%,#34752a 100%)}
+body.xp .app{background:linear-gradient(#fffdf1,#e5e1d2);box-shadow:inset 0 1px #fff,0 6px 22px #0006}
+body.xp .brandbar{background:linear-gradient(#2868d8,#1749a5);margin:-8px -8px 0;padding:0 10px;color:#fff;text-shadow:0 1px #003}
+body.xp .brand{color:#fff}
+body.xp .deck,body.xp .settings{background:linear-gradient(#faf9f1,#e0ddd0)}
+body.xp .settings{border-color:#b8b5a7}
+body.xp .btn{box-shadow:inset 0 1px #fff,0 1px 1px #777}
+body.xp .viewport{border-radius:3px}
+body.w7{--page:#1a4770;--shell:#e6edf5;--shell-hi:#fff;--edge:#7896b4;--ink:#17283a;--mut:#52667a;--panel:#e9f1fa;--button-top:#fff;--button-bottom:#cbd9e8;--button-edge:#7795b4;--button-ink:#152c43;--accent-top:#fff;--accent-bottom:#9fd1fa;--accent-ink:#092a47;--screen-edge:#8799ac;--font:"Segoe UI",Tahoma,sans-serif;--radius:9px;background:radial-gradient(ellipse at 35% 0%,#8bd6ff,#236ca5 50%,#0a2a4d)}
+body.w7 .app{background:linear-gradient(135deg,#f8fbffdd,#dce9f4f2 45%,#c4d6e7f5);backdrop-filter:blur(6px);box-shadow:inset 0 1px #fff,0 8px 30px #0007}
+body.w7 .brandbar{background:linear-gradient(#e9f5ff,#a6c6e3);margin:-8px -8px 0;padding:0 10px;color:#31516c;text-shadow:0 1px #fff}
+body.w7 .brand{color:#23445e}
+body.w7 .deck,body.w7 .settings{background:linear-gradient(#f8fcff,#cbd9e8)}
+body.w7 .btn{border-radius:5px;box-shadow:inset 0 1px #fff,0 1px 2px #667}
+body.w7 .viewport{border-color:#8197aa}
+body.silver{--page:#555b63;--shell:#c9ced5;--shell-hi:#f0f2f4;--edge:#f3f4f5;--ink:#222831;--mut:#606975;--button-top:#fff;--button-bottom:#aeb6c0;--button-edge:#8a939e;--button-ink:#20262e;--accent-top:#fff;--accent-bottom:#8cc7ef;--accent-ink:#142d40;--screen-edge:#646d78;background:radial-gradient(ellipse at top,#b8c0c9,#30353b)}
+body.silver .app{background:linear-gradient(145deg,#f7f8f9,#aeb5bd 45%,#e4e7eb)}
+body.silver .deck,body.silver .settings{background:linear-gradient(#e9edf1,#aeb5be)}
+body.cream{--page:#b6aa91;--shell:#e7ddc6;--shell-hi:#fff5dc;--edge:#fff0cf;--ink:#4b3e2c;--mut:#88785e;--button-top:#fff8e5;--button-bottom:#d0bc96;--button-edge:#ad9872;--button-ink:#4b3a25;--accent-top:#fff;--accent-bottom:#e2bf7e;--accent-ink:#4b3517;--screen-edge:#8c7e68;background:radial-gradient(ellipse at top,#e5d6b6,#6e5a3d)}
+body.cream .app{background:linear-gradient(145deg,#fff5df,#d2bd96)}
+body.cream .deck,body.cream .settings{background:linear-gradient(#f7e9cc,#cbb68f)}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
-/* Landscape is deliberately compact; preview stays the main focus. */
-body.land .cam{width:100%;max-width:none;display:grid;grid-template-columns:minmax(0,1fr) 184px;grid-template-rows:auto auto minmax(0,1fr);gap:7px;padding:8px}
-body.land .top{grid-column:2;grid-row:1;align-content:center;justify-content:center}
-body.land .lcd{grid-column:1;grid-row:1/4;min-height:0}
-body.land .deck{grid-column:2;grid-row:2;justify-content:center;padding:7px;gap:8px}
-body.land #menu{grid-column:2;grid-row:2/4;max-height:none;height:100%;min-height:0}
-body.land .cam.menu{grid-template-columns:minmax(0,1fr) 280px}
-body.land .cam.menu .top{grid-column:2;grid-row:1}
-body.land .cam.menu .lcd{grid-column:1;grid-row:1/4}
-body.land .cam.menu #menu{grid-column:2;grid-row:2/4}
-body.land .ctl{gap:5px;flex-wrap:wrap;justify-content:center}
-body.land .seg{justify-content:center;flex-wrap:wrap}
-body.land .btn{padding:6px 7px;font-size:10px}
-body.land .shut{width:50px;height:50px}
-body.land .top .tb{justify-content:center}
-body.land .top .tb:last-child #skb{display:none}
-@media(max-width:390px){.btn{padding:6px 7px;font-size:10px}.cam{padding:7px;gap:6px}.deck{padding:7px}.shut{width:52px;height:52px}#gl{grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:9px;padding:10px}}
 </style>
 </head>
 <body>
-<div class="cam">
-  <div class="tbar"><span>◉ HANDYCAM DV-2000</span><span>—　□　×</span></div>
-  <div class="top">
-    <div class="tb"><button class="btn" id="bar">4:3</button><button class="btn" id="bre">480p</button></div>
-    <div class="tb"><button class="btn" id="gb">GALLERY 0</button><button class="btn" id="mb">MENU</button></div>
-  </div>
-  <div class="lcd">
-    <canvas id="out" width="640" height="480"></canvas>
-    <div id="flash"></div>
-    <div id="pw"><div>点击 POWER 开机并允许使用摄像头</div><button class="btn act" id="pwb">⏻ POWER</button></div>
-  </div>
-  <div class="deck">
-    <div class="ctl">
-      <div class="seg"><button class="btn zb" id="zo">－</button><span class="zr" id="zr">1.0×</span><button class="btn zb" id="zi">＋</button></div>
-      <button class="btn" id="mic">MIC OFF</button>
-    </div>
-    <div class="ctl">
-      <div class="seg"><button class="btn act" id="mV">VIDEO</button><button class="btn" id="mP">PHOTO</button></div>
-      <button class="shut" id="sh" aria-label="快门"></button>
-      <div class="seg"><button class="btn" id="ori">横屏</button><button class="btn" id="fl">FLIP</button></div>
-    </div>
-  </div>
-  <div id="menu">
-    <div class="mh"><b>SETTINGS / 设置</b><button class="btn" id="mc">CLOSE</button></div>
-    <div class="tabs" id="tabs"></div><div id="panes"></div>
-  </div>
-  <div id="gal"><header><div class="gtitle">TAPE LIBRARY<small id="gsub">你的复古影像收藏</small></div><button class="btn" id="gc">✕ 关闭</button></header><div id="gl"></div></div>
-  <div class="toast" id="toast"></div>
-</div><script>
-'use strict';
-const $=s=>document.querySelector(s), cam=$('.cam'), out=$('#out'), oc=out.getContext('2d');
-const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;vid.setAttribute('playsinline','');
-const D={wb:-.08,sh:.45,pf:.25,ca:.25,bl:.08,bd:.18,bm:.25,nz:.25,sn:.12,vg:.22,jt:.15,sat:.95};
-const DEFAULTS={...D};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:3};
-let P={...D},S={...DS};
-try{Object.assign(P,JSON.parse(localStorage.getItem('dvP3')||'{}'))}catch(e){}
-try{Object.assign(S,JSON.parse(localStorage.getItem('dvS3')||'{}'))}catch(e){}
-const saveSettings=()=>{try{localStorage.setItem('dvP3',JSON.stringify(P));localStorage.setItem('dvS3',JSON.stringify(S));localStorage.setItem('dvW3',JSON.stringify(WM))}catch(e){}};
-const SK=['dv','xp','w7','metal','black','ceramic','champagne','leather'];
-const SKNAME=['经典 DV','Windows XP','Windows 7','拉丝银色','专业黑色','白色陶瓷','香槟金','复古皮革'];
-function applySkin(){document.body.classList.remove(...SK.map(s=>'skin-'+s));document.body.classList.add('skin-'+SK[Math.max(0,Math.min(SK.length-1,S.skin|0))]);saveSettings()}
-applySkin();
-const FN=['DV','VHS','NIGHT','B&W','HOME','CYBER','GOLD','PORTRA','FUJI','FADE','CINE'];
-const FILTERS=[
- {name:'DV 原色',desc:'清淡自然，轻微磁带质感',css:'none'},
- {name:'VHS 磁带',desc:'轻微褪色与扫描线',css:'saturate(.88) contrast(.96)'},
- {name:'夜景',desc:'略微提亮暗部',css:'brightness(1.06) saturate(.92)'},
- {name:'黑白',desc:'经典黑白影像',css:'grayscale(1) contrast(1.04)'},
- {name:'家庭录像',desc:'温暖、柔和的家庭影像',css:'sepia(.13) saturate(.91)'},
- {name:'Cyber',desc:'冷调数码复古',css:'hue-rotate(18deg) saturate(1.08)'},
- {name:'Gold 金色',desc:'温暖金黄、高光柔和',css:'sepia(.18) saturate(1.06)'},
- {name:'Portrait 人像',desc:'柔和肤色与低反差',css:'saturate(.86) contrast(.92) brightness(1.02)'},
- {name:'Fuji 青绿',desc:'轻微青绿与冷调',css:'hue-rotate(-7deg) saturate(.94)'},
- {name:'Fade 褪色',desc:'低反差、轻褪色',css:'saturate(.72) contrast(.86) brightness(1.04)'},
- {name:'Cine 电影',desc:'柔和冷暖平衡',css:'saturate(.88) contrast(.96)'}
-];
-let stream=null,audioStream=null,audioContext=null,audioDest=null,audioAnalyser=null;
-let on=false,facing='environment',mode='video',rec=null,chunks=[],recStart=0,items=[],fi=0,ri=0,si=2,land=innerWidth>innerHeight,zoom=1,zoomTarget=1,lastFrame=0,frameCount=0;
-const RATIOS=[['4:3',4/3],['16:9',16/9],['1:1',1],['2.35:1',2.35],['原始',0]], RES=[240,360,480,720,1080];
-const WM={enabled:true,color:'#e8e4d5',font:'mono',size:14,opacity:.88,position:'br',date:true,time:true,rec:true,device:true,filter:false,serial:false,custom:'',shadow:true};
-try{Object.assign(WM,JSON.parse(localStorage.getItem('dvW3')||'{}'))}catch(e){}
-let shotNo=1,displayDate=true;
+<main class="app" id="app">
+ <div class="brandbar"><span class="brand">◉ HANDYCAM <span style="font-weight:400">DV-2000</span></span><span><i class="led" id="led"></i><span id="stateText">STANDBY</span></span></div>
+ <div class="topbar"><div class="group"><button class="btn" id="ratioBtn">4:3</button><button class="btn" id="resBtn">480p</button></div><div class="group"><button class="btn" id="galleryBtn">GALLERY 0</button><button class="btn" id="menuBtn">MENU ⚙</button></div></div>
+ <div class="viewport"><canvas id="view" width="640" height="480"></canvas><div id="flash"></div><div class="powercover" id="powercover"><div id="powerText">按下 POWER 并允许浏览器访问摄像头</div><button class="btn active power" id="powerBtn">⏻ POWER ON</button></div></div>
+ <div class="deck" id="deck"><div class="row"><div class="group"><button class="btn zoombtn" id="zoomOut">−</button><span class="zoomread" id="zoomRead">1.0×</span><button class="btn zoombtn" id="zoomIn">＋</button></div><button class="btn" id="micBtn">MIC OFF</button></div><div class="row"><div class="group"><button class="btn active" id="videoMode">VIDEO</button><button class="btn" id="photoMode">PHOTO</button></div><button class="shutter" id="shutter" aria-label="拍摄"></button><div class="group"><button class="btn" id="orientationBtn">横屏布局</button><button class="btn" id="flipBtn">FLIP</button></div></div></div>
+ <section class="settings" id="settings"><div class="settingshead"><b>CAMERA SETTINGS / 设置</b><button class="btn" id="closeMenu">CLOSE ✕</button></div><nav class="tabs" id="tabs"></nav><div id="panes"></div></section>
+ <section class="gallery" id="gallery"><header class="galleryhead"><div>TAPE LIBRARY<small id="gallerySub">你的复古影像收藏</small></div><button class="btn" id="closeGallery">✕ CLOSE</button></header><div class="gallerylist" id="galleryList"></div></section>
+ <div class="toast" id="toast"></div>
+</main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id), app=$('app'), canvas=$('view'), ctx=canvas.getContext('2d',{alpha:false}), video=document.createElement('video');video.autoplay=true;video.playsInline=true;video.muted=true;
+const state={stream:null,audioStream:null,audioCtx:null,audioDest:null,recording:null,chunks:[],items:[],powered:false,mode:'video',facing:'environment',zoom:1,zoomTarget:1,ratio:'4:3',resolution:480,fit:'contain',skin:'classic',filter:'DV Original',watermark:true,waterColor:'#e8e4d5',waterFont:'mono',waterSize:14,waterOpacity:.88,waterPosition:'br',waterDate:true,waterTime:true,waterRec:true,waterDevice:true,waterFilter:false,waterSerial:false,customText:'',waterShadow:true,shotNo:1,frame:0};
+const filters=[['DV Original','原始 DV · 清淡自然','none'],['VHS Tape','VHS 磁带','saturate(.88) contrast(.96)'],['Warm Home','家庭录像','sepia(.12) saturate(.94)'],['B&W','黑白胶片','grayscale(1) contrast(1.04)'],['Fade Film','褪色胶片','saturate(.74) contrast(.88) brightness(1.03)'],['Portra','柔和人像','saturate(.88) contrast(.94)'],['Fuji Green','青绿胶片','hue-rotate(-7deg) saturate(.94)'],['Gold 200','金色胶片','sepia(.16) saturate(1.05)'],['Night','夜景','brightness(1.06) saturate(.92)'],['Cine','电影柔和','saturate(.9) contrast(.97)']];
+const quality=[['锐化','sharp',0,1.2,.01,1],['紫边','purple',0,1.2,.01,1.2],['色散','chromatic',0,1,.01,1],['模糊','blur',0,1,.01,0],['色彩拖影','smear',0,1,.01,.8],['高光扩散','bloom',0,1,.01,.8],['噪点','noise',0,1,.01,1],['扫描线','scan',0,1,.01,1],['暗角','vignette',0,1,.01,1],['抖动','jitter',0,1,.01,1],['饱和度','saturation',0,1.5,.01,1],['白平衡','whiteBalance',-1,1,.01,-.25]];
+const q={};quality.forEach(a=>q[a[1]]=a[5]);
+const skinClasses=['xp','w7','silver','cream'];function applySkin(){document.body.classList.remove(...skinClasses);if(skinClasses.includes(state.skin))document.body.classList.add(state.skin)}
+function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),2000)}
+function section(p,title){const d=document.createElement('div');d.className='section';d.textContent=title;p.append(d)}
+function hint(p,text){const d=document.createElement('p');d.className='hint';d.textContent=text;p.append(d)}
+function addPane(title){const b=document.createElement('button');b.className='btn';b.textContent=title;$('tabs').append(b);const p=document.createElement('div');p.className='pane';$('panes').append(p);b.onclick=()=>showPane(p,b);return p}
+function showPane(p,b){document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('show',x===p));document.querySelectorAll('#tabs .btn').forEach(x=>x.classList.toggle('active',x===b))}
+function chips(p,options,get,set){const wrap=document.createElement('div');wrap.className='chips';const buttons=[];options.forEach(([label,value])=>{const b=document.createElement('button');b.className='btn';b.textContent=label;b.onclick=()=>{set(value);sync()};wrap.append(b);buttons.push([b,value])});p.append(wrap);function sync(){buttons.forEach(([b,v])=>b.classList.toggle('active',get()===v))}sync();return sync}
+function slider(p,label,key,min,max,step,value,onChange){const row=document.createElement('label');row.className='sliderrow';const text=document.createElement('span');text.textContent=label;const input=document.createElement('input');input.type='range';input.min=min;input.max=max;input.step=step;input.value=value;const out=document.createElement('output');const sync=()=>{input.value=value;out.textContent=(+value).toFixed(2)};input.addEventListener('input',()=>{value=Number(input.value);out.textContent=value.toFixed(2);onChange(value)});row.append(text,input,out);p.append(row);sync();return {sync,set(v){value=v;sync()},input}}
+function field(p,label,el){const row=document.createElement('label');row.className='field';const name=document.createElement('span');name.textContent=label;row.append(name,el);p.append(row);return el}
+function select(p,label,opts,current,change){const s=document.createElement('select');opts.forEach(([text,val])=>{const o=document.createElement('option');o.textContent=text;o.value=val;s.append(o)});s.value=current;s.onchange=()=>change(s.value);field(p,label,s);return s}
+function toggle(p,label,key,initial,onChange){const wrap=document.createElement('div');wrap.className='chips';const b=document.createElement('button');b.className='btn';let val=initial;function sync(){b.textContent=label+'：'+(val?'开':'关');b.classList.toggle('active',val)}b.onclick=()=>{val=!val;sync();onChange(val)};wrap.append(b);p.append(wrap);sync();return {get:()=>val,set(v){val=v;sync()}}}
+const pLook=addPane('胶片滤镜');section(pLook,'FILM PRESETS / 胶片预设');hint(pLook,'默认画面保持自然、清淡；胶片效果只在你主动选择时启用。');let selectedFilter='DV Original';const filterSync=chips(pLook,filters.map(f=>[f[0],f[0]]),()=>selectedFilter,v=>{selectedFilter=v;state.filter=v;toast('滤镜：'+v)});const filterDesc=document.createElement('div');filterDesc.className='hint';pLook.append(filterDesc);function syncFilterDesc(){filterDesc.textContent=(filters.find(f=>f[0]===selectedFilter)||filters[0])[1]}syncFilterDesc();
+const pQuality=addPane('画质调节');section(pQuality,'VIDEO PROCESSING / 画质参数');hint(pQuality,'恢复旧版参数滑块范围与数值；滑动时会立即更新预览。');const qSliders=[];quality.forEach(a=>{const s=slider(pQuality,a[0],a[1],a[2],a[3],a[4],q[a[1]],v=>{q[a[1]]=v;state.frame=0});qSliders.push(s)});const reset=document.createElement('button');reset.className='btn';reset.textContent='恢复旧版画质参数';reset.onclick=()=>{quality.forEach(a=>q[a[1]]=a[5]);quality.forEach((a,i)=>qSliders[i].set(q[a[1]]));toast('已恢复旧版参数')};pQuality.append(reset);
+const pRatio=addPane('画面比例');section(pRatio,'FRAME / 画面尺寸');chips(pRatio,[['4:3','4:3'],['16:9','16:9'],['1:1','1:1'],['2.35:1','2.35:1'],['原始比例','Original']],()=>state.ratio,v=>{state.ratio=v;syncRatio()});function syncRatio(){$('ratioBtn').textContent=state.ratio==='Original'?'原始':state.ratio}const fitSel=select(pRatio,'画面适配',[['保持比例（黑边）','contain'],['拉伸铺满（会变形）','stretch']],state.fit,v=>{state.fit=v;toast(v==='stretch'?'已启用拉伸':'已启用保持比例')});hint(pRatio,'推荐“保持比例（黑边）”。拉伸模式会把画面填满画布，但可能让人物或物体变扁、变宽。');const resChips=chips(pRatio,[['240p',240],['360p',360],['480p',480],['720p',720],['1080p',1080]],()=>state.resolution,v=>{state.resolution=v;syncResolution();resizeOutput()});function syncResolution(){$('resBtn').textContent=state.resolution+'p'}
+const pSkin=addPane('机身外观');section(pSkin,'SKEUOMORPHIC BODY / 拟物机身');chips(pSkin,[['经典 DV','classic'],['Windows XP','xp'],['Windows 7','w7'],['拉丝银色','silver'],['奶油复古','cream']],()=>state.skin,v=>{state.skin=v;applySkin();toast('机身外观已切换')});hint(pSkin,'XP 采用经典蓝色标题栏与米灰按钮；Windows 7 采用玻璃质感浅蓝机身。');
+const pWater=addPane('水印');section(pWater,'WATERMARK / 水印');const wmToggle=toggle(pWater,'拍摄水印','enabled',state.watermark,v=>{state.watermark=v});const wmChecks=document.createElement('div');wmChecks.className='checks';function checkbox(label,key){const l=document.createElement('label'),i=document.createElement('input');i.type='checkbox';i.checked=state[key];i.onchange=()=>state[key]=i.checked;l.append(i,document.createTextNode(label));wmChecks.append(l)}[['日期','waterDate'],['时间','waterTime'],['REC / STBY','waterRec'],['设备名称','waterDevice'],['滤镜名称','waterFilter'],['影像序号','waterSerial']].forEach(([l,k])=>checkbox(l,k));pWater.append(wmChecks);const color=document.createElement('input');color.type='color';color.value=state.waterColor;color.oninput=()=>state.waterColor=color.value;field(pWater,'文字颜色',color);select(pWater,'字体',[['等宽数码','mono'],['iOS 系统','ios'],['衬线字体','serif'],['打字机','type']],state.waterFont,v=>state.waterFont=v);slider(pWater,'字体大小','waterSize',9,28,1,state.waterSize,v=>state.waterSize=v);slider(pWater,'不透明度','waterOpacity',.2,1,.05,state.waterOpacity,v=>state.waterOpacity=v);select(pWater,'水印位置',[['左上','tl'],['右上','tr'],['左下','bl'],['右下','br']],state.waterPosition,v=>state.waterPosition=v);const custom=document.createElement('input');custom.type='text';custom.placeholder='自定义设备名称';custom.value=state.customText;custom.oninput=()=>state.customText=custom.value;field(pWater,'自定义名称',custom);const shadow=toggle(pWater,'文字阴影','shadow',state.waterShadow,v=>state.waterShadow=v);
+const pAudio=addPane('声音');section(pAudio,'AUDIO / 音频');const micToggle=toggle(pAudio,'录像麦克风','mic',false,v=>{if(v)enableAudio();else disableAudio()});hint(pAudio,'只有在录制视频时才会把麦克风音轨加入录像。请在浏览器提示时允许麦克风权限。');
+showPane(pLook,$('tabs').firstElementChild);
+function targetRatio(){if(state.ratio==='Original')return (video.videoWidth||640)/(video.videoHeight||480);return ({'4:3':4/3,'16:9':16/9,'1:1':1,'2.35:1':2.35})[state.ratio]||4/3}
+function resizeOutput(){const ratio=targetRatio(),h=state.resolution;let w=Math.round(h*ratio);if(w%2)w++;canvas.width=Math.max(2,w);canvas.height=Math.max(2,h)}
+function applyColor(ctx){const preset=(filters.find(x=>x[0]===selectedFilter)||filters[0])[2];const sat=Math.max(0,Math.min(2,q.saturation));const contrast=1+Math.max(-.18,Math.min(.22,q.sharp*.12));const blur=Math.max(0,q.blur*.9);const warm=Math.max(0,q.whiteBalance);const cool=Math.max(0,-q.whiteBalance);const extra=`saturate(${sat}) contrast(${contrast}) blur(${blur}px) sepia(${warm*.12}) hue-rotate(${cool*8}deg)`;ctx.filter=(preset==='none'?'':preset+' ')+extra}
 const fontMap={mono:'ui-monospace,Menlo,monospace',ios:'-apple-system,BlinkMacSystemFont,sans-serif',serif:'Georgia,serif',type:'Courier New,monospace'};
-function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('on');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('on'),1800)}
-function fmt(sec){sec=Math.max(0,Math.floor(sec));return Math.floor(sec/3600)+':'+String(Math.floor(sec/60)%60).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
-function addPane(name){const d=document.createElement('div');d.className='pane';const b=document.createElement('button');b.className='btn';b.textContent=name;b.onclick=()=>showPane(d);$('#tabs').append(b);$('#panes').append(d);d.tab=b;return d}
-const panes=[],chipSync=[];
-function showPane(d){panes.forEach(p=>{p.classList.toggle('on',p===d);p.tab.classList.toggle('act',p===d)})}
-function head(p,t){const e=document.createElement('div');e.className='gh';e.textContent=t;p.append(e)}
-function note(p,t){const e=document.createElement('div');e.className='note';e.textContent=t;p.append(e)}
-function chips(p,labels,get,set){const w=document.createElement('div');w.className='chips';const bs=labels.map((label,i)=>{const b=document.createElement('button');b.className='btn';b.textContent=label;b.onclick=()=>{set(i);sync()};w.append(b);return b});function sync(){bs.forEach((b,i)=>b.classList.toggle('act',get()===i))}chipSync.push(sync);p.append(w);sync()}
-function slider(p,label,min,max,step,obj,key,cb){const l=document.createElement('label');l.className='ms';l.innerHTML='<span></span><input type="range"><i></i>';l.children[0].textContent=label;const input=l.children[1],v=l.children[2];input.min=min;input.max=max;input.step=step;function sync(){input.value=obj[key];v.textContent=(+obj[key]).toFixed(2)}input.oninput=()=>{obj[key]=+input.value;v.textContent=(+obj[key]).toFixed(2);saveSettings();cb&&cb()};p.append(l);sync();return sync}
-function toggle(p,label,obj,key,cb){const w=document.createElement('div');w.className='chips';const b=document.createElement('button');b.className='btn';function sync(){b.textContent=label+' '+(obj[key]?'开':'关');b.classList.toggle('act',!!obj[key])}b.onclick=()=>{obj[key]=!obj[key];sync();saveSettings();cb&&cb()};w.append(b);p.append(w);sync();return sync}
-function field(p,label,control){const r=document.createElement('div');r.className='field';const l=document.createElement('label');l.textContent=label;r.append(l,control);p.append(r);return control}
-function textInput(value,placeholder=''){const i=document.createElement('input');i.type='text';i.value=value;i.placeholder=placeholder;return i}
-function selectInput(options,value){const s=document.createElement('select');options.forEach(([label,val])=>{const o=document.createElement('option');o.textContent=label;o.value=val;s.append(o)});s.value=value;return s}
-function check(p,label,key){const l=document.createElement('label'),i=document.createElement('input');i.type='checkbox';i.checked=!!WM[key];i.onchange=()=>{WM[key]=i.checked;saveSettings()};l.append(i,document.createTextNode(label));p.append(l)}
-const pFilter=addPane('滤镜');panes.push(pFilter);head(pFilter,'FILM LOOK / 胶片风格');note(pFilter,'滤镜会应用于取景器、照片和录制的视频。选择轻量风格，保留自然的光线与肤色。');
-chips(pFilter,FILTERS.map(f=>f.name),()=>fi,i=>{fi=i;updateFilterButtons();toast('滤镜：'+FILTERS[fi].name)});
-const filterDesc=document.createElement('div');filterDesc.className='note';pFilter.append(filterDesc);
-function updateFilterButtons(){filterDesc.textContent=FILTERS[fi].desc;chipSync.forEach(f=>f())}
-const pQuality=addPane('画质');panes.push(pQuality);head(pQuality,'分辨率');chips(pQuality,RES.map(n=>n+'p'),()=>si,i=>{if(isRecording())return;si=i;$('#bre').textContent=RES[si]+'p'});
-head(pQuality,'画面比例');chips(pQuality,RATIOS.map(r=>r[0]),()=>ri,i=>{if(isRecording())return;ri=i;$('#bar').textContent=RATIOS[ri][0]});
-head(pQuality,'成像调整');const pSyncs=[];
-[['锐化','sh',0,1.2],['色彩拖影','bd',0,1],['后期模糊','bl',0,1],['饱和度','sat',0,1.4],['噪点','nz',0,1],['扫描线','sn',0,1],['暗角','vg',0,1],['紫边','pf',0,1],['色散','ca',0,1],['高光扩散','bm',0,1],['画面抖动','jt',0,1],['白平衡','wb',-1,1]].forEach(([l,k,a,b])=>pSyncs.push(slider(pQuality,l,a,b,.01,P,k,()=>{})));
-const resetQuality=document.createElement('button');resetQuality.className='btn';resetQuality.textContent='恢复清淡默认';resetQuality.onclick=()=>{Object.assign(P,DEFAULTS);pSyncs.forEach(f=>f());saveSettings();toast('已恢复默认画质')};pQuality.append(resetQuality);
-const pLook=addPane('外观');panes.push(pLook);head(pLook,'界面皮肤');chips(pLook,SKNAME,()=>S.skin,i=>{S.skin=i;applySkin();toast('外观已切换')});note(pLook,'拟物化金属、专业黑色、白陶瓷、香槟金与复古皮革主题。皮肤设置已从主界面移除。');
-const pWater=addPane('水印');panes.push(pWater);head(pWater,'水印总开关');toggle(pWater,'拍摄水印',WM,'enabled',()=>{saveSettings();drawFrame()});
-note(pWater,'水印会直接写入照片与录像文件。可单独控制每一项信息，并在取景器中实时预览。');
-head(pWater,'显示内容');const checks=document.createElement('div');checks.className='checks';['date','time','rec','device','filter','serial'].forEach(k=>check(checks,{date:'日期',time:'时间',rec:'REC / STBY',device:'设备名称',filter:'滤镜名称',serial:'序号'}[k],k));pWater.append(checks);
-head(pWater,'样式');const color=document.createElement('input');color.type='color';color.value=WM.color;field(pWater,'水印颜色',color);color.oninput=()=>{WM.color=color.value;saveSettings()};
-const fsel=selectInput([['等宽数码','mono'],['iOS 系统','ios'],['衬线字体','serif'],['打字机','type']],WM.font);field(pWater,'字体',fsel);fsel.onchange=()=>{WM.font=fsel.value;saveSettings()};
-pSyncs.push(slider(pWater,'字体大小',9,28,1,WM,'size',drawFrame));pSyncs.push(slider(pWater,'不透明度',.2,1,.05,WM,'opacity',drawFrame));
-const pos=selectInput([['左上','tl'],['右上','tr'],['左下','bl'],['右下','br']],WM.position);field(pWater,'水印位置',pos);pos.onchange=()=>{WM.position=pos.value;saveSettings();drawFrame()};
-const custom=textInput(WM.custom,'自定义设备名称');field(pWater,'自定义文字',custom);custom.oninput=()=>{WM.custom=custom.value;saveSettings();drawFrame()};
-const shadowToggle=toggle(pWater,'文字阴影',WM,'shadow',drawFrame);
-const pSound=addPane('声音');panes.push(pSound);head(pSound,'录制声音');note(pSound,'开启麦克风后，录像会尝试录入麦克风音频。iPhone 浏览器可能在录音时暂停其他 App 的音乐。');
-const micToggle=toggle(pSound,'麦克风',S,'mic',()=>{saveSettings();setupAudio()});
-pSyncs.push(slider(pSound,'输入增益',0,3,.05,S,'gain',()=>{if(audioContext&&audioContext.gainNode)audioContext.gainNode.gain.value=S.gain}));
-toggle(pSound,'降噪偏好',S,'ns',saveSettings);toggle(pSound,'自动增益偏好',S,'agc',saveSettings);toggle(pSound,'回声消除偏好',S,'ec',saveSettings);
-head(pSound,'录音码率');chips(pSound,['64k 低','128k 标准','256k 高'],()=>S.abr,i=>{S.abr=i;saveSettings()});
-panes.push(pQuality,pLook,pWater,pSound);
-showPane(pFilter);updateFilterButtons();
-function syncAll(){chipSync.forEach(f=>f())}
-$('#mb').onclick=()=>cam.classList.toggle('menu');$('#mc').onclick=()=>cam.classList.remove('menu');
-$('#skb')?.remove();/* Camera and optional audio */
-async function startCamera(){
-  if(!navigator.mediaDevices?.getUserMedia){pwMsg('当前浏览器不支持摄像头，请使用 HTTPS 页面并允许摄像头权限。');return}
-  if(stream)stream.getTracks().forEach(t=>t.stop());
-  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1920},height:{ideal:1080}},audio:false});vid.srcObject=stream;await vid.play();on=true;$('#pw').style.display='none';toast('摄像机已就绪')}
-  catch(e){pwMsg('无法使用摄像头：'+(e.name||e)+'。请检查浏览器权限。')}
-}
-function pwMsg(s){$('#pw').firstElementChild.textContent=s}
-$('#pwb').onclick=async()=>{await startCamera();if(S.mic)await setupAudio()};
-async function setupAudio(){
-  if(audioStream){audioStream.getTracks().forEach(t=>t.stop());audioStream=null}
-  audioDest=null;audioAnalyser=null;
-  $('#mic').textContent=S.mic?'MIC ON':'MIC OFF';$('#mic').classList.toggle('act',S.mic);
-  if(!S.mic)return;
-  try{
-    audioStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:!!S.ec,noiseSuppression:!!S.ns,autoGainControl:!!S.agc}});
-    const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
-    audioContext=new AC();const src=audioContext.createMediaStreamSource(audioStream),gain=audioContext.createGain(),an=audioContext.createAnalyser(),dest=audioContext.createMediaStreamDestination();
-    gain.gain.value=S.gain;an.fftSize=256;src.connect(gain);gain.connect(dest);gain.connect(an);audioDest=dest;audioAnalyser=an;audioContext.gainNode=gain;
-  }catch(e){S.mic=false;saveSettings();$('#mic').textContent='MIC OFF';toast('麦克风不可用，请检查权限')}
-}
-$('#mic').onclick=()=>{if(isRecording())return;S.mic=!S.mic;saveSettings();setupAudio()};
-$('#fl').onclick=async()=>{if(isRecording())return;facing=facing==='user'?'environment':'user';if(on)await startCamera()};
-$('#mV').onclick=()=>setMode('video');$('#mP').onclick=()=>setMode('photo');
-function setMode(m){if(isRecording())return;mode=m;$('#mV').classList.toggle('act',m==='video');$('#mP').classList.toggle('act',m==='photo');$('#sh').classList.toggle('photo',m==='photo');$('#sh').classList.remove('rec')}
-function isRecording(){return rec&&rec.state==='recording'}
-function setRes(i){if(isRecording())return;si=i;$('#bre').textContent=RES[si]+'p';syncAll()}
-function setRatio(i){if(isRecording())return;ri=i;$('#bar').textContent=RATIOS[ri][0];syncAll()}
-$('#bre').onclick=()=>setRes((si+1)%RES.length);$('#bar').onclick=()=>setRatio((ri+1)%RATIOS.length);
-function zoomButton(sel,dir){const e=$(sel);let active=false,last=0;e.addEventListener('pointerdown',ev=>{ev.preventDefault();active=true;last=performance.now();try{e.setPointerCapture(ev.pointerId)}catch(_){} });['pointerup','pointercancel','lostpointercapture'].forEach(n=>e.addEventListener(n,()=>active=false));function tick(){if(active){const now=performance.now(),dt=Math.min(.1,(now-last)/1000);last=now;zoomTarget=Math.max(1,Math.min(5,zoomTarget*Math.exp(dir*dt*.7)))}requestAnimationFrame(tick)}requestAnimationFrame(tick)}
-zoomButton('#zi',1);zoomButton('#zo',-1);
-$('#ori').onclick=()=>{land=!land;document.body.classList.toggle('land',land);$('#ori').textContent=land?'竖屏':'横屏'};
-function updateOrientation(){land=innerWidth>innerHeight;document.body.classList.toggle('land',land);$('#ori').textContent=land?'竖屏':'横屏'}
-updateOrientation();addEventListener('resize',updateOrientation);
-function filterStyle(){return FILTERS[fi]?.css||'none'}
-function watermark(ctx,w,h,recording){
- if(!WM.enabled)return;
- const parts=[];
- if(WM.device)parts.push(WM.custom.trim()||'HANDYCAM DV-2000');
- if(WM.filter)parts.push(FILTERS[fi].name.toUpperCase());
- if(WM.serial)parts.push('TAPE '+String(shotNo).padStart(4,'0'));
- if(WM.date)parts.push(new Date().toLocaleDateString('en-CA'));
- if(WM.time)parts.push(new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}));
- if(WM.rec)parts.push(recording?'● REC':'STBY');
- if(!parts.length)return;
- const size=Math.max(9,Math.min(28,+WM.size||14))*Math.max(1,w/640);
- ctx.save();ctx.globalAlpha=Math.max(.2,Math.min(1,+WM.opacity||.88));ctx.font=`600 ${size}px ${fontMap[WM.font]||fontMap.mono}`;ctx.textBaseline='top';
- const pad=size*.8,lines=parts;const lineH=size*1.45;let x=pad,y=pad;
- if(WM.position==='tr'||WM.position==='br')x=w-pad;
- if(WM.position==='bl'||WM.position==='br')y=h-pad-lineH*lines.length;
- lines.forEach((s,i)=>{ctx.textAlign=(WM.position==='tr'||WM.position==='br')?'right':'left';if(WM.shadow){ctx.shadowColor='#000';ctx.shadowBlur=size*.35;ctx.shadowOffsetX=1;ctx.shadowOffsetY=1}ctx.fillStyle=WM.color;ctx.fillText(s,x,y+i*lineH, w-pad*2);ctx.shadowBlur=0;ctx.shadowOffsetX=0;ctx.shadowOffsetY=0});
- ctx.restore();
-}
-function drawFrame(){
- const w=out.width,h=out.height;if(!w||!h)return;
- oc.save();oc.clearRect(0,0,w,h);oc.fillStyle='#000';oc.fillRect(0,0,w,h);
- if(on&&vid.readyState>=2){
-   const vw=vid.videoWidth||640,vh=vid.videoHeight||480,ratio=RATIOS[ri][1]||vw/vh;
-   let dw=w,dh=h;if(dw/dh>ratio)dw=dh*ratio;else dh=dw/ratio;
-   dw*=zoom;dh*=zoom;
-   const dx=(w-dw)/2,dy=(h-dh)/2;
-   oc.save();oc.filter=filterStyle();
-   if(facing==='user'){oc.translate(w,0);oc.scale(-1,1)}
-   oc.drawImage(vid,dx,dy,dw,dh);oc.restore();
-   /* Very subtle analog texture, kept light by default. */
-   if(P.nz>.01){oc.globalAlpha=Math.min(.10,P.nz*.035);for(let i=0;i<Math.round(w*h/4500);i++){oc.fillStyle=Math.random()>.5?'#fff':'#000';oc.fillRect(Math.random()*w,Math.random()*h,1,1)}}
-   if(P.vg>.01){const g=oc.createRadialGradient(w/2,h/2,Math.min(w,h)*.22,w/2,h/2,Math.max(w,h)*.72);g.addColorStop(0,'#0000');g.addColorStop(1,`rgba(0,0,0,${Math.min(.28,P.vg*.13)})`);oc.fillStyle=g;oc.fillRect(0,0,w,h)}
-   if(P.sn>.01){oc.globalAlpha=Math.min(.10,P.sn*.035);oc.fillStyle='#000';for(let y=0;y<h;y+=4)oc.fillRect(0,y,w,1)}
-   oc.globalAlpha=1;
-   watermark(oc,w,h,isRecording());
-   /* Minimal status icons */
-   oc.font=`bold ${Math.max(10,Math.min(w,h)*.025)}px ${fontMap.mono}`;oc.fillStyle='#fff';oc.shadowColor='#000';oc.shadowBlur=3;oc.textAlign='left';oc.textBaseline='bottom';
-   if(mode==='photo')oc.fillText('PHOTO',w*.025,h*.96);else if(!WM.enabled||!WM.rec)oc.fillText(isRecording()?'● REC':'STBY',w*.025,h*.96);
-   if(zoom>1.03)oc.fillText(zoom.toFixed(1)+'×',w*.025,h*.91);
-   oc.restore();
- }else{oc.fillStyle='#a0a0a0';oc.font='12px monospace';oc.textAlign='center';oc.fillText('NO SIGNAL',w/2,h/2)}
-}
-function resizeCanvas(){
- const N=RES[si],ratio=RATIOS[ri][1]||((vid.videoWidth||640)/(vid.videoHeight||480));let w,h;
- if(ratio>=1){h=N;w=Math.round(N*ratio)}else{w=N;h=Math.round(N/ratio)}
- w=Math.max(2,w&~1);h=Math.max(2,h&~1);
- if(out.width!==w||out.height!==h){out.width=w;out.height=h}
-}
-function loop(ts){requestAnimationFrame(loop);if(!on||vid.readyState<2||ts-lastFrame<33)return;lastFrame=ts;zoom+=(zoomTarget-zoom)*.18;$('#zr').textContent=zoom.toFixed(1)+'×';resizeCanvas();drawFrame()}
-requestAnimationFrame(loop);function flash(){const f=$('#flash');f.classList.add('on');f.style.animation='shutterFlash .42s ease-out';setTimeout(()=>{f.classList.remove('on');f.style.animation=''},430)}
-function addItem(item){items.unshift(item);$('#gb').textContent='GALLERY '+items.length;shotNo++;renderGallery();saveSettings()}
-$('#sh').onclick=()=>{
- if(!on){toast('请先开启摄像头');return}
- if(mode==='photo'){
-   flash();drawFrame();out.toBlob(blob=>{if(!blob){toast('照片生成失败');return}addItem({kind:'img',blob,url:URL.createObjectURL(blob),date:new Date()})},'image/jpeg',.94);toast('已拍摄照片');return
- }
- if(isRecording()){rec.stop();return}
- if(typeof MediaRecorder==='undefined'){toast('此浏览器不支持录像');return}
- try{
-   const cs=out.captureStream(30);if(audioDest)audioDest.stream.getAudioTracks().forEach(t=>cs.addTrack(t));
-   const types=['video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];const mime=types.find(t=>MediaRecorder.isTypeSupported(t))||'';
-   const opts={videoBitsPerSecond:Math.min(12e6,Math.max(2e6,RES[si]*RES[si]*4)),audioBitsPerSecond:[64000,128000,256000][S.abr]};if(mime)opts.mimeType=mime;
-   chunks=[];rec=new MediaRecorder(cs,opts);rec.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};
-   rec.onstop=()=>{const blob=new Blob(chunks,{type:rec.mimeType||'video/webm'});addItem({kind:'vid',blob,url:URL.createObjectURL(blob),date:new Date()});$('#sh').classList.remove('rec');toast('录像已保存到图库')};
-   rec.start(300);recStart=performance.now();$('#sh').classList.add('rec');toast('开始录像');
- }catch(e){toast('无法开始录像：'+(e.message||e))}
-};
-async function saveItem(it){
- const ext=it.kind==='img'?'jpg':(it.blob.type.includes('mp4')?'mp4':'webm');
- const file=new File([it.blob],`DV_${Date.now()}.${ext}`,{type:it.blob.type||'application/octet-stream'});
- try{if(navigator.canShare?.({files:[file]})){await navigator.share({files:[file]});toast('已打开分享菜单');return}}catch(e){if(e.name==='AbortError')return}
- const a=document.createElement('a');a.href=it.url;a.download=file.name;document.body.append(a);a.click();a.remove();toast('已触发下载；iPhone 可使用分享菜单存入照片')
-}
-function deleteItem(index){const it=items[index];if(!it)return;if(!confirm('确定删除这段影像吗？'))return;URL.revokeObjectURL(it.url);items.splice(index,1);$('#gb').textContent='GALLERY '+items.length;renderGallery();toast('已删除')}
-function renderGallery(){
- const g=$('#gl');g.innerHTML='';$('#gsub').textContent=`${items.length} 个片段 · PHOTO / VIDEO`;
- if(!items.length){const e=document.createElement('div');e.className='empty';e.innerHTML='<div class="reel">▣</div><strong>NO TAPE YET</strong><br>你的下一段回忆，会从这里开始。<br><br>关闭图库，按下快门拍摄第一张照片。';g.append(e);return}
- items.forEach((it,index)=>{
-   const d=document.createElement('div');d.className='it';d.style.animationDelay=Math.min(index*.025,.2)+'s';
-   const preview=document.createElement('div');preview.className='preview';
-   const el=document.createElement(it.kind==='img'?'img':'video');el.src=it.url;if(it.kind==='vid'){el.controls=true;el.playsInline=true}preview.append(el);
-   const meta=document.createElement('div');meta.className='meta';const type=document.createElement('span');type.textContent=it.kind==='img'?'▧ PHOTO':'▶ VIDEO';const time=document.createElement('span');time.textContent=it.date.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});meta.append(type,time);
-   const save=document.createElement('button');save.className='btn savebtn';save.textContent=it.kind==='img'?'⬇ 保存照片 / 分享':'⬇ 保存视频 / 分享';save.onclick=()=>saveItem(it);
-   const del=document.createElement('button');del.className='btn danger';del.textContent='删除';del.onclick=()=>deleteItem(index);
-   d.append(preview,meta,save,del);g.append(d)
- })
-}
-$('#gb').onclick=()=>{$('#gal').classList.add('on');renderGallery()};$('#gc').onclick=()=>$('#gal').classList.remove('on');
-$('#gal').addEventListener('click',e=>{if(e.target===$('#gal'))$('#gal').classList.remove('on')});
-/* Keep watermark and controls fresh while recording. */
-setInterval(()=>{if(on&&vid.readyState>=2){if(isRecording()&&performance.now()-recStart>0){} }},500);
-window.addEventListener('beforeunload',()=>{if(stream)stream.getTracks().forEach(t=>t.stop());if(audioStream)audioStream.getTracks().forEach(t=>t.stop());items.forEach(it=>URL.revokeObjectURL(it.url))});
+function drawWatermark(recording){if(!state.watermark)return;const w=canvas.width,h=canvas.height,lines=[];if(state.waterDevice)lines.push(state.customText.trim()||'HANDYCAM DV-2000');if(state.waterFilter)lines.push(selectedFilter.toUpperCase());if(state.waterSerial)lines.push('TAPE '+String(state.shotNo).padStart(4,'0'));const d=new Date();if(state.waterDate)lines.push(d.toLocaleDateString('en-CA'));if(state.waterTime)lines.push(d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}));if(state.waterRec)lines.push(recording?'● REC':'STBY');if(!lines.length)return;const size=state.waterSize*(w/640),pad=size*.8,lineH=size*1.4;let x=pad,y=pad;const right=state.waterPosition==='tr'||state.waterPosition==='br';if(right)x=w-pad;if(state.waterPosition==='bl'||state.waterPosition==='br')y=h-pad-lineH*lines.length;ctx.save();ctx.globalAlpha=state.waterOpacity;ctx.font=`600 ${size}px ${fontMap[state.waterFont]||fontMap.mono}`;ctx.textBaseline='top';ctx.textAlign=right?'right':'left';lines.forEach((line,i)=>{if(state.waterShadow){ctx.shadowColor='#000';ctx.shadowBlur=size*.4;ctx.shadowOffsetX=1;ctx.shadowOffsetY=1}ctx.fillStyle=state.waterColor;ctx.fillText(line,x,y+i*lineH,w-pad*2)});ctx.restore()}
+function draw(){const w=canvas.width,h=canvas.height;ctx.save();ctx.filter='none';ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);if(state.powered&&video.readyState>=2){const vw=video.videoWidth||640,vh=video.videoHeight||480,ratio=vw/vh;let dw=w,dh=h;if(state.fit==='contain'){if(w/h>ratio)dw=h*ratio;else dh=w/ratio}dw*=state.zoom;dh*=state.zoom;let dx=(w-dw)/2,dy=(h-dh)/2;if(q.jitter>.01){dx+=(Math.random()-.5)*q.jitter*3;dy+=(Math.random()-.5)*q.jitter*3}ctx.save();applyColor(ctx);if(state.facing==='user'){ctx.translate(w,0);ctx.scale(-1,1)}ctx.drawImage(video,dx,dy,dw,dh);ctx.restore();ctx.filter='none';if(q.chromatic>.01){ctx.save();ctx.globalAlpha=Math.min(.12,q.chromatic*.12);ctx.globalCompositeOperation='screen';ctx.drawImage(canvas,Math.max(1,q.chromatic*2),0,w,h);ctx.restore()}if(q.purple>.01){ctx.save();ctx.globalAlpha=Math.min(.08,q.purple*.08);ctx.fillStyle='#9d65d7';ctx.fillRect(0,0,w,h);ctx.restore()}if(q.smear>.01){ctx.save();ctx.globalAlpha=Math.min(.07,q.smear*.07);ctx.drawImage(canvas,0,Math.max(1,q.smear*2),w,h);ctx.restore()}if(q.bloom>.01){ctx.save();ctx.globalAlpha=Math.min(.09,q.bloom*.09);ctx.globalCompositeOperation='screen';ctx.filter=`blur(${1+q.bloom*3}px) brightness(1.15)`;ctx.drawImage(canvas,0,0,w,h);ctx.restore()}if(q.noise>.01){ctx.save();ctx.globalAlpha=Math.min(.08,q.noise*.035);for(let i=0,n=Math.round(w*h/5000);i<n;i++){ctx.fillStyle=Math.random()>.5?'#fff':'#000';ctx.fillRect(Math.random()*w,Math.random()*h,1,1)}ctx.restore()}if(q.scan>.01){ctx.save();ctx.globalAlpha=Math.min(.1,q.scan*.04);ctx.fillStyle='#000';for(let y=0;y<h;y+=4)ctx.fillRect(0,y,w,1);ctx.restore()}if(q.vignette>.01){const g=ctx.createRadialGradient(w/2,h/2,Math.min(w,h)*.24,w/2,h/2,Math.max(w,h)*.72);g.addColorStop(0,'#0000');g.addColorStop(1,`rgba(0,0,0,${Math.min(.32,q.vignette*.14)})`);ctx.fillStyle=g;ctx.fillRect(0,0,w,h)}drawWatermark(!!state.recording&&state.recording.state==='recording');if(!state.watermark||!state.waterRec){ctx.save();ctx.fillStyle='#fff';ctx.font=`bold ${Math.max(10,h*.025)}px ui-monospace,monospace`;ctx.shadowColor='#000';ctx.shadowBlur=3;ctx.textBaseline='bottom';ctx.fillText(state.mode==='photo'?'PHOTO':(state.recording?'● REC':'STBY'),w*.025,h*.96);ctx.restore()}}else{ctx.fillStyle='#b0b5bd';ctx.font='12px ui-monospace,monospace';ctx.textAlign='center';ctx.fillText('NO SIGNAL',w/2,h/2)}ctx.restore()}
+function frameLoop(){requestAnimationFrame(frameLoop);state.zoom+=(state.zoomTarget-state.zoom)*.2;$('zoomRead').textContent=state.zoom.toFixed(1)+'×';if(state.powered&&video.readyState>=2){const z=state.zoom;if(z!==1){/* digital zoom uses a centered source crop */}draw()}else draw()}
+function updateStatus(){const rec=state.recording&&state.recording.state==='recording';$('stateText').textContent=rec?'RECORDING':state.powered?'READY':'STANDBY';$('led').style.background=rec?'#ff3434':state.powered?'#4ed26c':'#d0a23c';$('led').style.boxShadow=rec?'0 0 7px #f33':'0 0 6px #4ed26c88'}
+async function startCamera(){if(!navigator.mediaDevices?.getUserMedia){$('powerText').textContent='浏览器不支持摄像头，请使用 HTTPS 页面。';return}try{if(state.stream)state.stream.getTracks().forEach(t=>t.stop());state.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:state.facing,width:{ideal:1920},height:{ideal:1080}},audio:false});video.srcObject=state.stream;await video.play();state.powered=true;$('powercover').style.display='none';resizeOutput();updateStatus();toast('摄像机已开启')}catch(e){$('powerText').textContent='无法开启摄像头：'+(e.name||e)+'。请检查权限后重试。';toast('摄像头启动失败')}}
+$('powerBtn').onclick=startCamera;
+async function enableAudio(){try{state.audioStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('不支持音频');state.audioCtx=new AC();const src=state.audioCtx.createMediaStreamSource(state.audioStream);state.audioDest=state.audioCtx.createMediaStreamDestination();src.connect(state.audioDest);toast('麦克风已开启')}catch(e){micToggle.set(false);state.audioDest=null;toast('麦克风不可用，请检查权限')}}
+function disableAudio(){if(state.audioStream)state.audioStream.getTracks().forEach(t=>t.stop());state.audioStream=null;state.audioDest=null}
+$('micBtn').onclick=()=>{const next=$('micBtn').dataset.on!=='1';$('micBtn').dataset.on=next?'1':'0';$('micBtn').textContent=next?'MIC ON':'MIC OFF';$('micBtn').classList.toggle('active',next);if(next)enableAudio();else disableAudio()};
+$('videoMode').onclick=()=>setMode('video');$('photoMode').onclick=()=>setMode('photo');
+function setMode(m){if(state.recording&&state.recording.state==='recording')return;state.mode=m;$('videoMode').classList.toggle('active',m==='video');$('photoMode').classList.toggle('active',m==='photo');$('shutter').classList.toggle('photo',m==='photo')}
+$('ratioBtn').onclick=()=>{const list=['4:3','16:9','1:1','2.35:1','Original'];state.ratio=list[(list.indexOf(state.ratio)+1)%list.length];syncRatio();resizeOutput()};
+$('resBtn').onclick=()=>{const list=[240,360,480,720,1080];state.resolution=list[(list.indexOf(state.resolution)+1)%list.length];syncResolution();resizeOutput()};
+$('zoomIn').onclick=()=>state.zoomTarget=Math.min(5,state.zoomTarget+.25);
+$('zoomOut').onclick=()=>state.zoomTarget=Math.max(1,state.zoomTarget-.25);
+$('flipBtn').onclick=async()=>{if(state.recording&&state.recording.state==='recording')return;state.facing=state.facing==='user'?'environment':'user';if(state.powered)await startCamera()};
+$('orientationBtn').onclick=()=>{document.body.classList.toggle('force-landscape');const force=document.body.classList.contains('force-landscape');app.classList.toggle('force-landscape',force);toast(force?'已启用横向控制布局':'已恢复自动布局')};
+$('menuBtn').onclick=()=>app.classList.toggle('menu');
+$('closeMenu').onclick=()=>app.classList.remove('menu');
+function triggerFlash(){const f=$('flash');f.classList.remove('fire');void f.offsetWidth;f.classList.add('fire')}
+function recording(){return state.recording&&state.recording.state==='recording'}
+$('shutter').onclick=()=>{if(!state.powered){toast('请先开启摄像头');return}if(state.mode==='photo'){triggerFlash();draw();canvas.toBlob(blob=>{if(blob)addItem('photo',blob);else toast('照片生成失败')},'image/jpeg',.94);toast('已拍摄照片');return}if(recording()){state.recording.stop();return}if(!window.MediaRecorder){toast('浏览器不支持录像');return}try{const stream=canvas.captureStream(30);if(state.audioDest)state.audioDest.stream.getAudioTracks().forEach(t=>stream.addTrack(t));const mime=['video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t=>MediaRecorder.isTypeSupported(t))||'';state.chunks=[];state.recording=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);state.recording.ondataavailable=e=>{if(e.data&&e.data.size)state.chunks.push(e.data)};state.recording.onstop=()=>{const blob=new Blob(state.chunks,{type:state.recording.mimeType||'video/webm'});addItem('video',blob);$('shutter').classList.remove('recording');updateStatus();toast('录像已加入图库')};state.recording.start(250);$('shutter').classList.add('recording');updateStatus();toast('开始录像，再按一次停止')}catch(e){toast('无法开始录像：'+e.message)}};
+function addItem(kind,blob){const url=URL.createObjectURL(blob);state.items.unshift({kind,blob,url,date:new Date()});state.shotNo++;$('galleryBtn').textContent='GALLERY '+state.items.length;renderGallery()}
+function renderGallery(){const list=$('galleryList');list.innerHTML='';$('gallerySub').textContent=`${state.items.length} 个片段 · 照片与录像`;if(!state.items.length){const d=document.createElement('div');d.className='empty';d.textContent='▣  NO TAPE YET\n关闭图库并按下快门，记录你的第一段回忆。';list.append(d);return}state.items.forEach((item,i)=>{const card=document.createElement('article');card.className='item';const prev=document.createElement('div');prev.className='preview';const media=document.createElement(item.kind==='photo'?'img':'video');media.src=item.url;if(item.kind==='video'){media.controls=true;media.playsInline=true}prev.append(media);const meta=document.createElement('div');meta.className='meta';const a=document.createElement('span');a.textContent=item.kind==='photo'?'▧ PHOTO':'▶ VIDEO';const b=document.createElement('span');b.textContent=item.date.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});meta.append(a,b);const save=document.createElement('button');save.className='btn save';save.textContent=item.kind==='photo'?'⬇ 保存照片 / 分享':'⬇ 保存视频 / 分享';save.onclick=()=>saveItem(item);const del=document.createElement('button');del.className='btn danger';del.textContent='删除';del.onclick=()=>{if(!confirm('确定删除这段影像？'))return;URL.revokeObjectURL(item.url);state.items.splice(i,1);$('galleryBtn').textContent='GALLERY '+state.items.length;renderGallery()};card.append(prev,meta,save,del);list.append(card)})}
+async function saveItem(item){const ext=item.kind==='photo'?'jpg':item.blob.type.includes('mp4')?'mp4':'webm';const file=new File([item.blob],`DV_${Date.now()}.${ext}`,{type:item.blob.type||'application/octet-stream'});try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file]});toast('已打开系统分享菜单');return}}catch(e){if(e.name==='AbortError')return}const a=document.createElement('a');a.href=item.url;a.download=file.name;document.body.append(a);a.click();a.remove();toast('已触发下载；iPhone 可用分享菜单存入照片')}
+$('galleryBtn').onclick=()=>{$('gallery').classList.add('open');renderGallery()};
+$('closeGallery').onclick=()=>$('gallery').classList.remove('open');
+/* Force-landscape is a layout preference only: it never rotates the video or changes its pixel ratio. */
+const extra=document.createElement('style');extra.textContent='body.force-landscape .app{width:100%;max-width:none;display:grid;grid-template-columns:minmax(0,1fr) 205px;grid-template-rows:25px auto minmax(0,1fr);gap:7px;padding:8px}body.force-landscape .brandbar{grid-column:1/3;grid-row:1}body.force-landscape .topbar{grid-column:2;grid-row:2;justify-content:center}body.force-landscape .viewport{grid-column:1;grid-row:2/4;min-height:0}body.force-landscape .deck{grid-column:2;grid-row:3;justify-content:center;padding:7px}body.force-landscape .settings{grid-column:2;grid-row:3;max-height:none;height:100%;min-height:0}body.force-landscape .row{flex-wrap:wrap;justify-content:center}body.force-landscape .app.menu{grid-template-columns:minmax(0,1fr) 285px}body.force-landscape .app.menu .settings{grid-column:2;grid-row:3}body.force-landscape .app.menu .deck{display:none}';document.head.append(extra);
+// Keep the preview's source geometry separate from the canvas geometry, preventing accidental squash/stretch.
+let lastWidth=canvas.width,lastHeight=canvas.height;function geometryGuard(){const r=targetRatio();if(state.ratio!=='Original'){const h=state.resolution,w=Math.round(h*r);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}}if(canvas.width!==lastWidth||canvas.height!==lastHeight){lastWidth=canvas.width;lastHeight=canvas.height}}
+function renderTick(){requestAnimationFrame(renderTick);state.zoom+=(state.zoomTarget-state.zoom)*.15;$('zoomRead').textContent=state.zoom.toFixed(1)+'×';draw()}
+// Replace the default drawing path with the zoom-aware path and make the legacy controls always sync.
+function syncRatio(){ $('ratioBtn').textContent=state.ratio==='Original'?'原始':state.ratio }
+function syncResolution(){ $('resBtn').textContent=state.resolution+'p' }
+resizeOutput();syncRatio();syncResolution();applySkin();updateStatus();renderTick();
+window.addEventListener('beforeunload',()=>{if(state.stream)state.stream.getTracks().forEach(t=>t.stop());if(state.audioStream)state.audioStream.getTracks().forEach(t=>t.stop());state.items.forEach(x=>URL.revokeObjectURL(x.url))});
+})();
 </script>
 </body>
 </html>
