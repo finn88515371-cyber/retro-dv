@@ -3,10 +3,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HANDYCAM DV-2000</title>
 <style>
-:root{color-scheme:dark;--ink:#d8d8d0;--red:#d8322b;--plate:#2a2c31;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{color-scheme:dark;--ink:#d8d8d0;--red:#d8322b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{height:100%;margin:0;background:#0d0d0f;color:var(--ink);font-family:ui-monospace,Menlo,monospace}
-.cam{height:100%;display:flex;flex-direction:column;gap:10px;padding:10px;box-sizing:border-box;max-width:560px;margin:0 auto}
+.cam{height:100%;display:flex;flex-direction:column;gap:8px;padding:10px;box-sizing:border-box;max-width:560px;margin:0 auto}
 .top{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.15em;color:#8b8d92}
 .top b{color:#c9c9c0;font-size:13px}
 .lcd{flex:1;min-height:0;position:relative;background:#000;border-radius:14px;border:7px solid #34363c;box-shadow:inset 0 0 24px #000,0 0 0 2px #0a0a0a,0 6px 20px #0008;overflow:hidden}
@@ -14,17 +14,19 @@ body{height:100%;margin:0;background:#0d0d0f;color:var(--ink);font-family:ui-mon
 #flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .35s}
 #flash.on{opacity:.9;transition:none}
 #pw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#000;text-align:center;padding:20px;font-size:13px;line-height:1.6;color:#9a9a92}
-.deck{background:linear-gradient(#2d2f35,#1f2024);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:12px;border:1px solid #3b3d44}
+.deck{background:linear-gradient(#2d2f35,#1f2024);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:9px;border:1px solid #3b3d44}
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .btn{background:#3a3c43;color:var(--ink);border:1px solid #55575f;border-bottom-width:3px;border-radius:8px;padding:9px 12px;font:inherit;font-size:12px;letter-spacing:.1em;cursor:pointer}
 .btn.act{background:#c9c9c0;color:#111;border-color:#e8e8e0}
 .btn:active{transform:translateY(1px)}
-.shut{width:76px;height:76px;border-radius:50%;border:5px solid #9a9a96;background:#18181b;position:relative;cursor:pointer;padding:0;flex:none}
+.shut{width:72px;height:72px;border-radius:50%;border:5px solid #9a9a96;background:#18181b;position:relative;cursor:pointer;padding:0;flex:none}
 .shut::after{content:'';position:absolute;inset:8px;border-radius:50%;background:var(--red);transition:.15s}
 .shut.photo::after{background:#e4e4dc}
 .shut.rec::after{inset:21px;border-radius:6px;background:var(--red)}
-.fx{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;color:#8b8d92;flex:1}
-.fx input{flex:1;accent-color:#c9c9c0}
+.sl{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;color:#8b8d92;flex:1}
+.sl input{flex:1;accent-color:#c9c9c0;min-width:0}
+.chips{display:flex;gap:6px;overflow-x:auto}
+.chips .btn{padding:7px 10px;flex:none}
 #gal{position:fixed;inset:0;background:#111;z-index:20;display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 #gal.on{display:flex}
 #gal header{display:flex;justify-content:space-between;align-items:center;padding:12px;font-size:13px;letter-spacing:.1em}
@@ -42,9 +44,14 @@ body{height:100%;margin:0;background:#0d0d0f;color:var(--ink);font-family:ui-mon
     <div id="pw"><div>点 POWER 开机并允许使用摄像头 / 麦克风<br>（需要 HTTPS，在 iPhone Safari 中打开）</div><button class="btn act" id="pwb">⏻ POWER</button></div>
   </div>
   <div class="deck">
+    <div class="row"><label class="sl">W<input type="range" id="zm" min="1" max="6" step=".01" value="1">T</label></div>
+    <div class="row"><label class="sl">蓝<input type="range" id="wb" min="-1" max="1" step=".01" value="0">黄</label></div>
+    <div class="chips" id="chips">
+      <button class="btn act" data-f="0">DV</button><button class="btn" data-f="1">VHS</button><button class="btn" data-f="2">NIGHT</button><button class="btn" data-f="3">B&amp;W</button><button class="btn" data-f="4">HOME</button><button class="btn" data-f="5">CYBER</button>
+    </div>
     <div class="row">
       <div style="display:flex;gap:6px"><button class="btn act" id="mV">VIDEO</button><button class="btn" id="mP">PHOTO</button></div>
-      <label class="fx">FX<input type="range" id="fx" min="0" max="1.5" step=".05" value="1"></label>
+      <label class="sl">FX<input type="range" id="fx" min="0" max="1.5" step=".05" value="1"></label>
     </div>
     <div class="row">
       <button class="btn" id="gb">GALLERY 0</button>
@@ -61,31 +68,42 @@ const out=$('#out'),oc=out.getContext('2d');
 const gc=document.createElement('canvas'),gl=gc.getContext('webgl');
 const VS='attribute vec2 a;varying vec2 u;void main(){u=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}';
 const FS=`precision highp float;
-uniform sampler2D t;uniform vec2 r;uniform float T,k,m;varying vec2 u;
+uniform sampler2D t;uniform vec2 r;uniform float T,k,m,z,fb,wb,F;varying vec2 u;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
 vec3 S(vec2 p){p.x=mix(p.x,1.-p.x,m);return texture2D(t,clamp(p,0.,1.)).rgb;}
+float Yf(vec3 c){return dot(c,vec3(.299,.587,.114));}
 void main(){
  vec3 w=vec3(.299,.587,.114);
- vec2 uv=u;float L=floor(uv.y*240.);float f=floor(T*30.);
+ vec2 sc=u;float L=floor(sc.y*240.);float f=floor(T*30.);
  float jit=h(vec2(L,f))-.5;
- uv.x+=jit*.0025*k+sin(uv.y*8.+T*1.5)*.0006*k;
- float inb=smoothstep(.03,0.,abs(uv.y-fract(T*.05)));
- uv.x+=inb*jit*.03*k;
- vec2 c=uv-.5;vec2 ca=c*(.004+dot(c,c)*.03)*k;
- vec3 col=vec3(S(uv+ca).r,S(uv).g,S(uv-ca).b);
+ vec2 uv=(sc-.5)/z+.5;
+ uv.x+=jit*.0025*k+sin(sc.y*8.+T*1.5)*.0006*k;
+ vec2 c=sc-.5;
+ vec2 ca=c*(.008+dot(c,c)*.04)*k+vec2(.0012*k,0.);
+ vec3 col=vec3(S(uv+ca).r,S(uv).g,S(uv-ca*1.3).b);
+ if(fb>0.){vec3 bl=(S(uv+vec2(fb,0.))+S(uv-vec2(fb,0.))+S(uv+vec2(0.,fb))+S(uv-vec2(0.,fb)))*.25;col=mix(col,bl,min(fb*120.,.8));}
  vec3 sm=(S(uv-vec2(.003,0.))+S(uv-vec2(.007,0.))+S(uv-vec2(.011,0.))+S(uv-vec2(.015,0.)))*.25;
  vec3 cm=mix(col,sm,min(.8*k,1.));
- col=dot(col,w)+(cm-dot(cm,w))*1.15;
+ col=Yf(col)+(cm-Yf(cm))*1.15;
+ float e=abs(Yf(S(uv+vec2(.004,0.)))-Yf(S(uv-vec2(.004,0.))));
+ col+=vec3(.5,0.,.9)*smoothstep(.05,.35,e)*.5*k;
  vec3 b=vec3(0.);
  for(int i=0;i<12;i++){float a=float(i)*.5236;vec2 d=vec2(cos(a),sin(a)*r.x/r.y);
   b+=max(S(uv+d*.012)-.55,0.)+max(S(uv+d*.03)-.55,0.)*.8;}
  col+=b*.14*k*vec3(1.,.92,.8);
- col=(col-.5)*1.1+.5;col=mix(vec3(dot(col,w)),col,1.1);
+ col=(col-.5)*1.1+.5;col=mix(vec3(Yf(col)),col,1.1);
  col+=vec3(.02,.01,-.01)*k;col=max(col,vec3(.04*k));
- col*=1.-.12*k*(.5+.5*sin(uv.y*240.*6.2832));
- col*=1.-.03*k*mod(f,2.);
- float n=h(uv*r+T)-.5;col+=n*.22*k*(1.-dot(col,w)*.5);
- col+=(vec3(h(uv*r*.5+T+1.),h(uv*r*.5+T+2.),h(uv*r*.5+T+3.))-.5)*.08*k;
+ float Y=Yf(col);float nk=1.;
+ if(F==1.){col=mix(vec3(Y),col,.75)*vec3(1.05,.96,1.1);nk=1.6;}
+ else if(F==2.){col=vec3(.25,1.,.3)*min(Y*2.2,1.3);nk=2.4;}
+ else if(F==3.){col=vec3(Y)*1.12+.02;nk=1.3;}
+ else if(F==4.){col=vec3(Y)*vec3(1.25,1.,.72)*1.05+(col-Y)*.35;}
+ else if(F==5.){col=mix(col,mix(vec3(0.,.3,.4),vec3(1.,.4,.8),smoothstep(.1,.9,Y)),.65);}
+ col*=vec3(1.+wb*.14,1.+wb*.03,1.-wb*.18);
+ col*=1.-.05*k*(.5+.5*sin(sc.y*240.*6.2832));
+ col*=1.-.02*k*mod(f,2.);
+ float n=h(sc*r+T)-.5;col+=n*.22*k*nk*(1.-Yf(col)*.5);
+ col+=(vec3(h(sc*r*.5+T+1.),h(sc*r*.5+T+2.),h(sc*r*.5+T+3.))-.5)*.08*k*nk;
  col*=1.-dot(c,c)*1.1*k;
  gl_FragColor=vec4(col,1.);}`;
 function sh(ty,s){const o=gl.createShader(ty);gl.shaderSource(o,s);gl.compileShader(o);return o}
@@ -101,6 +119,8 @@ const U=n=>gl.getUniformLocation(pg,n);
 
 const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
 let stream,facing='environment',on=false,mode='video',rec,chunks=[],t0=0,items=[],last=0,W=0,H=0;
+let zt=1,zc=1,zT=0,fi=0;
+const FN=['DV','VHS','NIGHT','B&W','HOME','CYBER'];
 
 async function start(){
   if(stream)stream.getTracks().forEach(t=>t.stop());
@@ -114,6 +134,9 @@ async function start(){
 function pwMsg(s){$('#pw').firstElementChild.textContent=s}
 $('#pwb').onclick=start;
 $('#fl').onclick=()=>{if(rec&&rec.state==='recording')return;facing=facing==='user'?'environment':'user';if(on)start()};
+$('#zm').oninput=e=>{zt=+e.target.value;zT=performance.now()};
+$('#chips').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;fi=+b.dataset.f;
+  document.querySelectorAll('#chips .btn').forEach(x=>x.classList.toggle('act',x===b))};
 
 function size(){
   const vw=vid.videoWidth,vh=vid.videoHeight;if(!vw)return false;
@@ -132,7 +155,12 @@ function ov(T){
   const blink=Math.floor(T*1.5)%2===0;
   if(mode==='photo')tx('PHOTO',m,m);
   else tx(isRec?(blink?'● REC':'  REC'):'STBY',m,m);
+  if(fi)tx(FN[fi],m,m+f*1.25);
   tx('SP ▮▮▮▯',W-m,m,'right');
+  if(performance.now()-zT<1800||Math.abs(zt-zc)>.01){
+    const n=Math.max(0,Math.min(8,Math.round((zc-1)/5*8)));
+    tx('W '+'▮'.repeat(n)+'▯'.repeat(8-n)+' T',W/2,H-m-f*3.4,'center');
+  }
   const d=new Date();
   tx(d.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).toUpperCase(),m,H-m-f*2.2);
   tx(d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),m,H-m-f);
@@ -142,9 +170,13 @@ function loop(ts){
   requestAnimationFrame(loop);
   if(!on||vid.readyState<2||ts-last<33||!size())return;
   last=ts;const T=ts/1000;
+  zc+=(zt-zc)*.08;if(Math.abs(zt-zc)<.002)zc=zt;
   gl.bindTexture(gl.TEXTURE_2D,tx);
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,vid);
-  gl.uniform2f(U('r'),W,H);gl.uniform1f(U('T'),T%1000);gl.uniform1f(U('k'),+$('#fx').value);gl.uniform1f(U('m'),facing==='user'?1:0);
+  gl.uniform2f(U('r'),W,H);gl.uniform1f(U('T'),T%1000);gl.uniform1f(U('k'),+$('#fx').value);
+  gl.uniform1f(U('m'),facing==='user'?1:0);gl.uniform1f(U('z'),zc);
+  gl.uniform1f(U('fb'),Math.min(Math.abs(zt-zc)*.0015,.008));
+  gl.uniform1f(U('wb'),+$('#wb').value);gl.uniform1f(U('F'),fi);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
   oc.drawImage(gc,0,0);ov(T);
 }
