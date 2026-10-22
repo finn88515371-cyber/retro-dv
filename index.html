@@ -7,8 +7,7 @@
 html{height:100%}
 body{height:100%;margin:0;background:#0d0d0f;color:var(--ink);font-family:ui-monospace,Menlo,monospace;overflow:hidden}
 .cam{position:relative;height:100%;display:flex;flex-direction:column;gap:6px;padding:8px;box-sizing:border-box;max-width:560px;margin:0 auto}
-.top{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.12em;color:#8b8d92}
-.top b{color:#c9c9c0;font-size:12px}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
 .tb{display:flex;gap:5px}
 .lcd{flex:1;min-height:0;position:relative;background:#000;border-radius:12px;border:6px solid #34363c;box-shadow:inset 0 0 24px #000,0 0 0 2px #0a0a0a,0 6px 20px #0008;overflow:hidden}
 #out{width:100%;height:100%;object-fit:contain;display:block;background:#000}
@@ -27,28 +26,25 @@ body{height:100%;margin:0;background:#0d0d0f;color:var(--ink);font-family:ui-mon
 .shut.rec::after{inset:16px;border-radius:5px;background:var(--red)}
 .sl{display:flex;align-items:center;gap:7px;font-size:11px;color:#8b8d92;flex:1}
 .sl input{flex:1;accent-color:#c9c9c0;min-width:0;margin:0}
-/* landscape layout */
-body.land .cam{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) 150px;grid-template-rows:auto minmax(0,1fr)}
+body:not(.mob) #ori{display:none}
+body.land .cam{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) 160px;grid-template-rows:auto minmax(0,1fr)}
 body.land .lcd{grid-row:1/3;grid-column:1}
 body.land .top{grid-column:2;grid-row:1;justify-content:center}
-body.land .ttl{display:none}
 body.land .deck{grid-column:2;grid-row:2;overflow-y:auto;justify-content:center}
 body.land .ctl{flex-direction:column}
 body.land .seg{flex-wrap:wrap;justify-content:center}
 body.rotr .cam,body.rotl .cam{position:fixed;top:0;left:0;width:100vh;width:100dvh;height:100vw;height:100dvw;transform-origin:0 0;padding:14px 22px}
 body.rotr .cam{transform:translateX(100vw) rotate(90deg);transform:translateX(100dvw) rotate(90deg)}
 body.rotl .cam{transform:translateY(100vh) rotate(-90deg);transform:translateY(100dvh) rotate(-90deg)}
-/* menu */
-#menu{position:absolute;z-index:15;display:none;background:rgba(16,16,18,.92);overflow-y:auto;padding:10px 12px 16px;box-sizing:border-box;left:0;right:0;bottom:0;height:52%;border-top:2px solid #3b3d44;border-radius:14px 14px 0 0}
-body.land #menu{left:auto;top:0;height:auto;width:50%;border-top:0;border-left:2px solid #3b3d44;border-radius:14px 0 0 14px}
+#menu{position:absolute;z-index:15;display:none;background:rgba(16,16,18,.93);overflow-y:auto;padding:10px 12px 16px;box-sizing:border-box;left:0;right:0;bottom:0;height:55%;border-top:2px solid #3b3d44;border-radius:14px 14px 0 0}
+body.land #menu{left:auto;top:0;height:auto;width:52%;border-top:0;border-left:2px solid #3b3d44;border-radius:14px 0 0 14px}
 #menu.on{display:block}
 .mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px;letter-spacing:.1em}
 .chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px}
 .ms{display:flex;align-items:center;gap:8px;font-size:12px;margin:10px 0}
-.ms span{width:76px;flex:none}
+.ms span{width:84px;flex:none}
 .ms input{flex:1;min-width:0;accent-color:#c9c9c0;margin:0}
 .ms i{width:34px;text-align:right;font-style:normal;color:#8b8d92;font-size:11px}
-/* gallery */
 #gal{position:absolute;inset:0;background:#111;z-index:20;display:none;flex-direction:column}
 #gal.on{display:flex}
 #gal header{display:flex;justify-content:space-between;align-items:center;padding:10px;font-size:12px;letter-spacing:.1em}
@@ -59,7 +55,10 @@ body.land #menu{left:auto;top:0;height:auto;width:50%;border-top:0;border-left:2
 </style></head>
 <body>
 <div class="cam">
-  <div class="top"><b class="ttl">DV-2000</b><div class="tb"><button class="btn" id="gb">GALLERY 0</button><button class="btn" id="mb">MENU</button></div></div>
+  <div class="top">
+    <div class="tb"><button class="btn" id="bar">4:3</button><button class="btn" id="bre">360p</button></div>
+    <div class="tb"><button class="btn" id="gb">GALLERY 0</button><button class="btn" id="mb">MENU</button></div>
+  </div>
   <div class="lcd">
     <canvas id="out" width="640" height="480"></canvas>
     <div id="flash"></div>
@@ -89,37 +88,46 @@ const out=$('#out'),oc=out.getContext('2d');
 const gc=document.createElement('canvas'),gl=gc.getContext('webgl');
 const VS='attribute vec2 a;varying vec2 u;void main(){u=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}';
 const FS=`precision highp float;
-uniform sampler2D t;uniform vec2 r;
-uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb;
+uniform sampler2D t;uniform vec2 r,cr;
+uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh;
 varying vec2 u;
+vec2 PX;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
 vec3 S(vec2 p){p.x=mix(p.x,1.-p.x,m);
- if(rot>1.5)p=vec2(1.-p.y,p.x);else if(rot>.5)p=vec2(p.y,1.-p.x);
+ if(rot>1.5)p=vec2(p.y,1.-p.x);else if(rot>.5)p=vec2(1.-p.y,p.x);
  return texture2D(t,clamp(p,0.,1.)).rgb;}
+vec3 Sb(vec2 p){vec2 o=PX*.35;return (S(p+o)+S(p+vec2(-o.x,o.y))+S(p+vec2(o.x,-o.y))+S(p-o))*.25;}
 float Yf(vec3 c){return dot(c,vec3(.299,.587,.114));}
 void main(){
  vec3 w=vec3(.299,.587,.114);
  vec2 sc=u;float L=floor(sc.y*240.);float f=floor(T*30.);
+ PX=(1./r)*cr/z;
  float jit=h(vec2(L,f))-.5;
- vec2 uv=(sc-.5)/z+.5;
+ vec2 uv=(sc-.5)*cr/z+.5;
  uv.x+=jit*.0025*jt+sin(sc.y*8.+T*1.5)*.0006*jt;
- vec2 c=sc-.5;
+ vec2 c=sc-.5;float asp=r.x/r.y;
  vec2 c2=c*(.008+dot(c,c)*.04)*ca+vec2(.0012*ca,0.);
- vec3 col=vec3(S(uv+c2).r,S(uv).g,S(uv-c2*1.3).b);
- float rr=bl*.003+fb;float asp=r.x/r.y;
+ vec3 col=vec3(Sb(uv+c2).r,Sb(uv).g,Sb(uv-c2*1.3).b);
+ float rr=bl*.003+fb;
  if(rr>.0002){vec3 bk=(col+S(uv+vec2(rr,0.))+S(uv-vec2(rr,0.))+S(uv+vec2(0.,rr*asp))+S(uv-vec2(0.,rr*asp)))*.2;col=mix(col,bk,clamp(rr*400.,0.,.9));}
  vec3 sm=(S(uv-vec2(.003,0.))+S(uv-vec2(.007,0.))+S(uv-vec2(.011,0.))+S(uv-vec2(.015,0.)))*.25;
  vec3 cm=mix(col,sm,clamp(.8*bd,0.,1.));
- col=Yf(col)+(cm-Yf(cm))*1.15;
+ float Y0=Yf(col);
+ col=Y0+(cm-Yf(cm))*1.15;
+ float yl=Yf(Sb(uv-vec2(PX.x,0.))),yr=Yf(Sb(uv+vec2(PX.x,0.)));
+ float yu=Yf(Sb(uv-vec2(0.,PX.y))),yd=Yf(Sb(uv+vec2(0.,PX.y)));
+ col+=((Y0*2.-yl-yr)*.4+(Y0*2.-yu-yd)*.2)*sh;
  float ya=Yf(S(uv+vec2(.005,0.))),yb=Yf(S(uv-vec2(.005,0.)));
  float pu=smoothstep(.04,.3,abs(ya-yb))*(.35+.65*smoothstep(.4,.9,max(ya,yb)));
  col+=vec3(.55,.05,1.)*pu*.7*pf;col.g-=pu*.12*pf;
  vec3 b=vec3(0.);
  for(int i=0;i<12;i++){float a=float(i)*.5236;vec2 d=vec2(cos(a),sin(a)*asp);
   b+=max(S(uv+d*.012)-.55,0.)+max(S(uv+d*.03)-.55,0.)*.8;}
- col+=b*.14*bm*vec3(1.,.92,.8);
+ col+=b*.14*bm*vec3(.92,.94,1.);
  col=(col-.5)*1.1+.5;col=mix(vec3(Yf(col)),col,1.1*sat);
- col+=vec3(.02,.01,-.01);col=max(col,vec3(.04));
+ col+=vec3(.018,0.,.05)*(1.-clamp(Yf(col),0.,1.));
+ col*=vec3(.97,.96,1.07);
+ col=max(col,vec3(.04));
  float Y=Yf(col);float nk=1.;
  if(F==1.){col=mix(vec3(Y),col,.75)*vec3(1.05,.96,1.1);nk=1.6;}
  else if(F==2.){col=vec3(.25,1.,.3)*min(Y*2.2,1.3);nk=2.4;}
@@ -142,14 +150,14 @@ gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_
 const la=gl.getAttribLocation(pg,'a');gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
 const tx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tx);
 [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
-const UL={};['r','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
+const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
 
 /* params + menu */
-const D={pf:1.2,ca:1,bl:.3,bd:1,bm:1,nz:1,sn:1,vg:1,jt:1,sat:1,wb:0};
+const D={wb:-.15,sh:1,pf:1.2,ca:1,bl:0,bd:.8,bm:.8,nz:1,sn:1,vg:1,jt:1,sat:1};
 let P={...D};
-try{Object.assign(P,JSON.parse(localStorage.getItem('dvP')||'{}'))}catch(e){}
-const store=()=>{try{localStorage.setItem('dvP',JSON.stringify(P))}catch(e){}};
-const PR=[['wb','白平衡 蓝↔黄',-1,1],['pf','紫边',0,3],['ca','色散(红蓝边)',0,3],['bl','画面模糊',0,2],['bd','色彩拖影',0,2],['bm','高光扩散',0,3],['nz','噪点',0,3],['sn','扫描线',0,3],['vg','暗角',0,2],['jt','画面抖动',0,3],['sat','饱和度',0,2]];
+try{Object.assign(P,JSON.parse(localStorage.getItem('dvP2')||'{}'))}catch(e){}
+const store=()=>{try{localStorage.setItem('dvP2',JSON.stringify(P))}catch(e){}};
+const PR=[['wb','白平衡 蓝↔黄',-1,1],['sh','锐化',0,2],['pf','紫边',0,3],['ca','色散(红蓝边)',0,3],['bl','后期模糊',0,2],['bd','色彩拖影',0,2],['bm','高光扩散',0,3],['nz','噪点',0,3],['sn','扫描线',0,3],['vg','暗角',0,2],['jt','画面抖动',0,3],['sat','饱和度',0,2]];
 const rows={};
 PR.forEach(([k,n,lo,hi])=>{
   const l=document.createElement('label');l.className='ms';
@@ -163,48 +171,62 @@ $('#mb').onclick=()=>$('#menu').classList.toggle('on');
 $('#mc').onclick=()=>$('#menu').classList.remove('on');
 
 /* state */
+const mob=matchMedia('(pointer:coarse)').matches;
 const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
-let stream,facing='environment',on=false,mode='video',rec,chunks=[],t0=0,items=[],last=0,W=0,H=0,rot=0;
-let zt=1,zc=1,zT=0,fi=0;
+let stream,facing='environment',on=false,mode='video',rec,chunks=[],t0=0,items=[],last=0,W=640,H=480,cw=0,ch=0,rot=0,szKey='',cr=[1,1];
+let zt=1,zc=1,zT=0,fi=0,ri=0,si=1;
 const FN=['DV','VHS','NIGHT','B&W','HOME','CYBER'];
+const RATIOS=[['4:3',4/3],['16:9',16/9],['1:1',1],['2.35:1',2.35],['原始',0]];
+const RES=[240,360,480,720];
+const recing=()=>rec&&rec.state==='recording';
 
-/* orientation */
 let lastDp=innerHeight>=innerWidth,land=!lastDp;
 function layout(){
   const dp=innerHeight>=innerWidth,b=document.body.classList;
-  b.toggle('land',land);b.toggle('rotr',land&&dp);b.toggle('rotl',!land&&!dp);
+  b.toggle('mob',mob);b.toggle('land',land);
+  b.toggle('rotr',mob&&land&&dp);b.toggle('rotl',mob&&!land&&!dp);
   $('#ori').textContent=land?'竖屏':'横屏';
 }
 addEventListener('resize',()=>{const dp=innerHeight>=innerWidth;if(dp!==lastDp){lastDp=dp;land=!dp}layout()});
-$('#ori').onclick=()=>{if(rec&&rec.state==='recording')return;land=!land;layout()};
+$('#ori').onclick=()=>{if(recing())return;land=!land;layout()};
 layout();
+$('#bar').onclick=()=>{if(recing())return;ri=(ri+1)%RATIOS.length;$('#bar').textContent=RATIOS[ri][0]};
+$('#bre').onclick=()=>{if(recing())return;si=(si+1)%RES.length;$('#bre').textContent=RES[si]+'p'};
 
 async function start(){
   if(stream)stream.getTracks().forEach(t=>t.stop());
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){pwMsg('此环境不支持摄像头，请在 Safari 中直接打开链接。');return}
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){pwMsg('此环境不支持摄像头，请用 Chrome / Edge / Safari 打开 https 链接。');return}
   const c={video:{facingMode:facing,width:{ideal:1280},height:{ideal:720}},audio:true};
   try{stream=await navigator.mediaDevices.getUserMedia(c)}
   catch(e){try{c.audio=false;stream=await navigator.mediaDevices.getUserMedia(c)}
-  catch(e2){pwMsg('无法使用摄像头：'+e2.name+'。请检查权限。');return}}
+  catch(e2){pwMsg('无法使用摄像头：'+e2.name+'。请检查浏览器权限。');return}}
   vid.srcObject=stream;await vid.play();on=true;$('#pw').style.display='none';
 }
 function pwMsg(s){$('#pw').firstElementChild.textContent=s}
 $('#pwb').onclick=start;
-$('#fl').onclick=()=>{if(rec&&rec.state==='recording')return;facing=facing==='user'?'environment':'user';if(on)start()};
+$('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';if(on)start()};
 $('#zm').oninput=e=>{zt=+e.target.value;zT=performance.now()};
 $('#chips').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;fi=+b.dataset.f;
   document.querySelectorAll('#chips .btn').forEach(x=>x.classList.toggle('act',x===b))};
 
 function size(){
   const vw=vid.videoWidth,vh=vid.videoHeight;if(!vw)return false;
-  rot=(land&&vw<vh)?1:(!land&&vw>vh)?2:0;
-  const a=rot?vh:vw,b=rot?vw:vh,s=Math.min(1,960/Math.max(a,b)),w=Math.round(a*s),h=Math.round(b*s);
-  if(w!==W||h!==H){W=w;H=h;gc.width=out.width=w;gc.height=out.height=h;gl.viewport(0,0,w,h)}
+  const outL=mob?land:true;
+  rot=(outL&&vw<vh)?1:(!outL&&vw>vh)?2:0;
+  const sa=rot?vh/vw:vw/vh;
+  let ta=RATIOS[ri][1];if(!ta)ta=sa;else if(!outL)ta=1/ta;
+  const N=RES[si];let w,h;
+  if(ta>=1){h=N;w=Math.round(N*ta)}else{w=N;h=Math.round(N/ta)}
+  w&=~1;h&=~1;
+  const s=Math.max(1,Math.round(720/N));
+  const key=w+'x'+h+'x'+s;
+  if(key!==szKey){szKey=key;cw=w;ch=h;gc.width=w;gc.height=h;out.width=W=w*s;out.height=H=h*s;gl.viewport(0,0,w,h)}
+  cr=ta>sa?[1,sa/ta]:[ta/sa,1];
   return true;
 }
 function fmt(s){s=Math.floor(s);return Math.floor(s/3600)+':'+String(Math.floor(s/60)%60).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 function ov(T){
-  const f=Math.max(12,Math.min(W,H)*.05),m=f*.9,isRec=rec&&rec.state==='recording';
+  const f=Math.max(12,Math.min(W,H)*.05),m=f*.9,isRec=recing();
   oc.font=`bold ${f}px ui-monospace,Menlo,monospace`;oc.textBaseline='top';
   const tx=(s,x,y,al)=>{oc.textAlign=al||'left';
     oc.fillStyle='rgba(255,40,60,.75)';oc.fillText(s,x-1.6,y);
@@ -231,18 +253,18 @@ function loop(ts){
   zc+=(zt-zc)*.08;if(Math.abs(zt-zc)<.002)zc=zt;
   gl.bindTexture(gl.TEXTURE_2D,tx);
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,vid);
-  gl.uniform2f(UL.r,W,H);gl.uniform1f(UL.T,T%1000);
+  gl.uniform2f(UL.r,cw,ch);gl.uniform2f(UL.cr,cr[0],cr[1]);gl.uniform1f(UL.T,T%1000);
   gl.uniform1f(UL.m,facing==='user'?1:0);gl.uniform1f(UL.z,zc);
   gl.uniform1f(UL.fb,Math.min(Math.abs(zt-zc)*.0015,.008));
   gl.uniform1f(UL.F,fi);gl.uniform1f(UL.rot,rot);
   for(const k in D)gl.uniform1f(UL[k],P[k]);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  oc.drawImage(gc,0,0);ov(T);
+  oc.imageSmoothingEnabled=false;oc.drawImage(gc,0,0,W,H);ov(T);
 }
 oc.fillStyle='#000';oc.fillRect(0,0,640,480);requestAnimationFrame(loop);
 
 function setMode(m){
-  if(rec&&rec.state==='recording')return;
+  if(recing())return;
   mode=m;$('#mV').classList.toggle('act',m==='video');$('#mP').classList.toggle('act',m==='photo');
   $('#sh').className='shut'+(m==='photo'?' photo':'');
 }
@@ -255,12 +277,12 @@ $('#sh').onclick=()=>{
     out.toBlob(b=>add({k:'img',blob:b,url:URL.createObjectURL(b)}),'image/jpeg',.92);
     return;
   }
-  if(rec&&rec.state==='recording'){rec.stop();return}
+  if(recing()){rec.stop();return}
   if(typeof MediaRecorder==='undefined'){alert('此浏览器不支持录像');return}
   const cs=out.captureStream(30);
   stream.getAudioTracks().forEach(a=>cs.addTrack(a));
   const mt=['video/mp4','video/webm;codecs=vp9,opus','video/webm'].find(x=>MediaRecorder.isTypeSupported(x))||'';
-  chunks=[];rec=new MediaRecorder(cs,mt?{mimeType:mt,videoBitsPerSecond:3e6}:{});
+  chunks=[];rec=new MediaRecorder(cs,mt?{mimeType:mt,videoBitsPerSecond:4e6}:{});
   rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
   rec.onstop=()=>{const b=new Blob(chunks,{type:rec.mimeType||'video/mp4'});add({k:'vid',blob:b,url:URL.createObjectURL(b)});$('#sh').classList.remove('rec')};
   rec.start(500);t0=performance.now();$('#sh').classList.add('rec');
@@ -268,7 +290,7 @@ $('#sh').onclick=()=>{
 async function save(it){
   const ext=it.k==='img'?'jpg':(it.blob.type.includes('mp4')?'mp4':'webm');
   const f=new File([it.blob],'DV_'+Date.now()+'.'+ext,{type:it.blob.type});
-  try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}
+  try{if(mob&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}
   catch(e){if(e.name==='AbortError')return}
   const a=document.createElement('a');a.href=it.url;a.download=f.name;a.click();
 }
