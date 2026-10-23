@@ -185,11 +185,11 @@ body.skin-w7 .tabs .btn.act{background:linear-gradient(#fff,#eaf3fc);border-top:
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 body.land .cam{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) 176px;grid-template-rows:auto minmax(0,1fr);gap:5px 6px}
 body.land .cam.menu{grid-template-columns:minmax(0,1fr) 300px}
-body.land .tbar{grid-column:1/3;grid-row:1}
+body.land .tbar{grid-column:1/3;grid-row:2}
 body.land.skin-xp .tbar{height:24px}
 body.land.skin-w7 .tbar{height:22px}
-body.land .lcd{grid-column:1;grid-row:2}
-body.land .side{display:flex;flex-direction:column;gap:5px;grid-column:2;grid-row:2;min-height:0;overflow-y:auto}
+body.land .lcd{grid-column:1;grid-row:3}
+body.land .side{display:flex;flex-direction:column;gap:5px;grid-column:2;grid-row:3;min-height:0;overflow-y:auto}
 body.land .side>*{flex:none}
 body.land .top{flex-direction:column;align-items:stretch;gap:4px}
 body.land .tb{display:grid;grid-template-columns:1fr 1fr;gap:4px}
@@ -228,9 +228,18 @@ body.bm #bar,body.bm #bre,body.bm #fb,body.bm #fstrip,body.bm .tbar{display:none
 #fxw{background:#fff}#fxb{background:#000}
 #fxc{display:flex;align-items:center;justify-content:center;font:300px/1 Georgia,serif;color:#000}
 #egg{width:28px;margin:30px 0 4px auto;text-align:center;font-size:16px;opacity:.42;transform:rotate(180deg);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+.cam{--bzw:12px;padding:calc(var(--pv) + var(--bzw)) calc(var(--ph) + var(--bzw))}
+.cam::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:30;box-sizing:border-box;border:var(--bzw) solid;border-color:rgba(255,255,255,.62) rgba(0,0,0,.2) rgba(0,0,0,.5) rgba(255,255,255,.3);background:var(--bzb,none) border-box;-webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0) border-box;-webkit-mask-composite:xor;mask-composite:exclude;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+.cam::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:31;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 0 0 2px rgba(255,255,255,.18)}
+body.skin-dv{--bzb:linear-gradient(#3a3a40,#1c1c20)}
+#ibar{order:-1;flex:none;display:flex;justify-content:space-between;align-items:center;gap:6px;padding:3px 10px;border-radius:5px;background:#0d100d;color:#d9f7c8;font:18px/1 VT323,ui-monospace,monospace;letter-spacing:.04em;text-shadow:0 0 4px rgba(170,255,140,.45);box-shadow:inset 0 1px 3px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.25),0 -1px 0 rgba(0,0,0,.25);white-space:nowrap;overflow:hidden}
+#ibar .lx{display:none}
+body.land #ibar{grid-column:1/3;grid-row:1}body.land #ibar .lx{display:inline}
+body.land .cam{grid-template-rows:auto auto minmax(0,1fr)}
 </style></head>
 <body class="skin-light">
 <div class="cam">
+  <div id="ibar"><span id="iev">EV 0.0</span><span id="ish">1/60</span><span id="iiso">ISO 100</span><span id="ifl">STD</span><span class="lx" id="imm">24mm</span><span class="lx" id="irs">480p</span></div>
   <div class="tbar"><span class="ti">Handycam DV-2000</span><span class="wc" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
   <div class="side">
     <div id="bmt">† Handycam †</div>
@@ -911,6 +920,23 @@ async function start(){
 }
 function pwMsg(s){$('#pw').classList.remove('off');$('#pw').firstElementChild.textContent=s}
 $('#pwb').onclick=()=>{applyMic();start()};
+/* auto power-on when camera permission is already granted */
+try{navigator.permissions&&navigator.permissions.query({name:'camera'}).then(r=>{if(r.state==='granted'&&!on)start()}).catch(()=>{})}catch(e){}
+/* top info bar: estimated exposure (program AE, f/1.8) */
+{const sc=document.createElement('canvas');sc.width=16;sc.height=12;const sx=sc.getContext('2d',{willReadFrequently:true});let lv=10,first=true;
+ const TS=[15,20,25,30,40,50,60,80,100,125,160,200,250,320,400,500,640,800,1000,1250,1600,2000,2500,3200,4000];
+ const IS=[50,64,80,100,125,160,200,250,320,400,500,640,800,1000,1250,1600,2000,2500,3200];
+ const near=(a,v)=>a.reduce((b,x)=>Math.abs(Math.log(x/v))<Math.abs(Math.log(b/v))?x:b,a[0]);
+ const tx=(id,t)=>{const e=document.getElementById(id);if(e.textContent!==t)e.textContent=t};
+ setInterval(()=>{
+   if(on&&vid.readyState>=2){try{sx.drawImage(vid,0,0,16,12);const d=sx.getImageData(0,0,16,12).data;let y=0;for(let i=0;i<d.length;i+=4)y+=(.299*d[i]+.587*d[i+1]+.114*d[i+2]);y/=d.length/4*255;
+     const tl=Math.max(3,Math.min(15.5,3.5+y*15));lv=first?tl:lv+(tl-lv)*.25;first=false}catch(e){}}
+   const e=ev||0,need=lv-e,N2=3.24;let iso=100,t=N2/Math.pow(2,need);
+   if(mode==='video'){t=1/60;iso=100*N2/(t*Math.pow(2,need))}
+   else{if(t>1/60){iso=Math.min(3200,100*t*60);t=N2*iso/100/Math.pow(2,need);t=Math.min(t,1/15)}if(t<1/4000)t=1/4000;if(iso<50){iso=50}}
+   iso=Math.max(50,Math.min(3200,iso));
+   tx('iev','EV '+(e>0?'+':e<0?'−':'±')+Math.abs(e).toFixed(1));tx('ish','1/'+near(TS,1/t));tx('iiso','ISO '+near(IS,iso));
+   tx('ifl',(typeof FN!=='undefined'&&FN[fi])||'');tx('imm',Math.round(curMM*zc*lensK)+'mm');tx('irs',RES[si]+'p')},250)}
 $('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';lensId=null;start()};
 
 /* zoom + exposure + flash / light */
