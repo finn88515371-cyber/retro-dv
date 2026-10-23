@@ -293,8 +293,8 @@ const out=$('#out'),oc=out.getContext('2d');
 const gc=document.createElement('canvas'),gl=gc.getContext('webgl');
 const VS='attribute vec2 a;varying vec2 u;void main(){u=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}';
 const FS=`precision highp float;
-uniform sampler2D t;uniform vec2 r,cr,st;
-uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf,kc,kb;
+uniform sampler2D t,tb;uniform vec2 r,cr,st;
+uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf,kc,kb,skk,ska,skt,skw;
 varying vec2 u;
 vec2 PX;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
@@ -328,6 +328,13 @@ void main(){
  for(int i=0;i<12;i++){float a=float(i)*.5236;vec2 d=vec2(cos(a),sin(a)*asp);
   b+=max(S(uv+d*.012)-.55,0.)+max(S(uv+d*.03)-.55,0.)*.8;}
  col+=b*.14*bm*vec3(.85,.92,1.);
+ if(skk>0.){float an=ska*.0174533;vec2 dv=vec2(cos(an),sin(an)*asp);vec2 pv=vec2(-sin(an),cos(an)*asp)*(.003+skw*.01);
+  float Lm=1.2*max(1.,1./asp);vec3 sa=vec3(0.),sg=vec3(0.);
+  for(int i=0;i<48;i++){float tt=(float(i)/47.-.5)*2.*Lm;vec2 q=uv+dv*tt;
+   if(q.x<0.||q.x>1.||q.y<0.||q.y>1.)continue;float wt=exp(-abs(tt)*1.2);
+   sa+=texture2D(tb,vec2(q.x,1.-q.y)).rgb*wt;
+   sg+=(texture2D(tb,vec2(q.x+pv.x,1.-q.y-pv.y)).rgb+texture2D(tb,vec2(q.x-pv.x,1.-q.y+pv.y)).rgb)*.5*wt;}
+  col+=(sa*.9+sg*.55)*skk*.07;}
  col=(col-.5)*1.1+.5;col=mix(vec3(Yf(col)),col,1.1*sat);
  col+=vec3(.005,.01,.04)*(1.-clamp(Yf(col),0.,1.));
  col*=vec3(.96,.98,1.06);
@@ -358,7 +365,7 @@ void main(){
  col*=max(1.-dot(c,c)*1.1*vg,0.);
  gl_FragColor=vec4(col,1.);}`;
 function mk(ty,s){const o2=gl.createShader(ty);gl.shaderSource(o2,s);gl.compileShader(o2);return o2}
-const pg=gl.createProgram();
+const pg=gl.createProgram();gl.bindAttribLocation(pg,0,'a');
 gl.attachShader(pg,mk(gl.VERTEX_SHADER,VS));gl.attachShader(pg,mk(gl.FRAGMENT_SHADER,FS));
 gl.linkProgram(pg);gl.useProgram(pg);
 gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
@@ -366,10 +373,24 @@ gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_
 const la=gl.getAttribLocation(pg,'a');gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
 const tx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tx);
 [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
-const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','kc','kb','st'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
+const BFS=`precision mediump float;uniform sampler2D t;uniform vec2 r,cr,st;uniform float m,z,rot,fp,ex,skt,ska;varying vec2 u;
+vec3 S(vec2 p){p=(p-.5)*cr/(z*st)+.5;if(fp>.5)p=1.-p;p.x=mix(p.x,1.-p.x,m);
+ if(rot>1.5)p=vec2(p.y,1.-p.x);else if(rot>.5)p=vec2(1.-p.y,p.x);
+ return texture2D(t,clamp(p,0.,1.)).rgb*ex;}
+void main(){float an=ska*.0174533;vec2 dv=vec2(cos(an),sin(an)*(r.x/r.y))*.012;vec3 a=vec3(0.);
+ for(int i=-3;i<=3;i++){vec3 c=S(u+dv*float(i));a=max(a,c*smoothstep(skt,1.,dot(c,vec3(.299,.587,.114))));}
+ gl_FragColor=vec4(a,1.);}`;
+const pb=gl.createProgram();gl.bindAttribLocation(pb,0,'a');gl.attachShader(pb,mk(gl.VERTEX_SHADER,VS));gl.attachShader(pb,mk(gl.FRAGMENT_SHADER,BFS));gl.linkProgram(pb);
+const UB={};['r','cr','st','m','z','rot','fp','ex','skt','ska'].forEach(n=>UB[n]=gl.getUniformLocation(pb,n));
+const BN=128,btx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,btx);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,BN,BN,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+[[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
+const fbo=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,btx,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+gl.bindTexture(gl.TEXTURE_2D,tx);
+const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','kc','kb','st','skk','ska','skt','skw'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
+gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);
 
 /* settings */
-const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1};
+const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5};
 const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
@@ -534,7 +555,16 @@ const pC=mkPane('色彩');
 addSlider(pC,'白平衡 蓝↔黄',-1,1,.01,P,'wb');addSlider(pC,'饱和度',0,2,.01,P,'sat');addSlider(pC,'紫边',0,3,.01,P,'pf');
 addSlider(pC,'色散(红蓝边)',0,3,.01,P,'ca');addSlider(pC,'高光扩散',0,3,.01,P,'bm');addSlider(pC,'暗角',0,2,.01,P,'vg');addReset(pC);
 const pR=mkPane('复古');
-addSlider(pR,'噪点',0,3,.01,P,'nz');addSlider(pR,'扫描线',0,3,.01,P,'sn');addSlider(pR,'画面抖动',0,3,.01,P,'jt');addReset(pR);
+addSlider(pR,'噪点',0,3,.01,P,'nz');addSlider(pR,'扫描线',0,3,.01,P,'sn');addSlider(pR,'画面抖动',0,3,.01,P,'jt');
+head(pR,'光源拖影');
+addSlider(pR,'强度',0,2,.01,P,'skk');addSlider(pR,'触发亮度',.5,.98,.01,P,'skt');addSlider(pR,'宽度',0,2,.01,P,'skw');
+{const l=document.createElement('label');l.className='ms';l.innerHTML='<span>方向角度</span><input type="range" min="0" max="180" step="1"><i style="width:52px"></i>';
+ const i=l.children[1],v=l.children[2],lab=a=>a===90?'90° 竖':(a===0||a===180)?a+'° 横':a+'°';
+ const sync=()=>{i.value=P.ska;v.textContent=lab(+P.ska)};
+ i.oninput=()=>{let a=+i.value;for(const t of [0,90,180])if(Math.abs(a-t)<=6)a=t;P.ska=a;i.value=a;v.textContent=lab(a);save()};
+ sync();pR.append(l);pR.sy.push(sync);pR.rk.push([P,'ska',D.ska,null])}
+note(pR,'画面里很亮的光源（路灯、太阳、车灯）会拉出一条贯穿画面的光带，颜色跟着光源本身。角度拖到 0°、90°、180° 附近会自动吸附到横向或竖向。强度调到 0 就是关闭。');
+addReset(pR);
 const pW=mkPane('水印');
 head(pW,'显示内容');
 [['rec','录像状态'],['flt','滤镜名'],['bat','电量'],['date','日期'],['time','时间'],['tc','计时码'],['zm','焦段/变焦条']].forEach(([k,n])=>addToggle(pW,n,WM.items,k));
@@ -754,14 +784,24 @@ function loop(ts){
   const lz=Math.log(zc),lt=Math.log(zt);
   zc=Math.exp(lz+(lt-lz)*(1-Math.exp(-dt*7)));if(Math.abs(zc-zt)<.002)zc=zt;
   $('#zr').textContent=zc.toFixed(1)+'×';
-  gl.bindTexture(gl.TEXTURE_2D,tx);
+  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tx);
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,vid);
+  const PP=bmOn?{...P,nz:BMP.nz,jt:BMP.jt,vg:BMP.vg,sn:BMP.sn,sh:BMP.sh,bm:BMP.bm,ca:.25,pf:0,bd:.2,bl:0,wb:0,sat:1}:P;
+  const fpv=rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0,mv=facing==='user'?1:0,exv=Math.pow(2,ev);
+  if(PP.skk>0){
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);gl.activeTexture(gl.TEXTURE0);
+    gl.useProgram(pb);gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.viewport(0,0,BN,BN);
+    gl.uniform2f(UB.r,cw,ch);gl.uniform2f(UB.cr,cr[0],cr[1]);gl.uniform2f(UB.st,S.stx,S.sty);gl.uniform1f(UB.m,mv);gl.uniform1f(UB.z,zc);
+    gl.uniform1f(UB.rot,rot);gl.uniform1f(UB.fp,fpv);gl.uniform1f(UB.ex,exv);gl.uniform1f(UB.skt,PP.skt);gl.uniform1f(UB.ska,PP.ska);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,btx);gl.activeTexture(gl.TEXTURE0);
+  }
+  gl.useProgram(pg);gl.viewport(0,0,cw,ch);
   gl.uniform2f(UL.r,cw,ch);gl.uniform2f(UL.cr,cr[0],cr[1]);gl.uniform2f(UL.st,S.stx,S.sty);gl.uniform1f(UL.T,T%1000);
-  gl.uniform1f(UL.m,facing==='user'?1:0);gl.uniform1f(UL.z,zc);
+  gl.uniform1f(UL.m,mv);gl.uniform1f(UL.z,zc);
   gl.uniform1f(UL.fb,Math.min(Math.abs(zt-zc)*.0015,.008));
   gl.uniform1f(UL.F,fi);gl.uniform1f(UL.rot,rot);
-  gl.uniform1f(UL.ex,Math.pow(2,ev));gl.uniform1f(UL.fx,flashFx);gl.uniform1f(UL.fp,rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0);gl.uniform1f(UL.lf,lightFx);
-  const PP=bmOn?{...P,nz:BMP.nz,jt:BMP.jt,vg:BMP.vg,sn:BMP.sn,sh:BMP.sh,bm:BMP.bm,ca:.25,pf:0,bd:.2,bl:0,wb:0,sat:1}:P;
+  gl.uniform1f(UL.ex,exv);gl.uniform1f(UL.fx,flashFx);gl.uniform1f(UL.fp,fpv);gl.uniform1f(UL.lf,lightFx);
   for(const k in D)gl.uniform1f(UL[k],PP[k]);
   gl.uniform1f(UL.kc,bmOn?BMP.ct:1);gl.uniform1f(UL.kb,bmOn?BMP.cr:0);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
