@@ -743,16 +743,25 @@ head(pY,'照片互传（6 位码，两台设备同时打开）');
  const big=document.createElement('div');big.style.cssText='font:bold 34px/1.2 VT323,monospace;letter-spacing:.2em;text-align:center;margin:6px 0;display:none';pY.append(big);
  const st=document.createElement('div');st.className='note';pY.append(st);
  const ca=document.createElement('button');ca.className='btn';ca.textContent='取消传输';ca.style.display='none';pY.append(ca);
- note(pY,'发送方点「发送」会显示 6 位码，接收方点「接收」输入这个码。传输时两边都保持屏幕亮着、停留在这个页面。已经有的照片不会重复导入。需要联网（用的是开源的 PeerJS 连接服务）。');
+ note(pY,'发送方点「发送」会显示 6 位码，接收方点「接收」输入这个码。传输时会自动保持屏幕常亮，两边都停留在这个页面别切走。已经有的照片不会重复导入。需要联网（用的是开源的 PeerJS 连接服务）。');
  let peer=null,conn=null;
+ /* keep screen awake during transfer: Wake Lock API, fallback = tiny looping muted video */
+ const WK={on:false,lock:null,v:null,c:null,t:0};
+ async function wakeOn(){WK.on=true;
+   try{if(navigator.wakeLock){WK.lock=await navigator.wakeLock.request('screen');WK.lock.addEventListener('release',()=>{WK.lock=null});return}}catch(e){}
+   try{if(!WK.v){WK.c=document.createElement('canvas');WK.c.width=WK.c.height=2;const v=document.createElement('video');v.muted=true;v.playsInline=true;v.setAttribute('playsinline','');v.loop=true;
+       v.style.cssText='position:fixed;width:1px;height:1px;opacity:.01;pointer-events:none;bottom:0;left:0';v.srcObject=WK.c.captureStream(2);document.body.append(v);WK.v=v}
+     clearInterval(WK.t);WK.t=setInterval(()=>{const x=WK.c.getContext('2d');x.fillStyle=Math.random()<.5?'#000':'#111';x.fillRect(0,0,2,2)},500);await WK.v.play()}catch(e){}}
+ function wakeOff(){WK.on=false;try{WK.lock&&WK.lock.release()}catch(e){}WK.lock=null;clearInterval(WK.t);try{WK.v&&WK.v.pause()}catch(e){}}
+ document.addEventListener('visibilitychange',()=>{if(WK.on&&document.visibilityState==='visible'&&!WK.lock)wakeOn()});
  const say=t=>st.textContent=t;
- const stop=()=>{try{conn&&conn.close()}catch(e){}try{peer&&peer.destroy()}catch(e){}peer=conn=null;ca.style.display='none';big.style.display='none'};
+ const stop=()=>{wakeOff();try{conn&&conn.close()}catch(e){}try{peer&&peer.destroy()}catch(e){}peer=conn=null;ca.style.display='none';big.style.display='none'};
  ca.onclick=()=>{stop();say('已取消。')};
  const loadPJ=()=>window.Peer?Promise.resolve():new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';sc.onload=res;sc.onerror=()=>rej(new Error('load'));document.head.append(sc)});
  const PFX='retrodv-cam-';
  async function send(onlyFav){stop();rw.style.display='none';
    const list=items.filter(x=>!onlyFav||x.fav);if(!list.length){say(onlyFav?'没有收藏的照片。':'相册是空的。');return}
-   say('正在连接服务器…');try{await loadPJ()}catch(e){say('无法加载 PeerJS，请检查网络。');return}
+   wakeOn();say('正在连接服务器…');try{await loadPJ()}catch(e){say('无法加载 PeerJS，请检查网络。');return}
    const go=tries=>{const code=String(Math.floor(100000+Math.random()*900000));peer=new Peer(PFX+code);
      peer.on('open',()=>{big.textContent=code;big.style.display='';ca.style.display='';say('把这个码输入到另一台设备的「接收」里。共 '+list.length+' 项待发送。')});
      peer.on('error',e=>{if(e.type==='unavailable-id'&&tries<3){try{peer.destroy()}catch(_){}go(tries+1)}else{say('连接出错：'+e.type);stop()}});
@@ -768,7 +777,7 @@ head(pY,'照片互传（6 位码，两台设备同时打开）');
          catch(e){say('传输中断：'+(e.message||e));stop()}})})};
    go(0)}
  async function recv(code){stop();if(!/^\d{6}$/.test(code)){say('请输入 6 位数字。');return}
-   say('正在连接…');try{await loadPJ()}catch(e){say('无法加载 PeerJS，请检查网络。');return}
+   wakeOn();say('正在连接…');try{await loadPJ()}catch(e){say('无法加载 PeerJS，请检查网络。');return}
    peer=new Peer();ca.style.display='';
    peer.on('error',e=>{say(e.type==='peer-unavailable'?'找不到这个码，请确认发送方还停在显示码的页面。':'连接出错：'+e.type);stop()});
    peer.on('open',()=>{conn=peer.connect(PFX+code,{reliable:true});let n=0,got=0,added=0;
