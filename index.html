@@ -1,5 +1,9 @@
 <!doctype html>
 <html lang="zh"><head><meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Retro DV">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>HANDYCAM DV-2000</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -388,12 +392,7 @@ void main(){
  else if(F==20.){col*=vec3(.88,.97,1.12);col+=b*vec3(.9,.15,.08)*.25;col=mix(vec3(Y),col,1.05);nk=1.5;}
  else if(F==21.){float v=(Y*1.05-.5)*1.12+.5;col=vec3(v);nk=2.2;}
  col=(col-.5)*kc+.5;col=max(col-kb,0.)/(1.-kb);
- if(fx>0.){vec2 q=vec2(c.x,c.y+.03);float d2=dot(q,q)*4.,fo=exp(-d2*1.5),Ya=Yf(col);
-  float w=clamp(fo*1.35-.05,0.,1.);
-  vec3 lit=col*(1.+fo*1.2)+fo*.05;lit=lit/(1.+lit*.45)*1.4;lit=(lit-.5)*1.18+.5;lit=mix(vec3(Yf(lit)),lit,.9)*vec3(.97,1.,1.05);
-  vec3 bg=col*col*(.45+.4*fo)*(1.-.35*smoothstep(.35,.0,Ya));
-  vec3 fl=mix(bg,lit,w);fl+=vec3(1.)*pow(fo,6.)*smoothstep(.55,.9,Ya)*.25;
-  col=mix(col,fl,min(fx,1.));}
+ if(fx>.5){float ff=1.4-1.7*dot(c,c);col=col*(1.+ff*.8);col=(col-.5)*1.25+.5;col=mix(col,vec3(1.),clamp(ff*.12,0.,.25));}
  if(lf>.5){float fl=max(1.-1.6*dot(c,c),0.);col=col*(1.+fl*.55)+vec3(.03,.03,.04)*fl;}
  col*=vec3(1.+wb*.14,1.+wb*.03,1.-wb*.18);
  col*=1.-.05*sn*(.5+.5*sin(sc.y*240.*6.2832));
@@ -697,6 +696,18 @@ head(pS,'录音码率');addChips(pS,['64k 低','128k 标准','256k 高'],()=>S.a
 addReset(pS);
 const pM=mkPane('相机');
 head(pM,'取景辅助');addToggle(pM,'九宫格',S,'grid',()=>updGrid());
+head(pM,'全屏');
+{const w=document.createElement('div');w.className='chips';const b=document.createElement('button');b.className='btn';pM.append(w);w.append(b);
+ const nt=document.createElement('div');nt.className='hint';nt.style.textAlign='left';pM.append(nt);
+ const de=document.documentElement,can=!!(de.requestFullscreen||de.webkitRequestFullscreen),standalone=navigator.standalone||matchMedia('(display-mode: standalone)').matches;
+ const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+ const sync=()=>{b.textContent=standalone?'已是全屏 App 模式':isFs()?'退出全屏':'进入全屏';b.classList.toggle('act',standalone||isFs())};
+ b.onclick=()=>{if(standalone)return;
+   if(can){if(isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document);else{const r=(de.requestFullscreen||de.webkitRequestFullscreen).call(de);r&&r.catch&&r.catch(()=>{nt.style.display=''})}}
+   else nt.style.display=''};
+ nt.style.display=can||standalone?'none':'';
+ nt.innerHTML='iPhone 的 Safari 不允许网页自己进入全屏。可以这样做：用 Safari 打开本页 → 点底部「分享」按钮 → 「添加到主屏幕」→ 以后从主屏幕图标打开，就没有地址栏和工具栏，是完整全屏。<br>注意：主屏幕版和 Safari 版的相册是分开存的，之前在 Safari 里拍的照片要先下载保存。';
+ document.addEventListener('fullscreenchange',sync);document.addEventListener('webkitfullscreenchange',sync);sync()}
 head(pM,'画面方向');
 head(pM,'横屏时手机往哪边转');
 addChips(pM,['↺ 逆时针（左边朝下）','↻ 顺时针（右边朝下）'],()=>S.lo-1,i=>{S.lo=i+1;save();reO()});
@@ -704,6 +715,75 @@ addToggle(pM,'后置镜头 横屏旋转 180°',S,'lfB');
 addToggle(pM,'前置镜头 横屏旋转 180°',S,'lfF');
 note(pM,'先在这里选好你横拿手机的方向，再点主界面的“横屏”。从竖着拿开始，把手机往左转（左边朝下）就是逆时针，往右转（右边朝下）就是顺时针。前置和后置镜头的横屏方向是分开校正的：哪个镜头横屏时画面是倒的，就打开对应的那个开关，只影响那个镜头的横屏，不会改到竖屏和另一个镜头。建议打开 iPhone 的“竖排方向锁定”，效果最稳定。');
 const pK=mkPane('外观');head(pK,'界面皮肤');addChips(pK,SKN,()=>SK.indexOf(S.skin),i=>{S.skin=SK[i];applySkin()});
+/* ---------- sync: settings code + peer-to-peer photo transfer ---------- */
+const pY=mkPane('同步');
+head(pY,'设置码（导出 / 导入全部参数）');
+{const w=document.createElement('div');w.className='vr';w.innerHTML='<button class="btn" id="scx">复制设置码</button><button class="btn" id="sci">导入设置码</button>';pY.append(w);
+ const ta=document.createElement('textarea');ta.className='txt';ta.id='scode';ta.rows=3;ta.placeholder='点「复制设置码」会生成并复制；导入时把码粘贴到这里，再点「导入设置码」';ta.style.marginTop='6px';ta.style.resize='none';pY.append(ta);
+ const st=document.createElement('div');st.className='note';pY.append(st);
+ const b64=u=>{let s='';for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+ const ub64=t=>{t=t.replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';const s=atob(t),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u};
+ const zip=async(u,dir)=>{const cs=dir?new CompressionStream('deflate-raw'):new DecompressionStream('deflate-raw');return new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(cs)).arrayBuffer())};
+ $('#scx').onclick=async()=>{const u=new TextEncoder().encode(JSON.stringify({v:1,P,S,W:WM}));let c;
+   try{c=window.CompressionStream?'DV1z.'+b64(await zip(u,1)):'DV1.'+b64(u)}catch(e){c='DV1.'+b64(u)}
+   ta.value=c;let ok=false;try{await navigator.clipboard.writeText(c);ok=true}catch(e){try{ta.select();ok=document.execCommand('copy')}catch(_){}}
+   st.textContent=ok?'已复制到剪贴板（'+c.length+' 个字符），到另一边粘贴导入即可。':'自动复制失败，请手动全选上面的码复制。'};
+ $('#sci').onclick=async()=>{let c=ta.value.trim();
+   if(!c){try{c=(await navigator.clipboard.readText()).trim();ta.value=c}catch(e){}}
+   if(!c){st.textContent='请先把设置码粘贴到上面的框里。';return}
+   try{const m=c.match(/^DV1(z?)\.(.+)$/);if(!m)throw 0;let u=ub64(m[2].replace(/\s/g,''));if(m[1])u=await zip(u,0);
+     const o=JSON.parse(new TextDecoder().decode(u));if(!o||o.v!==1)throw 0;
+     if(o.P)Object.assign(P,o.P);if(o.S)Object.assign(S,o.S);if(o.W)Object.assign(WM,o.W);save();st.textContent='导入成功，正在刷新…';setTimeout(()=>location.reload(),400)}
+   catch(e){st.textContent='这个码无法识别，请确认复制完整（以 DV1 开头）。'}};
+ note(pY,'包含所有画面参数、滤镜、皮肤、水印、镜头和方向设置。同一台手机从 Safari 搬到主屏幕 App 也用这个：复制 → 切过去 → 导入。');
+}
+head(pY,'照片互传（6 位码，两台设备同时打开）');
+{const w=document.createElement('div');w.className='vr';w.innerHTML='<button class="btn" id="tsa">发送全部</button><button class="btn" id="tsf">只发收藏</button><button class="btn" id="trc">接收</button>';pY.append(w);
+ const rw=document.createElement('div');rw.style.cssText='display:none;gap:6px;margin-top:6px';rw.innerHTML='<input class="txt" id="pcode" inputmode="numeric" maxlength="6" placeholder="输入对方的 6 位码" style="flex:1"><button class="btn" id="pgo">连接</button>';pY.append(rw);
+ const big=document.createElement('div');big.style.cssText='font:bold 34px/1.2 VT323,monospace;letter-spacing:.2em;text-align:center;margin:6px 0;display:none';pY.append(big);
+ const st=document.createElement('div');st.className='note';pY.append(st);
+ const ca=document.createElement('button');ca.className='btn';ca.textContent='取消传输';ca.style.display='none';pY.append(ca);
+ note(pY,'发送方点「发送」会显示 6 位码，接收方点「接收」输入这个码。传输时两边都保持屏幕亮着、停留在这个页面。已经有的照片不会重复导入。需要联网（用的是开源的 PeerJS 连接服务）。');
+ let peer=null,conn=null;
+ const say=t=>st.textContent=t;
+ const stop=()=>{try{conn&&conn.close()}catch(e){}try{peer&&peer.destroy()}catch(e){}peer=conn=null;ca.style.display='none';big.style.display='none'};
+ ca.onclick=()=>{stop();say('已取消。')};
+ const loadPJ=()=>window.Peer?Promise.resolve():new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';sc.onload=res;sc.onerror=()=>rej(new Error('load'));document.head.append(sc)});
+ const PFX='retrodv-cam-';
+ async function send(onlyFav){stop();rw.style.display='none';
+   const list=items.filter(x=>!onlyFav||x.fav);if(!list.length){say(onlyFav?'没有收藏的照片。':'相册是空的。');return}
+   say('正在连接服务器…');try{await loadPJ()}catch(e){say('无法加载 PeerJS，请检查网络。');return}
+   const go=tries=>{const code=String(Math.floor(100000+Math.random()*900000));peer=new Peer(PFX+code);
+     peer.on('open',()=>{big.textContent=code;big.style.display='';ca.style.display='';say('把这个码输入到另一台设备的「接收」里。共 '+list.length+' 项待发送。')});
+     peer.on('error',e=>{if(e.type==='unavailable-id'&&tries<3){try{peer.destroy()}catch(_){}go(tries+1)}else{say('连接出错：'+e.type);stop()}});
+     peer.on('connection',c=>{if(conn){c.close();return}conn=c;big.style.display='none';
+       c.on('open',async()=>{let ackR=null;c.on('data',d=>{if(d&&d.t==='ack'&&ackR){const r=ackR;ackR=null;r()}});
+         c.on('close',()=>{if(ackR){say('对方断开了连接。');ackR=null}});
+         try{c.send({t:'hello',n:list.length});
+           for(let i=0;i<list.length;i++){const it=list[i];say('发送中 '+(i+1)+' / '+list.length+' …');
+             const buf=await it.blob.arrayBuffer();const p=new Promise(r=>ackR=r);
+             c.send({t:'item',id:it.id,k:it.k,tm:it.t,d:it.d||0,fav:!!it.fav,type:it.blob.type,buf});
+             await Promise.race([p,new Promise((_,rj)=>setTimeout(()=>rj(new Error('timeout')),90000))])}
+           c.send({t:'done'});say('发送完成，共 '+list.length+' 项。');setTimeout(stop,1500)}
+         catch(e){say('传输中断：'+(e.message||e));stop()}})})};
+   go(0)}
+ async function recv(code){stop();if(!/^\d{6}$/.test(code)){say('请输入 6 位数字。');return}
+   say('正在连接…');try{await loadPJ()}catch(e){say('无法加载 PeerJS，请检查网络。');return}
+   peer=new Peer();ca.style.display='';
+   peer.on('error',e=>{say(e.type==='peer-unavailable'?'找不到这个码，请确认发送方还停在显示码的页面。':'连接出错：'+e.type);stop()});
+   peer.on('open',()=>{conn=peer.connect(PFX+code,{reliable:true});let n=0,got=0,added=0;
+     conn.on('open',()=>say('已连接，等待对方发送…'));
+     conn.on('data',d=>{if(!d)return;
+       if(d.t==='hello'){n=d.n;say('准备接收 '+n+' 项…')}
+       else if(d.t==='item'){got++;
+         if(!items.some(x=>x.id===d.id)){const r={id:d.id,k:d.k,blob:new Blob([d.buf],{type:d.type}),t:d.tm,d:d.d,fav:d.fav};idbPut(r);items.push(mkItem(r));added++}
+         items.sort((a,b)=>b.t-a.t);updCount();say('接收中 '+got+' / '+n+' …');conn.send({t:'ack'})}
+       else if(d.t==='done'){say('接收完成：新增 '+added+' 项'+(got-added?'，'+(got-added)+' 项已存在跳过':'')+'。');if(galOpen())renderGal();setTimeout(stop,1500)}});
+     conn.on('close',()=>{if(got<n)say('连接断开，已收到 '+got+' / '+n+' 项。')})})}
+ $('#tsa').onclick=()=>send(false);$('#tsf').onclick=()=>send(true);
+ $('#trc').onclick=()=>{stop();rw.style.display='flex';say('');$('#pcode').focus()};
+ $('#pgo').onclick=()=>recv($('#pcode').value.trim());
+}
 /* black metal pane (hidden until the egg is found) */
 DEF.set(BMP,{...BMP});
 const pB=document.createElement('div');pB.className='pane';pB.sy=[];pB.rk=[];$('#panes').append(pB);
@@ -951,7 +1031,7 @@ async function takePhoto(){
   if(S.flash){
     let real=false;
     if(hasTorch){try{await track.applyConstraints({advanced:[{torch:true}]});real=true;torchOn=true;await sleep(220)}catch(e){real=false}}
-    flashFx=real?.7:1;
+    flashFx=real?0:1;
   }
   fl.classList.add('on');setTimeout(()=>fl.classList.remove('on'),S.flash?90:60);
   shotReq=1;
