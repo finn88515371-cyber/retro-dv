@@ -198,7 +198,7 @@ body.land.bm .btn{font-size:13px}
 body.bm .zb,body.bm .zr,body.bm .evr i{font-family:Georgia,'Songti SC',serif}
 body.bm .shut.rec::after{background:#7a0000}
 body.bm #bar,body.bm #bre,body.bm #fb,body.bm #fstrip,body.bm .tbar{display:none!important}
-#egg{width:28px;margin:30px 0 4px auto;text-align:center;font-size:11px;opacity:.16;transform:rotate(180deg);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+#egg{width:28px;margin:30px 0 4px auto;text-align:center;font-size:16px;opacity:.42;transform:rotate(180deg);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -289,12 +289,12 @@ const out=$('#out'),oc=out.getContext('2d');
 const gc=document.createElement('canvas'),gl=gc.getContext('webgl');
 const VS='attribute vec2 a;varying vec2 u;void main(){u=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}';
 const FS=`precision highp float;
-uniform sampler2D t;uniform vec2 r,cr;
+uniform sampler2D t;uniform vec2 r,cr,st;
 uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf,kc,kb;
 varying vec2 u;
 vec2 PX;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
-vec3 S(vec2 p){p=(p-.5)*cr/z+.5;if(fp>.5)p=1.-p;p.x=mix(p.x,1.-p.x,m);
+vec3 S(vec2 p){p=(p-.5)*cr/(z*st)+.5;if(fp>.5)p=1.-p;p.x=mix(p.x,1.-p.x,m);
  if(rot>1.5)p=vec2(p.y,1.-p.x);else if(rot>.5)p=vec2(1.-p.y,p.x);
  return texture2D(t,clamp(p,0.,1.)).rgb*ex;}
 vec3 Sb(vec2 p){vec2 o=PX*.35;return (S(p+o)+S(p+vec2(-o.x,o.y))+S(p+vec2(o.x,-o.y))+S(p-o))*.25;}
@@ -362,11 +362,11 @@ gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_
 const la=gl.getAttribLocation(pg,'a');gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
 const tx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tx);
 [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
-const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','kc','kb'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
+const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','kc','kb','st'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -518,6 +518,10 @@ const pQ=mkPane('画质');
 head(pQ,'分辨率');addChips(pQ,RES.map(n=>n+'p'),()=>si,setRes);
 head(pQ,'画面比例');addChips(pQ,RATIOS.map(r=>r[0]),()=>ri,setRatio);
 addToggle(pQ,'拉伸填满（不裁切）',S,'stretch');
+head(pQ,'画面拉伸');
+addSlider(pQ,'横向拉伸',.5,2,.01,S,'stx');addSlider(pQ,'纵向拉伸',.5,2,.01,S,'sty');
+{const b=document.createElement('button');b.className='btn';b.textContent='恢复不拉伸';b.onclick=()=>{S.stx=1;S.sty=1;save();pQ.sy.forEach(f=>f())};pQ.append(b)}
+note(pQ,'大于 1 是把画面往这个方向拉长，小于 1 是压扁。拉伸是实时的，拍照和录像都会带上。');
 addSlider(pQ,'自定义比例',.5,3,.01,S,'car',()=>{if(recing())return;ri=4;updBar();syncChips()});
 note(pQ,'自定义比例 = 宽 ÷ 高。开启“拉伸填满”后画面会被拉伸变形以填满所选比例，关闭则是居中裁切。');
 head(pQ,'清晰度');
@@ -702,7 +706,7 @@ function loop(ts){
   $('#zr').textContent=zc.toFixed(1)+'×';
   gl.bindTexture(gl.TEXTURE_2D,tx);
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,vid);
-  gl.uniform2f(UL.r,cw,ch);gl.uniform2f(UL.cr,cr[0],cr[1]);gl.uniform1f(UL.T,T%1000);
+  gl.uniform2f(UL.r,cw,ch);gl.uniform2f(UL.cr,cr[0],cr[1]);gl.uniform2f(UL.st,S.stx,S.sty);gl.uniform1f(UL.T,T%1000);
   gl.uniform1f(UL.m,facing==='user'?1:0);gl.uniform1f(UL.z,zc);
   gl.uniform1f(UL.fb,Math.min(Math.abs(zt-zc)*.0015,.008));
   gl.uniform1f(UL.F,fi);gl.uniform1f(UL.rot,rot);
