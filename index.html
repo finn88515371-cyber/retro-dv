@@ -110,6 +110,22 @@ body.skin-w7 .tabs .btn.act{background:linear-gradient(#fff,#eaf3fc);border-top:
 .th img,.th video{width:100%;height:auto;display:block;border-radius:4px;background:#000;pointer-events:none}
 .th i{position:absolute;right:5px;bottom:5px;font-style:normal;font-size:10px;color:#fff;background:rgba(0,0,0,.6);padding:1px 6px;border-radius:8px}
 .th .dt{display:block;font-size:10px;color:var(--menumut);margin-top:4px;text-align:center}
+.gh2 small{font-size:11px;font-weight:normal;color:var(--menumut)}
+#gal.view #gsel,#gal.edit #gsel{visibility:hidden}
+.fv{position:absolute;left:5px;top:5px;width:26px;height:26px;border-radius:50%;border:0;padding:0;background:rgba(0,0,0,.45);color:#fff;font-size:15px;line-height:26px;cursor:pointer}
+.fv.on{color:#ffd23f;text-shadow:0 0 6px rgba(255,210,63,.8)}
+.ck{display:none;position:absolute;right:5px;top:5px;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.3);box-sizing:border-box;color:#fff;font-size:13px;line-height:18px;text-align:center}
+#gal.sel .ck{display:block}
+#gal.sel .fv{display:none}
+.th.picked{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
+.th.picked .ck{background:var(--acc)}
+.th.picked img,.th.picked video{opacity:.75}
+#gbar{display:none;flex:none;gap:6px;padding:8px 10px;border-top:1px solid var(--menub);align-items:center;flex-wrap:wrap}
+#gal.sel #gbar{display:flex}
+#gal.view #gbar,#gal.edit #gbar{display:none}
+#gbar .btn{flex:1;padding:10px 4px;font-size:12px}
+#gcount{width:100%;font-size:11px;color:var(--menumut);text-align:center}
+.btn.warn{color:#e5484d}
 #gv{display:none;flex:1;min-height:0;flex-direction:column}
 #gal.view #gv{display:flex}
 #gal.view #gl,#gal.view .gtabs,#gal.edit #gl,#gal.edit .gtabs{display:none}
@@ -203,15 +219,16 @@ body.rotl .cam{transform:translateY(100vh) rotate(-90deg);transform:translateY(1
     <div id="pw"><div>点 POWER 开机并允许使用摄像头</div><button class="btn act" id="pwb">⏻ POWER</button></div>
   </div>
   <div id="gal">
-    <div class="gh2"><button class="btn" id="gc">‹ 返回</button><b>相册</b><span id="gn"></span></div>
-    <div class="gtabs" id="gtabs"><button class="btn act" data-g="0">全部</button><button class="btn" data-g="1">照片</button><button class="btn" data-g="2">视频</button></div>
+    <div class="gh2"><button class="btn" id="gc">‹ 返回</button><b>相册 <small id="gn"></small></b><button class="btn" id="gsel">选择</button></div>
+    <div class="gtabs" id="gtabs"><button class="btn act" data-g="0">全部</button><button class="btn" data-g="1">照片</button><button class="btn" data-g="2">视频</button><button class="btn" data-g="3">★ 收藏</button></div>
     <div id="gl"></div>
+    <div id="gbar"><div id="gcount"></div><button class="btn" id="ba">全选</button><button class="btn" id="bf">★ 收藏</button><button class="btn" id="bs">下载/保存</button><button class="btn warn" id="bx">删除</button></div>
     <div id="gv">
       <div id="vm"></div>
       <div class="vb">
         <button class="btn act big" id="vs">保存 / 分享</button>
         <button class="btn big" id="ve">✎ 贴纸 / 涂鸦</button>
-        <div class="vr"><button class="btn" id="vd">下载文件</button><button class="btn" id="vo">新窗口打开</button><button class="btn" id="vx">删除</button></div>
+        <div class="vr"><button class="btn" id="vf">☆ 收藏</button><button class="btn" id="vd">下载</button><button class="btn" id="vo">打开</button><button class="btn warn" id="vx">删除</button></div>
         <div class="vr"><button class="btn" id="vp">‹ 上一个</button><span class="hint" id="vi" style="flex:1;align-self:center"></span><button class="btn" id="vn">下一个 ›</button></div>
         <div class="hint">iPhone：点“保存 / 分享”，在弹出的菜单里选“存储图像 / 存储视频”。拍的内容会自动保存在本机浏览器里，刷新后还在。</div>
       </div>
@@ -368,7 +385,7 @@ function mkItem(r){const d=new Date(r.t),ext=r.k==='img'?'jpg':(r.blob.type.incl
   return {...r,url:URL.createObjectURL(r.blob),file:new File([r.blob],name,{type:r.blob.type})}}
 function updCount(){$('#gb').textContent='GALLERY '+items.length;$('#gn').textContent=items.length+' 项'}
 function addItem(k,blob,dur){
-  const r={id:Date.now()+'-'+Math.floor(Math.random()*1000),k,blob,t:Date.now(),d:dur||0};
+  const r={id:Date.now()+'-'+Math.floor(Math.random()*1000),k,blob,t:Date.now(),d:dur||0,fav:false};
   idbPut(r);items.unshift(mkItem(r));updCount();
   const g=$('#gb');g.classList.remove('bump');void g.offsetWidth;g.classList.add('bump');
   if(galOpen()&&!$('#gal').classList.contains('edit'))renderGal();
@@ -451,7 +468,8 @@ async function applyLight(){
 }
 
 /* orientation: o=0 竖屏, 1 手机逆时针转, 2 手机顺时针转 */
-function pickO(){if(S.auto&&gam!==null&&Math.abs(gam)>35){const w=gam<0?1:2;return S.swap?3-w:w}return S.lo}
+let gx=null,gy=null,gsign=1;
+function pickO(){if(S.auto&&gx!==null&&Math.abs(gx)>4.5){const w=gx*gsign>0?1:2;return S.swap?3-w:w}return S.lo}
 function layout(){
   const dp=innerHeight>=innerWidth,b=document.body.classList;
   land=mob?(dp?o!==0:true):!dp;
@@ -462,9 +480,10 @@ function layout(){
 const reO=()=>{if(o&&!recing()){o=pickO();layout()}};
 let sensorAsked=false;
 function askSensor(){if(sensorAsked)return;sensorAsked=true;
-  try{const DE=window.DeviceOrientationEvent;if(DE&&typeof DE.requestPermission==='function')DE.requestPermission().catch(()=>{})}catch(e){}}
-addEventListener('deviceorientation',e=>{if(e.gamma==null)return;gam=e.gamma;
-  if(S.auto&&mob&&o&&innerHeight>=innerWidth&&!recing()&&Math.abs(gam)>55){const n=pickO();if(n!==o){o=n;layout()}}});
+  try{const DM=window.DeviceMotionEvent;if(DM&&typeof DM.requestPermission==='function')DM.requestPermission().catch(()=>{})}catch(e){}}
+addEventListener('devicemotion',e=>{const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;gx=a.x;gy=a.y;
+  if(o===0&&innerHeight>=innerWidth&&Math.abs(gy)>7&&Math.abs(gx)<3)gsign=gy>0?1:-1;
+  if(S.auto&&mob&&o&&innerHeight>=innerWidth&&!recing()&&Math.abs(gx)>7&&Math.abs(gy)<4){const n=pickO();if(n!==o){o=n;layout()}}});
 addEventListener('resize',layout);
 $('#ori').onclick=()=>{if(recing())return;if(o){o=0}else{askSensor();o=pickO()}layout()};
 layout();
@@ -691,23 +710,39 @@ $('#sh').onclick=()=>{
 /* gallery */
 let gf=0,gi=0;
 const gal=$('#gal');
-const flt=()=>items.filter(x=>gf===0||(gf===1?x.k==='img':x.k==='vid'));
+const flt=()=>items.filter(x=>gf===0||(gf===1?x.k==='img':gf===2?x.k==='vid':!!x.fav));
+const recOf=it=>({id:it.id,k:it.k,blob:it.blob,t:it.t,d:it.d,fav:!!it.fav});
+let selMode=false;const selSet=new Set();
+function setFav(it,v){it.fav=v;idbPut(recOf(it))}
+function setSel(on){selMode=on;selSet.clear();gal.classList.toggle('sel',on);$('#gsel').textContent=on?'完成':'选择';renderGal()}
+function updSel(){const n=selSet.size,L=items.filter(x=>selSet.has(x.id));
+  $('#gcount').textContent=n?'已选 '+n+' 项':'点照片来选择';
+  $('#bf').textContent=n&&L.every(x=>x.fav)?'☆ 取消收藏':'★ 收藏';
+  const V=flt();$('#ba').textContent=V.length&&V.every(x=>selSet.has(x.id))?'取消全选':'全选'}
 const canShare=it=>!!(navigator.canShare&&navigator.canShare({files:[it.file]}));
 function setGf(n){gf=n;[...$('#gtabs').children].forEach(x=>x.classList.toggle('act',+x.dataset.g===n))}
 function renderGal(){
-  const L=flt(),g=$('#gl');g.innerHTML='';updCount();
-  if(!L.length){g.textContent='还没有拍摄内容';return}
+  const L=flt(),g=$('#gl');g.innerHTML='';updCount();if(selMode)updSel();
+  if(!L.length){g.textContent=gf===3?'还没有收藏，点照片左上角的 ☆ 就能收藏':'还没有拍摄内容';return}
   L.forEach((it,i)=>{
-    const d=document.createElement('div');d.className='th';d.style.animationDelay=Math.min(i,12)*5+'ms';
+    const d=document.createElement('div');d.className='th'+(selSet.has(it.id)?' picked':'');d.style.animationDelay=Math.min(i,12)*5+'ms';
     const tw=document.createElement('div');tw.className='tw';
     const el=document.createElement(it.k==='img'?'img':'video');
     if(it.k==='vid'){el.src=it.url+'#t=0.1';el.muted=true;el.preload='metadata';el.playsInline=true}else el.src=it.url;
     tw.append(el);
     if(it.k==='vid'){const b=document.createElement('i');b.textContent='▶ '+fmt(it.d||0).replace(/^0:/,'');tw.append(b)}
+    const fv=document.createElement('button');fv.className='fv'+(it.fav?' on':'');fv.textContent=it.fav?'★':'☆';
+    fv.onclick=e=>{e.stopPropagation();setFav(it,!it.fav);fv.classList.toggle('on',it.fav);fv.textContent=it.fav?'★':'☆';if(gf===3)renderGal()};
+    const ck=document.createElement('span');ck.className='ck';ck.textContent=selSet.has(it.id)?'✓':'';
+    tw.append(fv,ck);
     const dt=document.createElement('span');dt.className='dt';const t=new Date(it.t);
     dt.textContent=`${pad(t.getMonth()+1)}-${pad(t.getDate())} ${pad(t.getHours())}:${pad(t.getMinutes())}`;
     d.append(tw,dt);
-    d.onclick=()=>{gi=i;gal.classList.add('view');showView()};g.append(d);
+    d.onclick=()=>{
+      if(selMode){if(selSet.has(it.id))selSet.delete(it.id);else selSet.add(it.id);
+        const p=selSet.has(it.id);d.classList.toggle('picked',p);ck.textContent=p?'✓':'';updSel();return}
+      gi=i;gal.classList.add('view');showView()};
+    g.append(d);
   });
 }
 function cur(){return flt()[gi]}
@@ -720,6 +755,7 @@ function showView(){
   $('#vi').textContent=(gi+1)+' / '+L.length;
   $('#vs').textContent=canShare(it)?'保存 / 分享到相册':'下载保存';
   $('#ve').style.display=it.k==='img'?'':'none';
+  $('#vf').textContent=it.fav?'★ 已收藏':'☆ 收藏';$('#vf').classList.toggle('act',!!it.fav);
 }
 function dl(it){const a=document.createElement('a');a.href=it.url;a.download=it.file.name;document.body.appendChild(a);a.click();a.remove()}
 $('#vs').onclick=()=>{const it=cur();if(!it)return;
@@ -731,11 +767,27 @@ $('#vx').onclick=()=>{const it=cur();if(!it||!confirm('删除这个文件？删�
 $('#vp').onclick=()=>{gi--;if(gi<0)gi=flt().length-1;showView()};
 $('#vn').onclick=()=>{gi++;if(gi>=flt().length)gi=0;showView()};
 $('#gtabs').onclick=e=>{const b=e.target.closest('[data-g]');if(!b)return;setGf(+b.dataset.g);renderGal()};
-$('#gb').onclick=()=>{if(recing())return;gal.classList.remove('view','edit');renderGal();gal.classList.add('on');applyMic();applyLight()};
+$('#gb').onclick=()=>{if(recing())return;gal.classList.remove('view','edit');selMode=false;selSet.clear();gal.classList.remove('sel');$('#gsel').textContent='选择';renderGal();gal.classList.add('on');applyMic();applyLight()};
 $('#gc').onclick=()=>{
   if(gal.classList.contains('edit')){gal.classList.remove('edit');gal.classList.add('view')}
   else if(gal.classList.contains('view')){gal.classList.remove('view');renderGal()}
+  else if(selMode){setSel(false)}
   else{gal.classList.remove('on');applyMic();applyLight()}};
+$('#vf').onclick=()=>{const it=cur();if(!it)return;setFav(it,!it.fav);showView()};
+$('#gsel').onclick=()=>setSel(!selMode);
+$('#ba').onclick=()=>{const V=flt();if(V.every(x=>selSet.has(x.id)))V.forEach(x=>selSet.delete(x.id));else V.forEach(x=>selSet.add(x.id));renderGal()};
+$('#bf').onclick=()=>{const L=items.filter(x=>selSet.has(x.id));if(!L.length)return;const v=!L.every(x=>x.fav);L.forEach(x=>setFav(x,v));renderGal()};
+$('#bs').onclick=async()=>{
+  const L=items.filter(x=>selSet.has(x.id));if(!L.length)return;
+  const files=L.map(x=>x.file);
+  try{if(navigator.canShare&&navigator.canShare({files})){await navigator.share({files});return}}catch(e){if(e&&e.name==='AbortError')return}
+  for(const it of L){dl(it);await sleep(350)}
+};
+$('#bx').onclick=()=>{
+  const L=items.filter(x=>selSet.has(x.id));if(!L.length)return;
+  if(!confirm('删除选中的 '+L.length+' 项？删除后无法恢复。'))return;
+  L.forEach(it=>{idbDel(it.id);URL.revokeObjectURL(it.url)});
+  items=items.filter(x=>!selSet.has(x.id));selSet.clear();renderGal()};
 
 /* sticker / doodle editor (soft lo-fi pixel stickers + DV-style text) */
 const ec=$('#ec'),ec2=ec.getContext('2d');
