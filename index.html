@@ -338,7 +338,7 @@ const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,auto:true,swap:false,lo:2};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -359,7 +359,7 @@ applySkin();
 const mob=matchMedia('(pointer:coarse)').matches;
 const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
 let stream,track,facing='environment',on=false,mode='video',rec,chunks=[],t0=0,items=[],last=0,W=640,H=480,cw=0,ch=0,rot=0,szKey='',cr=[1,1];
-let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=2,ev=0,evT=0,o=0,land=false,gam=null;
+let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=2,ev=0,evT=0,o=0,land=false;
 let lensId=null,lenses=[],autoWide=true,curMM=24,hasTorch=false,shotReq=0,flashFx=0,torchOn=false,lightFx=0;
 const FN=['DV','VHS','夜视','黑白','家庭','赛博','胶片','蓝晒','CRT','热成像','海报','负片','青橙','梦幻'];
 const FO=['DV','VHS','NIGHT','B&W','HOME','CYBER','FILM','CYANO','CRT','THERMAL','POSTER','NEG','TEAL','DREAM'];
@@ -467,9 +467,9 @@ async function applyLight(){
   lightFx=want?1:0;
 }
 
-/* orientation: o=0 竖屏, 1 手机逆时针转, 2 手机顺时针转 */
-let gx=null,gy=null,gsign=1;
-function pickO(){if(S.auto&&gx!==null&&Math.abs(gx)>4.5){const w=gx*gsign>0?1:2;return S.swap?3-w:w}return S.lo}
+/* orientation (manual, no sensors)
+   o=0 竖屏; o=1 横屏·手机逆时针转(左边朝下); o=2 横屏·手机顺时针转(右边朝下)
+   S.lo = 设置里选的横屏方向 (1 或 2) */
 function layout(){
   const dp=innerHeight>=innerWidth,b=document.body.classList;
   land=mob?(dp?o!==0:true):!dp;
@@ -477,15 +477,10 @@ function layout(){
   b.toggle('rotr',mob&&dp&&o===1);b.toggle('rotl',mob&&dp&&o===2);
   $('#ori').textContent=o?'竖屏':'横屏';
 }
-const reO=()=>{if(o&&!recing()){o=pickO();layout()}};
-let sensorAsked=false;
-function askSensor(){if(sensorAsked)return;sensorAsked=true;
-  try{const DM=window.DeviceMotionEvent;if(DM&&typeof DM.requestPermission==='function')DM.requestPermission().catch(()=>{})}catch(e){}}
-addEventListener('devicemotion',e=>{const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;gx=a.x;gy=a.y;
-  if(o===0&&innerHeight>=innerWidth&&Math.abs(gy)>7&&Math.abs(gx)<3)gsign=gy>0?1:-1;
-  if(S.auto&&mob&&o&&innerHeight>=innerWidth&&!recing()&&Math.abs(gx)>7&&Math.abs(gy)<4){const n=pickO();if(n!==o){o=n;layout()}}});
+if(S.lo!==1&&S.lo!==2)S.lo=1;
+const reO=()=>{if(o&&!recing()){o=S.lo;layout()}};
 addEventListener('resize',layout);
-$('#ori').onclick=()=>{if(recing())return;if(o){o=0}else{askSensor();o=pickO()}layout()};
+$('#ori').onclick=()=>{if(recing())return;o=o?0:S.lo;layout()};
 layout();
 const angle=()=>{let a=(screen.orientation&&typeof screen.orientation.angle==='number')?screen.orientation.angle:(typeof window.orientation==='number'?window.orientation:0);return((a%360)+360)%360};
 
@@ -533,12 +528,10 @@ head(pM,'镜头');
 const lensBox=document.createElement('div');lensBox.className='chips';pM.append(lensBox);
 note(pM,'默认使用后置广角（主摄）。手机支持时，这里会列出超广角、长焦等镜头。焦段按 35mm 等效估算：超广角约 13mm、广角约 24mm、长焦约 77mm，再乘以变焦倍数。');
 head(pM,'画面方向');
+head(pM,'横屏时手机往哪边转');
+addChips(pM,['↺ 逆时针（左边朝下）','↻ 顺时针（右边朝下）'],()=>S.lo-1,i=>{S.lo=i+1;save();reO()});
 addToggle(pM,'画面旋转 180°',S,'flip');
-addToggle(pM,'自动判断横屏方向',S,'auto',reO);
-addToggle(pM,'横屏方向对调',S,'swap',reO);
-head(pM,'没有传感器时的横屏方向');
-addChips(pM,['↺ 手机逆时针转','↻ 手机顺时针转'],()=>S.lo-1,i=>{S.lo=i+1;save();reO()});
-note(pM,'横屏只需点一下主界面的“横屏”按钮，方向会自动判断（iPhone 第一次会请求“动作与方向”权限，请允许）。如果横屏时界面和画面是倒着的，打开“横屏方向对调”。');
+note(pM,'先在这里选好你横拿手机的方向，再点主界面的“横屏”。从竖着拿开始，把手机往左转（左边朝下）就是逆时针，往右转（右边朝下）就是顺时针。如果界面是正的但画面是倒的，打开“画面旋转 180°”。建议打开 iPhone 的“竖排方向锁定”，效果最稳定。');
 const pK=mkPane('外观');head(pK,'界面皮肤');addChips(pK,SKN,()=>SK.indexOf(S.skin),i=>{S.skin=SK[i];applySkin()});
 showPane(pQ);syncChips();updMic();updBar();
 $('#mb').onclick=()=>cam.classList.toggle('menu');
