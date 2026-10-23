@@ -116,6 +116,8 @@ body.skin-w7 .tabs .btn.act{background:linear-gradient(#fff,#eaf3fc);border-top:
 .txt{width:100%;box-sizing:border-box;padding:7px 9px;border-radius:var(--rad);border:1px solid var(--btnb);background:#fff;color:#111;font:inherit;font-size:13px}
 #lvl{height:8px;background:rgba(128,128,128,.3);border-radius:4px;overflow:hidden;margin:6px 0}
 #lvl b{display:block;height:100%;width:0;background:#3fae6a}
+#askd{position:absolute;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45)}
+.askb{background:var(--menu);color:var(--menuink);border:1px solid var(--menub);border-radius:var(--crad);padding:16px;max-width:280px;box-shadow:0 8px 30px rgba(0,0,0,.5)}.askb p{margin:0 0 12px;font-size:14px;line-height:1.6}
 #gal{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;background:var(--menu);color:var(--menuink)}
 #gal.on{display:flex;animation:fade .04s}
 .gh2{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:8px}
@@ -313,7 +315,7 @@ body.land .cam{grid-template-rows:auto auto minmax(0,1fr)}
       <div class="etop"><button class="btn" id="eca">取消</button><button class="btn" id="eu">撤销</button><button class="btn" id="ecl">清空</button><span id="ezr"></span><button class="btn act" id="eok">保存</button></div>
       <div id="ew"><canvas id="ec"></canvas></div>
       <div class="eb">
-        <div class="chips" id="etabs"><button class="btn act" data-t="adj">调整</button><button class="btn" data-t="crop">裁剪</button><button class="btn" data-t="frame">相框</button><button class="btn" data-t="pen">画笔</button><button class="btn" data-t="er">橡皮</button><button class="btn" data-t="stk">贴纸</button></div>
+        <div class="chips" id="etabs"><button class="btn act" data-t="adj">调整</button><button class="btn" data-t="crop">裁剪</button><button class="btn" data-t="frame">相框</button><button class="btn" data-t="pen">画笔</button><button class="btn" data-t="er">橡皮</button><button class="btn" data-t="shape">形状</button><button class="btn" data-t="mos">马赛克</button><button class="btn" data-t="stk">贴纸</button></div>
         <div id="pa" style="display:none"><div id="adjs"></div><button class="btn" id="adr">重置调整</button></div>
         <div id="pc" style="display:none">
           <div class="chips" id="crat"><button class="btn act" data-r="0">自由</button><button class="btn" data-r="1">1:1</button><button class="btn" data-r="1.3333">4:3</button><button class="btn" data-r="0.75">3:4</button><button class="btn" data-r="1.7778">16:9</button><button class="btn" data-r="0.5625">9:16</button></div>
@@ -328,6 +330,8 @@ body.land .cam{grid-template-rows:auto auto minmax(0,1fr)}
           <label class="ms"><span>相框像素</span><input type="range" id="fpx" min="1" max="3" step=".1" value="2"><i id="fpxv">2.0</i></label>
           <div id="ftw"><div class="gh">相框文字</div><input class="txt" id="ftx" maxlength="24"></div>
           <div class="hint">涂鸦和贴纸会画在相框上面</div></div>
+        <div id="psh" style="display:none"><div class="chips" id="shs"></div><div class="chips" id="shf"><button class="btn act" data-f="0">描边</button><button class="btn" data-f="1">填充</button></div></div>
+        <div id="pm" style="display:none"><label class="ms"><span>马赛克块</span><input type="range" id="mbs" min="2" max="10" step=".5" value="5"><i id="mbsv">5.0</i></label><label class="ms"><span>笔刷(块)</span><input type="range" id="msz" min="1" max="6" step="1" value="2"><i id="mszv">2</i></label><div class="hint">在要打码的地方涂抹，方块越大越粗</div></div>
         <div id="pp" style="display:none"><div class="sws" id="sws"></div><label class="ms"><span>粗细(格)</span><input type="range" id="es" min="1" max="10" step="1" value="3"><i id="esn">3</i></label>
           <label class="ms"><span>像素大小</span><input type="range" id="eps" min=".3" max="2" step=".1" value=".7"><i id="epsv">0.7</i></label></div>
         <div id="pk" style="display:none">
@@ -1117,7 +1121,7 @@ $('#sh').onclick=()=>{
 let gf=0,gi=0;
 const gal=$('#gal');
 const flt=()=>items.filter(x=>gf===0||(gf===1?x.k==='img':gf===2?x.k==='vid':!!x.fav));
-const recOf=it=>({id:it.id,k:it.k,blob:it.blob,t:it.t,d:it.d,fav:!!it.fav});
+const recOf=it=>({id:it.id,k:it.k,blob:it.blob,t:it.t,d:it.d,fav:!!it.fav,sv:it.sv||0});
 let selMode=false;const selSet=new Set();
 function setFav(it,v){it.fav=v;idbPut(recOf(it))}
 function setSel(on){selMode=on;selSet.clear();gal.classList.toggle('sel',on);$('#gsel').textContent=on?'完成':'选择';renderGal()}
@@ -1164,9 +1168,19 @@ function showView(){
   $('#vf').textContent=it.fav?'★':'☆';$('#vf').classList.toggle('act',!!it.fav);
 }
 function dl(it){const a=document.createElement('a');a.href=it.url;a.download=it.file.name;document.body.appendChild(a);a.click();a.remove()}
-$('#vs').onclick=()=>{const it=cur();if(!it)return;
-  if(canShare(it)){navigator.share({files:[it.file]}).catch(e=>{if(e&&e.name!=='AbortError')dl(it)})}else dl(it)};
-$('#vd').onclick=()=>{const it=cur();if(it)dl(it)};
+/* remember saves; ask before saving the same photo again within 7 days */
+const SVW=7*864e5;
+function markSaved(L){const n=Date.now();L.forEach(it=>{it.sv=n;idbPut(recOf(it))})}
+function ago(t){const m=Math.round((Date.now()-t)/6e4);return m<1?'刚刚':m<60?m+' 分钟前':m<1440?Math.round(m/60)+' 小时前':Math.round(m/1440)+' 天前'}
+function askAgain(msg,yes){let d=document.getElementById('askd');
+  if(!d){d=document.createElement('div');d.id='askd';d.innerHTML='<div class="askb"><p></p><div class="vr"><button class="btn" data-a="0">取消</button><button class="btn act" data-a="1">再次保存</button></div></div>';$('#gal').append(d)}
+  d.querySelector('p').textContent=msg;d.style.display='flex';
+  d.onclick=e=>{const b=e.target.closest('[data-a]');if(!b&&e.target!==d)return;d.style.display='none';if(b&&b.dataset.a==='1')yes()}}
+function guardSave(L,fn){const R=L.filter(x=>x.sv&&Date.now()-x.sv<SVW);if(!R.length){fn();return}
+  askAgain(L.length===1?'这张照片'+ago(R[0].sv)+'保存过了，要再保存一次吗？':'选中的 '+L.length+' 项里有 '+R.length+' 项最近已经保存过，要全部再保存一次吗？',fn)}
+$('#vs').onclick=()=>{const it=cur();if(!it)return;guardSave([it],()=>{
+  if(canShare(it)){navigator.share({files:[it.file]}).then(()=>markSaved([it])).catch(e=>{if(e&&e.name!=='AbortError'){dl(it);markSaved([it])}})}else{dl(it);markSaved([it])}})};
+$('#vd').onclick=()=>{const it=cur();if(it)guardSave([it],()=>{dl(it);markSaved([it])})};
 {let sx=0,sy=0,st=0;const vm=$('#vm');
  vm.addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY;st=Date.now()});
  vm.addEventListener('pointerup',e=>{const r=document.body.classList,rot=r.contains('rotr')?1:r.contains('rotl')?-1:0;
@@ -1188,11 +1202,11 @@ $('#vf').onclick=()=>{const it=cur();if(!it)return;setFav(it,!it.fav);showView()
 $('#gsel').onclick=()=>setSel(!selMode);
 $('#ba').onclick=()=>{const V=flt();if(V.every(x=>selSet.has(x.id)))V.forEach(x=>selSet.delete(x.id));else V.forEach(x=>selSet.add(x.id));renderGal()};
 $('#bf').onclick=()=>{const L=items.filter(x=>selSet.has(x.id));if(!L.length)return;const v=!L.every(x=>x.fav);L.forEach(x=>setFav(x,v));renderGal()};
-$('#bs').onclick=async()=>{
+$('#bs').onclick=()=>{
   const L=items.filter(x=>selSet.has(x.id));if(!L.length)return;
-  const files=L.map(x=>x.file);
-  try{if(navigator.canShare&&navigator.canShare({files})){await navigator.share({files});return}}catch(e){if(e&&e.name==='AbortError')return}
-  for(const it of L){dl(it);await sleep(350)}
+  guardSave(L,async()=>{const files=L.map(x=>x.file);
+    try{if(navigator.canShare&&navigator.canShare({files})){await navigator.share({files});markSaved(L);return}}catch(e){if(e&&e.name==='AbortError')return}
+    for(const it of L){dl(it);await sleep(350)}markSaved(L)})
 };
 $('#bx').onclick=()=>{
   const L=items.filter(x=>selSet.has(x.id));if(!L.length)return;
@@ -1203,7 +1217,7 @@ $('#bx').onclick=()=>{
 /* sticker / doodle editor (soft lo-fi pixel stickers + DV-style text) */
 const ec=$('#ec'),ec2=ec.getContext('2d');
 const ADJ0={ex:0,br:0,ct:0,hl:0,sh:0,sat:0,tp:0,tn:0,fd:0,vg:0,gr:0};
-const E={src:null,base:document.createElement('canvas'),adj:{...ADJ0},geo:[],cr:{x:0,y:0,w:1,h:1},car:0,cdrag:null,layer:document.createElement('canvas'),strokes:[],stk:[],hist:[],tool:'pen',col:'#ff004d',sz:3,ps:.7,gs:8,gw:1,gh:1,fr:0,fb:.6,fpx:2,ftx:'',fkey:'',fc:null,t:0,sel:-1,cw:0,ch:0,cur:null,drag:null};
+const E={src:null,base:document.createElement('canvas'),adj:{...ADJ0},geo:[],cr:{x:0,y:0,w:1,h:1},car:0,cdrag:null,layer:document.createElement('canvas'),strokes:[],stk:[],hist:[],tool:'pen',col:'#ff004d',sz:3,ps:.7,shp:'rect',sfill:false,mst:[],mcur:null,mbs:5,msz:2,snap:null,gs:8,gw:1,gh:1,fr:0,fb:.6,fpx:2,ftx:'',fkey:'',fc:null,t:0,sel:-1,cw:0,ch:0,cur:null,drag:null};
 const ECOL=['#000000','#1d2b53','#7e2553','#008751','#ab5236','#5f574f','#c2c3c7','#fff1e8','#ff004d','#ffa300','#ffec27','#00e436','#29adff','#83769c','#ff77a8','#ffccaa'];
 const PAL={k:'#2b2a33',w:'#fff4e0',r:'#ff6b8b',p:'#ffd3dc',y:'#ffd966',b:'#5b7cff',g:'#8a8fa8',t:'#6fd8c0',o:'#f2a65a',c:'#c9c3d9',l:'#cfe3ff',n:'#f6e7c8',m:'#ffe9a8',R:'#ff6a6a',O:'#ffa64d',Y:'#ffe066',G:'#7ddc7a',B:'#5ab4ff',V:'#a07aff'};
 const SPR={
@@ -1316,7 +1330,7 @@ function loc(e){
   return {x:Math.max(0,Math.min(1,x)),y:Math.max(0,Math.min(1,y))};
 }
 function edRender(sel=true){
-  ec2.clearRect(0,0,E.cw,E.ch);if(E.fr)drawFrame();else ec2.drawImage(E.base,0,0);
+  ec2.clearRect(0,0,E.cw,E.ch);const PS=photoSrc();if(E.fr)drawFrame(PS);else ec2.drawImage(PS,0,0);
   ec2.imageSmoothingEnabled=false;ec2.drawImage(E.layer,0,0,E.gw*E.gs,E.gh*E.gs);ec2.imageSmoothingEnabled=true;
   E.stk.forEach((s,i)=>{drawStk(ec2,s);if(sel&&i===E.sel)selBox(s)});
   if(sel&&E.tool==='crop')drawCrop();
@@ -1383,10 +1397,10 @@ function cropMove(p){
 function bakeGeo(fn){
   evReset();E.sel=-1;edRender(false);
   const comp=document.createElement('canvas');comp.width=E.cw;comp.height=E.ch;comp.getContext('2d').drawImage(ec,0,0);
-  E.geo.push({src:E.src,strokes:E.strokes,stk:E.stk,adj:{...E.adj},fr:E.fr,ftx:E.ftx});E.hist.push('g');
-  setSrc(fn(comp));E.strokes=[];E.stk=[];E.adj={...ADJ0};E.fr=0;E.ftx='';syncFrameUI();syncAdj();rebuild();applyAdj();stkUI();fullCrop();edRender();
+  E.geo.push({src:E.src,strokes:E.strokes,stk:E.stk,mst:E.mst,adj:{...E.adj},fr:E.fr,ftx:E.ftx});E.hist.push('g');
+  setSrc(fn(comp));E.strokes=[];E.stk=[];E.mst=[];E.adj={...ADJ0};E.fr=0;E.ftx='';syncFrameUI();syncAdj();rebuild();applyAdj();stkUI();fullCrop();edRender();
 }
-function restoreGeo(g){setSrc(g.src);E.strokes=g.strokes;E.stk=g.stk;E.adj=g.adj;E.fr=g.fr||0;E.ftx=g.ftx||'';syncFrameUI();syncAdj();rebuild();applyAdj();stkUI();fullCrop()}
+function restoreGeo(g){setSrc(g.src);E.strokes=g.strokes;E.stk=g.stk;E.mst=g.mst||[];E.adj=g.adj;E.fr=g.fr||0;E.ftx=g.ftx||'';syncFrameUI();syncAdj();rebuild();applyAdj();stkUI();fullCrop()}
 function mkC(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
 $('#crat').onclick=e=>{const b=e.target.closest('[data-r]');if(!b)return;[...$('#crat').children].forEach(x=>x.classList.toggle('act',x===b));setRatio2(+b.dataset.r);edRender()};
 $('#gsx').oninput=e=>{$('#gsxv').textContent=(+e.target.value).toFixed(2)};
@@ -1398,14 +1412,14 @@ $('#gap').onclick=()=>{const r=E.cr,sx=+$('#gsx').value,sy=+$('#gsy').value;
 $('#grot').onclick=()=>bakeGeo(comp=>{const c=mkC(comp.height,comp.width),x=c.getContext('2d');x.translate(c.width,0);x.rotate(Math.PI/2);x.drawImage(comp,0,0);return c});
 $('#gfh').onclick=()=>bakeGeo(comp=>{const c=mkC(comp.width,comp.height),x=c.getContext('2d');x.translate(c.width,0);x.scale(-1,1);x.drawImage(comp,0,0);return c});
 $('#gfv').onclick=()=>bakeGeo(comp=>{const c=mkC(comp.width,comp.height),x=c.getContext('2d');x.translate(0,c.height);x.scale(1,-1);x.drawImage(comp,0,0);return c});
-function rebuild(){const c=E.layer.getContext('2d');c.clearRect(0,0,E.gw,E.gh);E.strokes.forEach(st=>{st.m=new Map();st.pts.forEach((_,i)=>rasterSeg(st,i))})}
+function rebuild(){const c=E.layer.getContext('2d');c.clearRect(0,0,E.gw,E.gh);E.strokes.forEach(st=>{st.m=new Map();if(st.sh)rasterShape(st);else st.pts.forEach((_,i)=>rasterSeg(st,i))})}
 function stkUI(){const s=E.stk[E.sel];$('#sc').style.display=s?'':'none';if(s){$('#ss').value=s.s;$('#sr').value=s.r;$('#sb').value=s.b;$('#sxw').value=s.sx||1;$('#syh').value=s.sy||1}}
 function setTool(t){
   E.tool=t;if(t!=='stk'){E.sel=-1;stkUI()}
   [...$('#etabs').children].forEach(b=>b.classList.toggle('act',b.dataset.t===t));
-  $('#pp').style.display=(t==='pen'||t==='er')?'':'none';$('#pk').style.display=t==='stk'?'':'none';
+  $('#pp').style.display=(t==='pen'||t==='er'||t==='shape')?'':'none';$('#psh').style.display=t==='shape'?'':'none';$('#pm').style.display=t==='mos'?'':'none';$('#pk').style.display=t==='stk'?'':'none';
   $('#pa').style.display=t==='adj'?'':'none';$('#pc').style.display=t==='crop'?'':'none';$('#pf').style.display=t==='frame'?'':'none';
-  $('#sws').style.display=t==='pen'?'':'none';edRender();
+  $('#sws').style.display=(t==='pen'||t==='shape')?'':'none';edRender();
 }
 function openEd(it){
   const im=new Image();
@@ -1413,7 +1427,7 @@ function openEd(it){
     const s=Math.min(1,1280/Math.max(im.naturalWidth,im.naturalHeight));
     const c=mkC(Math.round(im.naturalWidth*s),Math.round(im.naturalHeight*s));c.getContext('2d').drawImage(im,0,0,c.width,c.height);
     setSrc(c);E.geo=[];E.adj={...ADJ0};syncAdj();E.t=it.t;E.fr=0;E.ftx='';E.fkey='';syncFrameUI();
-    try{Promise.all(['16px VT323','16px "UnifrakturMaguntia"','16px Fredoka'].map(f=>document.fonts.load(f))).then(()=>{E.fkey='';edRender()})}catch(e){}E.strokes=[];E.stk=[];E.hist=[];E.sel=-1;E.cur=null;E.drag=null;E.cdrag=null;
+    try{Promise.all(['16px VT323','16px "UnifrakturMaguntia"','16px Fredoka'].map(f=>document.fonts.load(f))).then(()=>{E.fkey='';edRender()})}catch(e){}E.strokes=[];E.stk=[];E.mst=[];E.mcur=null;E.hist=[];E.sel=-1;E.cur=null;E.drag=null;E.cdrag=null;
     E.car=0;[...$('#crat').children].forEach((x,i)=>x.classList.toggle('act',i===0));fullCrop();rebuild();applyAdj();
     evReset();gal.classList.remove('view','imm');gal.classList.add('edit');setTool('adj');
   };
@@ -1490,11 +1504,11 @@ function pixelize(x,W,H){const id=x.getImageData(0,0,W,H),d=id.data,n=W*H,A=new 
     else if(edge(i+W,X,Y+1)||edge(i+1,X+1,Y))for(let k=0;k<3;k++)out[j+k]=d[j+k]*.78}
   id.data.set(out);
   x.putImageData(id,0,0)}
-function drawFrame(){const f=frameCanvas(),sx=E.cw/f.W,sy=E.ch/f.H;ec2.save();
+function drawFrame(PS){PS=PS||E.base;const f=frameCanvas(),sx=E.cw/f.W,sy=E.ch/f.H;ec2.save();
   if(f.fi){const o=Math.max(sx,sy)*2,X=f.fi.l*sx-o,Y=f.fi.t*sy-o,w=E.cw-(f.fi.l+f.fi.r)*sx+2*o,h=E.ch-(f.fi.t+f.fi.b)*sy+2*o;
     const k=Math.max(w/E.cw,h/E.ch),sw=w/k,sh=h/k;
-    ec2.beginPath();rrp(ec2,X,Y,w,h,f.fi.ir*sx+o);ec2.clip();ec2.drawImage(E.base,(E.cw-sw)/2,(E.ch-sh)/2,sw,sh,X,Y,w,h);ec2.restore();ec2.save()}
-  else ec2.drawImage(E.base,0,0);
+    ec2.beginPath();rrp(ec2,X,Y,w,h,f.fi.ir*sx+o);ec2.clip();ec2.drawImage(PS,(E.cw-sw)/2,(E.ch-sh)/2,sw,sh,X,Y,w,h);ec2.restore();ec2.save()}
+  else ec2.drawImage(PS,0,0);
   ec2.imageSmoothingEnabled=false;ec2.drawImage(f.c,0,0,E.cw,E.ch);ec2.restore()}
 function syncFrameUI(){[...$('#frs').children].forEach((b,i)=>b.classList.toggle('act',i===E.fr));const f=FR[E.fr];
   $('#ftw').style.display=f.t?'':'none';if(f.t){$('#ftx').placeholder=f.t(E.t);$('#ftx').value=E.ftx}$('#fbl').value=E.fb;$('#fblv').textContent=E.fb.toFixed(2);$('#fpx').value=E.fpx;$('#fpxv').textContent=E.fpx.toFixed(1)}
@@ -1504,8 +1518,44 @@ $('#ftx').oninput=e=>{E.ftx=e.target.value;edRender()};
 $('#fpx').oninput=e=>{E.fpx=+e.target.value;$('#fpxv').textContent=E.fpx.toFixed(1);edRender()};
 /* ---------- pixel doodle (16 colours, mosaic soft edge) ---------- */
 function gridSize(){E.gs=Math.max(2,Math.round(Math.min(E.cw,E.ch)*E.ps/100));E.gw=Math.ceil(E.cw/E.gs);E.gh=Math.ceil(E.ch/E.gs);E.layer.width=E.gw;E.layer.height=E.gh}
-function rasterSeg(st,i){
-  const c=E.layer.getContext('2d'),b=st.pts[i],a=st.pts[i-1]||b,x0=a.x*E.gw,y0=a.y*E.gh,x1=b.x*E.gw,y1=b.y*E.gh,n=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0)*2)),r=Math.max(st.w/2,.71),R=Math.ceil(r+3);
+/* ---- mosaic (coarse blocks) ---- */
+const MO={sm:document.createElement('canvas'),mk:document.createElement('canvas'),tp:document.createElement('canvas'),out:document.createElement('canvas')};
+function photoSrc(){const L=E.mst.concat(E.mcur?[E.mcur]:[]);if(!L.length)return E.base;
+  const mb=Math.max(4,Math.round(Math.min(E.cw,E.ch)*E.mbs/100)),mw=Math.ceil(E.cw/mb),mh=Math.ceil(E.ch/mb);
+  const sm=MO.sm,mk=MO.mk,tp=MO.tp;sm.width=mk.width=tp.width=mw;sm.height=mk.height=tp.height=mh;
+  const sx=sm.getContext('2d');sx.imageSmoothingEnabled=true;sx.imageSmoothingQuality='high';sx.drawImage(E.base,0,0,mw*mb,mh*mb,0,0,mw,mh);
+  const mx=mk.getContext('2d');mx.fillStyle='#000';
+  L.forEach(st=>{const r=st.w/2;for(let i=0;i<st.pts.length;i++){const b=st.pts[i],a=st.pts[i-1]||b,x0=a.x*E.cw/mb,y0=a.y*E.ch/mb,x1=b.x*E.cw/mb,y1=b.y*E.ch/mb,n=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0)*2));
+    for(let k=0;k<=n;k++){const cx=x0+(x1-x0)*k/n,cy=y0+(y1-y0)*k/n;for(let gy=Math.floor(cy-r-1);gy<=cy+r+1;gy++)for(let gx=Math.floor(cx-r-1);gx<=cx+r+1;gx++)if(Math.hypot(gx+.5-cx,gy+.5-cy)<=Math.max(r,.71))mx.fillRect(gx,gy,1,1)}}});
+  const tx=tp.getContext('2d');tx.drawImage(sm,0,0);tx.globalCompositeOperation='destination-in';tx.drawImage(mk,0,0);tx.globalCompositeOperation='source-over';
+  const o=MO.out;if(o.width!==E.cw||o.height!==E.ch){o.width=E.cw;o.height=E.ch}const ox=o.getContext('2d');ox.clearRect(0,0,E.cw,E.ch);ox.drawImage(E.base,0,0);
+  ox.imageSmoothingEnabled=false;ox.drawImage(tp,0,0,mw,mh,0,0,mw*mb,mh*mb);ox.imageSmoothingEnabled=true;return o}
+$('#mbs').oninput=e=>{E.mbs=+e.target.value;$('#mbsv').textContent=E.mbs.toFixed(1);edRender()};
+$('#msz').oninput=e=>{E.msz=+e.target.value;$('#mszv').textContent=E.msz};
+/* ---- geometric shapes, rasterised onto the pixel layer ---- */
+const SHN=[['line','直线'],['arrow','箭头'],['rect','矩形'],['oval','圆形'],['tri','三角'],['star','星星'],['heart','爱心']];
+SHN.forEach(([k,n])=>{const b=document.createElement('button');b.className='btn'+(k===E.shp?' act':'');b.textContent=n;b.dataset.k=k;b.onclick=()=>{E.shp=k;[...$('#shs').children].forEach(x=>x.classList.toggle('act',x===b))};$('#shs').append(b)});
+$('#shf').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;E.sfill=b.dataset.f==='1';[...$('#shf').children].forEach(x=>x.classList.toggle('act',x===b))};
+function shapeGeo(st){const ax=st.a.x*E.gw,ay=st.a.y*E.gh,bx=st.b.x*E.gw,by=st.b.y*E.gh,x0=Math.min(ax,bx),x1=Math.max(ax,bx),y0=Math.min(ay,by),y1=Math.max(ay,by),cx=(x0+x1)/2,cy=(y0+y1)/2,rx=(x1-x0)/2,ry=(y1-y0)/2;
+  const P=[];
+  if(st.sh==='line')return{lines:[[[ax,ay],[bx,by]]],poly:null};
+  if(st.sh==='arrow'){const L=Math.hypot(bx-ax,by-ay)||1,ux=(bx-ax)/L,uy=(by-ay)/L,h=Math.max(st.w*2.5,L*.22,3);
+    const l=[bx-ux*h-uy*h*.6,by-uy*h+ux*h*.6],r=[bx-ux*h+uy*h*.6,by-uy*h-ux*h*.6];
+    return st.fill?{lines:[[[ax,ay],[bx-ux*h*.5,by-uy*h*.5]]],poly:[[bx,by],l,r]}:{lines:[[[ax,ay],[bx,by]],[l,[bx,by],r]],poly:null}}
+  if(st.sh==='rect')P.push([x0,y0],[x1,y0],[x1,y1],[x0,y1]);
+  else if(st.sh==='oval')for(let i=0;i<48;i++){const t=i/48*Math.PI*2;P.push([cx+Math.cos(t)*rx,cy+Math.sin(t)*ry])}
+  else if(st.sh==='tri')P.push([cx,y0],[x1,y1],[x0,y1]);
+  else if(st.sh==='star')for(let i=0;i<10;i++){const t=-Math.PI/2+i*Math.PI/5,q=i%2?.42:1;P.push([cx+Math.cos(t)*rx*q,cy+(Math.sin(t)*q+.1)*ry*1.0])}
+  else if(st.sh==='heart')for(let i=0;i<48;i++){const t=i/48*Math.PI*2,hx=16*Math.pow(Math.sin(t),3),hy=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));P.push([cx+hx/17*rx,cy+(hy+2.5)/17*ry])}
+  return{lines:[P.concat([P[0]])],poly:st.fill?P:null}}
+function inPoly(x,y,P){let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const[xi,yi]=P[i],[xj,yj]=P[j];if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi)c=!c}return c}
+function rasterShape(st){const g=shapeGeo(st),c=E.layer.getContext('2d');
+  if(g.poly){let a=1e9,b=1e9,A=-1e9,B=-1e9;g.poly.forEach(([x,y])=>{a=Math.min(a,x);b=Math.min(b,y);A=Math.max(A,x);B=Math.max(B,y)});
+    c.fillStyle=st.col;for(let gy=Math.max(0,Math.floor(b));gy<=Math.min(E.gh-1,B);gy++)for(let gx=Math.max(0,Math.floor(a));gx<=Math.min(E.gw-1,A);gx++)if(inPoly(gx+.5,gy+.5,g.poly)){st.m.set(gy*E.gw+gx,1);c.fillRect(gx,gy,1,1)}}
+  g.lines.forEach(L=>{for(let i=1;i<L.length;i++)rasterGrid(st,L[i-1][0],L[i-1][1],L[i][0],L[i][1])})}
+function rasterSeg(st,i){const b=st.pts[i],a=st.pts[i-1]||b;rasterGrid(st,a.x*E.gw,a.y*E.gh,b.x*E.gw,b.y*E.gh)}
+function rasterGrid(st,x0,y0,x1,y1){
+  const c=E.layer.getContext('2d'),n=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0)*2)),r=Math.max(st.w/2,.71),R=Math.ceil(r+3);
   for(let k=0;k<=n;k++){const cx=x0+(x1-x0)*k/n,cy=y0+(y1-y0)*k/n;
     for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++){const gx=Math.floor(cx)+dx,gy=Math.floor(cy)+dy;if(gx<0||gy<0||gx>=E.gw||gy>=E.gh)continue;
       const d=Math.hypot(gx+.5-cx,gy+.5-cy),al=d<=r?1:Math.max(0,Math.ceil((1-(d-r)/2.6)*4)/4*.8);if(!al)continue;const key=gy*E.gw+gx,old=st.m.get(key)||0;if(al<=old)continue;st.m.set(key,al);
@@ -1540,7 +1590,7 @@ function toLocal(cx,cy){const r=$('#ew').getBoundingClientRect(),dx=cx-(r.left+r
   return b.contains('rotr')?{x:dy,y:-dx}:b.contains('rotl')?{x:-dy,y:dx}:{x:dx,y:dy}}
 function pinInfo(){const [a,b]=[...EV.pts.values()];const p=toLocal((a.x+b.x)/2,(a.y+b.y)/2);return{d:Math.hypot(a.x-b.x,a.y-b.y)||1,m:p}}
 function evClamp(){const w=ec.offsetWidth,h=ec.offsetHeight,mx=w*(EV.s-1)/2,my=h*(EV.s-1)/2;EV.x=Math.max(-mx,Math.min(mx,EV.x));EV.y=Math.max(-my,Math.min(my,EV.y))}
-function cancelAction(){if(E.cur){E.cur=null;rebuild()}E.drag=null;E.cdrag=null;edRender()}
+function cancelAction(){E.mcur=null;if(E.cur){E.cur=null;rebuild()}E.drag=null;E.cdrag=null;edRender()}
 ec.addEventListener('pointerdown',e=>{
   e.preventDefault();try{ec.setPointerCapture(e.pointerId)}catch(_){}
   EV.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
@@ -1550,6 +1600,9 @@ ec.addEventListener('pointerdown',e=>{
   if(E.tool==='adj'||E.tool==='frame')return;
   if(E.tool==='crop'){cropDown(p);return}
   if(E.tool==='stk'){const i=hitStk(p);E.sel=i;if(i>=0)E.drag={i,ox:p.x-E.stk[i].x,oy:p.y-E.stk[i].y};stkUI();edRender();return}
+  if(E.tool==='mos'){E.mcur={pts:[p],w:E.msz};edRender();return}
+  if(E.tool==='shape'){const s2=E.layer;E.snap=document.createElement('canvas');E.snap.width=s2.width;E.snap.height=s2.height;E.snap.getContext('2d').drawImage(s2,0,0);
+    E.cur={sh:E.shp,fill:E.sfill,col:E.col,w:E.sz,a:p,b:p,pts:[],m:new Map()};rasterShape(E.cur);edRender();return}
   E.cur={col:E.col,w:E.sz,er:E.tool==='er',pts:[p],m:new Map()};rasterSeg(E.cur,0);edRender();
 });
 ec.addEventListener('pointermove',e=>{
@@ -1560,15 +1613,18 @@ ec.addEventListener('pointermove',e=>{
   const p=loc(e);
   if(E.cdrag){cropMove(p);edRender();return}
   if(E.drag){const s=E.stk[E.drag.i];s.x=p.x-E.drag.ox;s.y=p.y-E.drag.oy;edRender()}
+  else if(E.mcur){E.mcur.pts.push(p);edRender()}
+  else if(E.cur&&E.cur.sh){E.cur.b=p;E.cur.m=new Map();const c=E.layer.getContext('2d');c.clearRect(0,0,E.gw,E.gh);c.drawImage(E.snap,0,0);rasterShape(E.cur);edRender()}
   else if(E.cur){E.cur.pts.push(p);rasterSeg(E.cur,E.cur.pts.length-1);edRender()}
 });
 ['pointerup','pointercancel'].forEach(n=>ec.addEventListener(n,e=>{EV.pts.delete(e.pointerId);
   if(EV.pts.size<2)EV.pin=null;
   if(EV.lock){if(!EV.pts.size){EV.lock=false;if(EV.s<1.05){EV.s=1;EV.x=EV.y=0;evApply()}}return}
-  if(E.cur){E.strokes.push(E.cur);E.hist.push('s');E.cur=null}E.drag=null;E.cdrag=null}));
+  if(E.mcur){E.mst.push(E.mcur);E.hist.push('m');E.mcur=null;edRender()}
+  if(E.cur){E.strokes.push(E.cur);E.hist.push('s');E.cur=null;E.snap=null}E.drag=null;E.cdrag=null}));
 $('#ezr').onclick=evReset;
-$('#eu').onclick=()=>{const h=E.hist.pop();if(h==='s'){E.strokes.pop();rebuild()}else if(h==='k'){E.stk.pop();E.sel=-1;stkUI()}else if(h==='g'){restoreGeo(E.geo.pop())}edRender()};
-$('#ecl').onclick=()=>{E.strokes=[];E.stk=[];E.hist=E.hist.filter(h=>h==='g');E.sel=-1;rebuild();stkUI();edRender()};
+$('#eu').onclick=()=>{const h=E.hist.pop();if(h==='s'){E.strokes.pop();rebuild()}else if(h==='k'){E.stk.pop();E.sel=-1;stkUI()}else if(h==='m'){E.mst.pop()}else if(h==='g'){restoreGeo(E.geo.pop())}edRender()};
+$('#ecl').onclick=()=>{E.strokes=[];E.stk=[];E.mst=[];E.hist=E.hist.filter(h=>h==='g');E.sel=-1;rebuild();stkUI();edRender()};
 $('#eca').onclick=()=>{evReset();gal.classList.remove('edit');gal.classList.add('view')};
 $('#eok').onclick=()=>{E.sel=-1;evReset();edRender(false);
   ec.toBlob(b=>{if(!b)return;addItem('img',b);setGf(0);gi=0;gal.classList.remove('edit');gal.classList.add('view');showView()},'image/jpeg',.92)};
