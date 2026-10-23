@@ -336,7 +336,7 @@ const gc=document.createElement('canvas'),gl=gc.getContext('webgl');
 const VS='attribute vec2 a;varying vec2 u;void main(){u=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}';
 const FS=`precision highp float;
 uniform sampler2D t,tb,tk,ta;uniform vec2 r,cr,st;
-uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf,kc,kb,skk,ska,skt,skw,bkk,bkt;
+uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf,fd,kc,kb,skk,ska,skt,skw,bkk,bkt;
 varying vec2 u;
 vec2 PX;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
@@ -402,6 +402,7 @@ void main(){
  else if(F==21.){float v=(Y*1.05-.5)*1.12+.5;col=vec3(v);nk=2.2;}
  col=(col-.5)*kc+.5;col=max(col-kb,0.)/(1.-kb);
  if(fx>.5){float ff=1.4-1.7*dot(c,c);col=col*(1.+ff*.8);col=(col-.5)*1.25+.5;col=mix(col,vec3(1.),clamp(ff*.12,0.,.25));}
+ if(fd<1.5){col=max(col,0.);col=(1.-exp(-col*1.8))/(1.-exp(-1.8));}
  if(lf>.5){float fl=max(1.-1.6*dot(c,c),0.);col=col*(1.+fl*.55)+vec3(.03,.03,.04)*fl;}
  col*=vec3(1.+wb*.14,1.+wb*.03,1.-wb*.18);
  col*=1.-.05*sn*(.5+.5*sin(sc.y*240.*6.2832));
@@ -491,12 +492,12 @@ function drawBokeh(PP){const pts=findPeaks(Math.round(PP.bkn));if(!pts.length)re
     gl.uniform3f(US.col,r,g,b);gl.uniform1f(US.al,PP.bkk*.6*Math.min(1,v*1.4));gl.drawArrays(gl.TRIANGLE_STRIP,0,4)}
   gl.disable(gl.BLEND);gl.useProgram(pg)}
 gl.bindTexture(gl.TEXTURE_2D,tx);
-const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','kc','kb','st','skk','ska','skt','skw','bkk','bkt'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
+const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','fd','kc','kb','st','skk','ska','skt','skw','bkk','bkt'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
 gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);gl.uniform1i(gl.getUniformLocation(pg,'tk'),3);gl.uniform1i(gl.getUniformLocation(pg,'ta'),4);
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,camOK:false};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -519,7 +520,7 @@ const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
 let stream,track,facing='environment',on=false,mode='photo',rec,chunks=[],t0=0,items=[],last=0,W=640,H=480,cw=0,ch=0,rot=0,szKey='',cr=[1,1];
 let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=2,ev=0,evT=0,o=0,land=false;
 let bmOn=false;const BMP={ct:1.8,cr:.12,nz:2.4,jt:2.2,vg:1.2,sn:.5,sh:1.1,bm:.5};
-let lensId=null,lenses=[],autoWide=true,curMM=24,hasTorch=false,shotReq=0,flashFx=0,torchOn=false,lightFx=0;
+let shotFD=2,sceneY=.45,lensId=null,lenses=[],autoWide=true,curMM=24,hasTorch=false,shotReq=0,flashFx=0,torchOn=false,lightFx=0;
 const FN=['DV','VHS','夜视','黑白','家庭','赛博','胶片','蓝晒','CRT','热成像','海报','负片','青橙','梦幻','富士','Velvia','徕卡','徕卡黑白','Portra','柯达金','800T','HP5'];
 const FO=['DV','VHS','NIGHT','B&W','HOME','CYBER','FILM','CYANO','CRT','THERMAL','POSTER','NEG','TEAL','DREAM','FUJI','VELVIA','LEICA','LEICA MONO','PORTRA','GOLD','800T','HP5'];
 const SW=['linear-gradient(135deg,#9db3c9,#e6edf3)','repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px),linear-gradient(135deg,#b58be0,#f08ac0)','radial-gradient(circle,#4dff6a,#0a3d12)','linear-gradient(135deg,#fff,#222)','linear-gradient(135deg,#ffd49a,#b8722a)','linear-gradient(135deg,#00c8d8,#ff5fb0)','linear-gradient(135deg,#e8d8b8,#7d9a96)','linear-gradient(135deg,#c8ecff,#0d4f8c)','repeating-linear-gradient(90deg,rgba(255,60,60,.85) 0 1px,rgba(60,255,60,.85) 1px 2px,rgba(80,80,255,.85) 2px 3px),#222','linear-gradient(135deg,#1a0066,#a0007a,#f23c10,#ffe040,#fff)','linear-gradient(135deg,#2a5db0 25%,#7ac0e8 25% 50%,#f2c14e 50% 75%,#e8503a 75%)','linear-gradient(135deg,#1a1a1a,#e8e8e8)','linear-gradient(135deg,#1a8a9a 50%,#f09a4a 50%)','radial-gradient(circle at 50% 40%,#fff,#f6c8e8 55%,#b9a2f0)','linear-gradient(135deg,#2f7d6a,#cfe6c8)','linear-gradient(135deg,#1d4fbf,#29a35a,#f2c230)','radial-gradient(circle at 50% 45%,#e8dccb,#5a4632 75%,#1a120c)','linear-gradient(135deg,#f2efe8,#1a1a1a)','linear-gradient(135deg,#f3d1b8,#c9a98e,#8fa7a0)','linear-gradient(135deg,#ffd36b,#e8892a)','radial-gradient(circle at 60% 40%,#ff7a5a,#1b3b6f 60%)','repeating-radial-gradient(circle,#777 0 1px,#bbb 1px 2px)'];
@@ -705,6 +706,8 @@ head(pS,'录音码率');addChips(pS,['64k 低','128k 标准','256k 高'],()=>S.a
 addReset(pS);
 const pM=mkPane('相机');
 head(pM,'取景辅助');addToggle(pM,'九宫格',S,'grid',()=>updGrid());
+head(pM,'开机');addToggle(pM,'打开页面自动开机',S,'autoOn');
+note(pM,'允许过一次相机后，之后打开页面会自动开机，不再停在 POWER。如果 Safari 仍然每次都问，请在「设置 → App → Safari → 相机」或网页地址栏「ᴀA → 网站设置 → 相机」里改成「允许」。');
 head(pM,'全屏');
 {const w=document.createElement('div');w.className='chips';const b=document.createElement('button');b.className='btn';pM.append(w);w.append(b);
  const nt=document.createElement('div');nt.className='hint';nt.style.textAlign='left';pM.append(nt);
@@ -908,7 +911,7 @@ async function start(){
   stream=null;let err;
   for(const v of tries){try{stream=await navigator.mediaDevices.getUserMedia({video:v,audio:false});break}catch(e){err=e}}
   if(!stream){pwMsg('无法使用摄像头：'+(err&&err.name)+'。请检查浏览器权限。');return}
-  track=stream.getVideoTracks()[0];
+  track=stream.getVideoTracks()[0];if(!S.camOK){S.camOK=true;save()}
   vid.srcObject=stream;await vid.play();on=true;$('#pw').classList.add('off');
   out.classList.remove('boot');void out.offsetWidth;out.classList.add('boot');
   try{hasTorch=!!(track.getCapabilities&&track.getCapabilities().torch)}catch(e){hasTorch=false}
@@ -921,7 +924,9 @@ async function start(){
 function pwMsg(s){$('#pw').classList.remove('off');$('#pw').firstElementChild.textContent=s}
 $('#pwb').onclick=()=>{applyMic();start()};
 /* auto power-on when camera permission is already granted */
-try{navigator.permissions&&navigator.permissions.query({name:'camera'}).then(r=>{if(r.state==='granted'&&!on)start()}).catch(()=>{})}catch(e){}
+{const auto=()=>{if(!on&&S.autoOn!==false){applyMic();start()}};let done=false;
+ try{navigator.permissions&&navigator.permissions.query({name:'camera'}).then(r=>{if(r.state==='granted'){done=true;auto()}else if(r.state==='denied')done=true}).catch(()=>{})}catch(e){}
+ setTimeout(()=>{if(!done&&S.camOK)auto()},300)}
 /* top info bar: estimated exposure (program AE, f/1.8) */
 {const sc=document.createElement('canvas');sc.width=16;sc.height=12;const sx=sc.getContext('2d',{willReadFrequently:true});let lv=10,first=true;
  const TS=[15,20,25,30,40,50,60,80,100,125,160,200,250,320,400,500,640,800,1000,1250,1600,2000,2500,3200,4000];
@@ -929,7 +934,7 @@ try{navigator.permissions&&navigator.permissions.query({name:'camera'}).then(r=>
  const near=(a,v)=>a.reduce((b,x)=>Math.abs(Math.log(x/v))<Math.abs(Math.log(b/v))?x:b,a[0]);
  const tx=(id,t)=>{const e=document.getElementById(id);if(e.textContent!==t)e.textContent=t};
  setInterval(()=>{
-   if(on&&vid.readyState>=2){try{sx.drawImage(vid,0,0,16,12);const d=sx.getImageData(0,0,16,12).data;let y=0;for(let i=0;i<d.length;i+=4)y+=(.299*d[i]+.587*d[i+1]+.114*d[i+2]);y/=d.length/4*255;
+   if(on&&vid.readyState>=2){try{sx.drawImage(vid,0,0,16,12);const d=sx.getImageData(0,0,16,12).data;let y=0;for(let i=0;i<d.length;i+=4)y+=(.299*d[i]+.587*d[i+1]+.114*d[i+2]);y/=d.length/4*255;sceneY=y;
      const tl=Math.max(3,Math.min(15.5,3.5+y*15));lv=first?tl:lv+(tl-lv)*.25;first=false}catch(e){}}
    const e=ev||0,need=lv-e,N2=3.24;let iso=100,t=N2/Math.pow(2,need);
    if(mode==='video'){t=1/60;iso=100*N2/(t*Math.pow(2,need))}
@@ -1011,7 +1016,7 @@ function loop(ts){
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,vid);
   const P0=bmOn?{...P,nz:BMP.nz,jt:BMP.jt,vg:BMP.vg,sn:BMP.sn,sh:BMP.sh,bm:BMP.bm,ca:.25,pf:0,bd:.2,bl:0,wb:0,sat:1}:P;
   const PP=(P0.skOn&&P0.bkOn)?P0:{...P0,skk:P0.skOn?P0.skk:0,bkk:P0.bkOn?P0.bkk:0};
-  const fpv=rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0,mv=facing==='user'?1:0,exv=Math.pow(2,ev);
+  const fpv=rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0,mv=facing==='user'?1:0,exv=Math.pow(2,ev)*(shotFD<1.5?shotFD:1);
   if(PP.skk>0||PP.bkk>0){
     [1,3,4].forEach(n=>{gl.activeTexture(gl.TEXTURE0+n);gl.bindTexture(gl.TEXTURE_2D,null)});gl.activeTexture(gl.TEXTURE0);
     gl.useProgram(pb);gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.viewport(0,0,BN,BN);
@@ -1039,14 +1044,14 @@ function loop(ts){
   gl.uniform1f(UL.m,mv);gl.uniform1f(UL.z,zc*lensK);
   gl.uniform1f(UL.fb,Math.min(Math.abs(zt-zc)*.0015,.008));
   gl.uniform1f(UL.F,fi);gl.uniform1f(UL.rot,rot);
-  gl.uniform1f(UL.ex,exv);gl.uniform1f(UL.fx,flashFx);gl.uniform1f(UL.fp,fpv);gl.uniform1f(UL.lf,lightFx);
+  gl.uniform1f(UL.ex,exv);gl.uniform1f(UL.fx,flashFx);gl.uniform1f(UL.fd,shotFD);gl.uniform1f(UL.fp,fpv);gl.uniform1f(UL.lf,lightFx);
   for(const k in D)gl.uniform1f(UL[k],PP[k]);
   gl.uniform1f(UL.kc,bmOn?BMP.ct:1);gl.uniform1f(UL.kb,bmOn?BMP.cr:0);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
   oc.imageSmoothingEnabled=false;oc.drawImage(gc,0,0,W,H);ov(T);
   if(S.grid){const g=$('#grid'),bw=out.clientWidth,bh=out.clientHeight,k=Math.min(bw/W,bh/H),iw=W*k,ih=H*k;
     g.style.left=((bw-iw)/2+out.offsetLeft)+'px';g.style.top=((bh-ih)/2+out.offsetTop)+'px';g.style.width=iw+'px';g.style.height=ih+'px'}
-  if(shotReq){shotReq=0;flashFx=0;
+  if(shotReq){shotReq=0;flashFx=0;shotFD=2;
     out.toBlob(b=>{if(b)addItem('img',b);
       if(torchOn){torchOn=false;try{track.applyConstraints({advanced:[{torch:false}]}).catch(()=>{})}catch(e){}}},'image/jpeg',.92)}
 }
@@ -1060,6 +1065,8 @@ function setMode(m){
 }
 $('#mV').onclick=()=>setMode('video');$('#mP').onclick=()=>setMode('photo');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const ySC=document.createElement('canvas');ySC.width=16;ySC.height=12;const yX=ySC.getContext('2d',{willReadFrequently:true});
+function measureY(){try{yX.drawImage(vid,0,0,16,12);const d=yX.getImageData(0,0,16,12).data;let y=0;for(let i=0;i<d.length;i+=4)y+=.299*d[i]+.587*d[i+1]+.114*d[i+2];return y/(d.length/4)/255*Math.pow(2,ev)}catch(e){return sceneY}}
 async function takePhoto(){
   if(shotReq)return;
   const fl=$('#flash');
@@ -1067,6 +1074,9 @@ async function takePhoto(){
     let real=false;
     if(hasTorch){try{await track.applyConstraints({advanced:[{torch:true}]});real=true;torchOn=true;await sleep(220)}catch(e){real=false}}
     flashFx=real?0:1;
+    const y=measureY(),sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+    /* normal exposure -> pull it down so the flash doesn't blow out; already dark -> leave it */
+    shotFD=real?Math.max(.5,Math.min(1,.42/Math.max(y,.01))):1-.42*sm((y-.18)/(.45-.18));
   }
   fl.classList.add('on');setTimeout(()=>fl.classList.remove('on'),S.flash?90:60);
   shotReq=1;
