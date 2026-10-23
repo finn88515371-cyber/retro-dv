@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -308,8 +307,8 @@ const out=$('#out'),oc=out.getContext('2d');
 const gc=document.createElement('canvas'),gl=gc.getContext('webgl');
 const VS='attribute vec2 a;varying vec2 u;void main(){u=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}';
 const FS=`precision highp float;
-uniform sampler2D t,tb;uniform vec2 r,cr,st;
-uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf,kc,kb,skk,ska,skt,skw;
+uniform sampler2D t,tb,tk,ta;uniform vec2 r,cr,st;
+uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf,kc,kb,skk,ska,skt,skw,bkk,bkt;
 varying vec2 u;
 vec2 PX;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
@@ -344,6 +343,8 @@ void main(){
   b+=max(S(uv+d*.012)-.55,0.)+max(S(uv+d*.03)-.55,0.)*.8;}
  col+=b*.14*bm*vec3(.85,.92,1.);
  if(skk>0.)col+=texture2D(tb,vec2(uv.x,1.-uv.y)).rgb*skk*.4;
+ if(bkk>0.){vec2 tu=vec2(uv.x,1.-uv.y);vec3 la=texture2D(ta,tu).rgb;float hm=smoothstep(.03,.2,Yf(la))*min(bkk,1.);vec3 bk=texture2D(tk,tu).rgb*bkk;
+  col=mix(col+bk*.85,max(bk*1.05,la*.55)+bk*.1,hm);}
  col=(col-.5)*1.1+.5;col=mix(vec3(Yf(col)),col,1.1*sat);
  col+=vec3(.005,.01,.04)*(1.-clamp(Yf(col),0.,1.));
  col*=vec3(.96,.98,1.06);
@@ -414,6 +415,18 @@ const UK={};['r','ska','skw'].forEach(n=>UK[n]=gl.getUniformLocation(pk,n));gl.u
 const btx2=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,btx2);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,BN,BN,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
 [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
 const fbo2=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fbo2);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,btx2,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+const CFS=`precision mediump float;uniform sampler2D tm,sp;uniform vec2 r;uniform float R,rt;varying vec2 u;
+void main(){float asp=r.x/r.y,cr=cos(rt),sr=sin(rt);vec3 a=vec3(0.);
+ for(int j=0;j<15;j++)for(int i=0;i<15;i++){vec2 o=vec2(float(i),float(j))/7.-1.;
+  vec2 ro=vec2(o.x*cr+o.y*sr,-o.x*sr+o.y*cr);float w=texture2D(sp,ro*.5+.5).r;if(w<.02)continue;
+  vec2 q=u+vec2(o.x,o.y*asp)*R;if(q.x<0.||q.x>1.||q.y<0.||q.y>1.)continue;
+  a+=texture2D(tm,vec2(q.x,1.-q.y)).rgb*w;}
+ gl_FragColor=vec4(1.-exp(-a*.3),1.);}`;
+const pc=gl.createProgram();gl.bindAttribLocation(pc,0,'a');gl.attachShader(pc,mk(gl.VERTEX_SHADER,VS));gl.attachShader(pc,mk(gl.FRAGMENT_SHADER,CFS));gl.linkProgram(pc);
+const UC={};['r','R','rt'].forEach(n=>UC[n]=gl.getUniformLocation(pc,n));gl.useProgram(pc);gl.uniform1i(gl.getUniformLocation(pc,'tm'),1);gl.uniform1i(gl.getUniformLocation(pc,'sp'),2);
+const BN3=256,btx3=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,btx3);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,BN3,BN3,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+[[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
+const fbo3=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fbo3);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,btx3,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
 gl.useProgram(pg);
 /* bokeh sprites */
 const SVS='attribute vec2 a;uniform vec2 c,sz;uniform float rt;varying vec2 v;void main(){v=a*.5+.5;vec2 p=vec2(a.x*cos(rt)-a.y*sin(rt),a.x*sin(rt)+a.y*cos(rt));gl_Position=vec4(c+p*sz,0.,1.);}';
@@ -450,8 +463,8 @@ function drawBokeh(PP){const pts=findPeaks(Math.round(PP.bkn));if(!pts.length)re
     gl.uniform3f(US.col,r,g,b);gl.uniform1f(US.al,PP.bkk*.6*Math.min(1,v*1.4));gl.drawArrays(gl.TRIANGLE_STRIP,0,4)}
   gl.disable(gl.BLEND);gl.useProgram(pg)}
 gl.bindTexture(gl.TEXTURE_2D,tx);
-const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','kc','kb','st','skk','ska','skt','skw'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
-gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);
+const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','kc','kb','st','skk','ska','skt','skw','bkk','bkt'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
+gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);gl.uniform1i(gl.getUniformLocation(pg,'tk'),3);gl.uniform1i(gl.getUniformLocation(pg,'ta'),4);
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false};
@@ -633,9 +646,9 @@ head(pR,'光斑');
 addToggle(pR,'光斑',P,'bkOn',()=>{if(P.bkOn&&!P.bkk){P.bkk=1;save();pR.sy.forEach(f=>f())}});
 addChips(pR,BKN,()=>P.bksh|0,i=>{P.bksh=i;save()});
 addSlider(pR,'光斑强度',0,2,.01,P,'bkk');addSlider(pR,'光斑大小',.3,3,.01,P,'bks');addSlider(pR,'光斑旋转',0,180,1,P,'bkr');
-addSlider(pR,'光斑数量',1,40,1,P,'bkn');addSlider(pR,'光斑触发亮度',.5,.98,.01,P,'bkt');
+addSlider(pR,'光斑触发亮度',.5,.98,.01,P,'bkt');
 pR.rk.push([P,'bksh',D.bksh,null]);
-note(pR,'画面里的高光点会变成所选形状的光斑，颜色跟着光源。');
+note(pR,'模仿镜头前加了异形光圈遮光片的效果：画面里的亮点会散成所选形状的光斑，亮点越大光斑越大，相邻的光斑会自然融在一起，颜色跟着光源。');
 addReset(pR);
 const pW=mkPane('水印');
 head(pW,'显示内容');
@@ -862,18 +875,26 @@ function loop(ts){
   const PP=(P0.skOn&&P0.bkOn)?P0:{...P0,skk:P0.skOn?P0.skk:0,bkk:P0.bkOn?P0.bkk:0};
   const fpv=rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0,mv=facing==='user'?1:0,exv=Math.pow(2,ev);
   if(PP.skk>0||PP.bkk>0){
-    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);gl.activeTexture(gl.TEXTURE0);
+    [1,3,4].forEach(n=>{gl.activeTexture(gl.TEXTURE0+n);gl.bindTexture(gl.TEXTURE_2D,null)});gl.activeTexture(gl.TEXTURE0);
     gl.useProgram(pb);gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.viewport(0,0,BN,BN);
     gl.uniform2f(UB.r,cw,ch);gl.uniform2f(UB.cr,cr[0],cr[1]);gl.uniform2f(UB.st,S.stx,S.sty);gl.uniform1f(UB.m,mv);gl.uniform1f(UB.z,zc);
     gl.uniform1f(UB.rot,rot);gl.uniform1f(UB.fp,fpv);gl.uniform1f(UB.ex,exv);gl.uniform1f(UB.skt,Math.min(PP.skk>0?PP.skt:1,PP.bkk>0?PP.bkt:1));gl.uniform1f(UB.ska,PP.ska);
-    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
-    if(PP.skk>0){
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,btx);gl.activeTexture(gl.TEXTURE0);
-    gl.useProgram(pk);gl.bindFramebuffer(gl.FRAMEBUFFER,fbo2);
-    gl.uniform2f(UK.r,cw,ch);gl.uniform1f(UK.ska,PP.ska);gl.uniform1f(UK.skw,PP.skw);
-    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
-    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,btx2);gl.activeTexture(gl.TEXTURE0);
+    if(PP.bkk>0){
+      const st=shapeTex(PP.bksh|0);gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,st);gl.activeTexture(gl.TEXTURE0);
+      gl.useProgram(pc);gl.bindFramebuffer(gl.FRAMEBUFFER,fbo3);gl.viewport(0,0,BN3,BN3);
+      gl.uniform2f(UC.r,cw,ch);gl.uniform1f(UC.R,Math.min(cw,ch)*.055*PP.bks/cw);gl.uniform1f(UC.rt,PP.bkr*Math.PI/180);
+      gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     }
+    if(PP.skk>0){
+      gl.useProgram(pk);gl.bindFramebuffer(gl.FRAMEBUFFER,fbo2);gl.viewport(0,0,BN,BN);
+      gl.uniform2f(UK.r,cw,ch);gl.uniform1f(UK.ska,PP.ska);gl.uniform1f(UK.skw,PP.skw);
+      gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,btx2);
+    gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,btx3);gl.activeTexture(gl.TEXTURE4);gl.bindTexture(gl.TEXTURE_2D,btx);gl.activeTexture(gl.TEXTURE0);
   }
   gl.useProgram(pg);gl.viewport(0,0,cw,ch);
   gl.uniform2f(UL.r,cw,ch);gl.uniform2f(UL.cr,cr[0],cr[1]);gl.uniform2f(UL.st,S.stx,S.sty);gl.uniform1f(UL.T,T%1000);
@@ -884,7 +905,6 @@ function loop(ts){
   for(const k in D)gl.uniform1f(UL[k],PP[k]);
   gl.uniform1f(UL.kc,bmOn?BMP.ct:1);gl.uniform1f(UL.kb,bmOn?BMP.cr:0);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  if(PP.bkk>0)drawBokeh(PP);
   oc.imageSmoothingEnabled=false;oc.drawImage(gc,0,0,W,H);ov(T);
   if(shotReq){shotReq=0;flashFx=0;
     out.toBlob(b=>{if(b)addItem('img',b);
