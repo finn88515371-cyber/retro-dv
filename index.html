@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>HANDYCAM DV-2000</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Silkscreen&family=Pixelify+Sans&family=Special+Elite&family=UnifrakturMaguntia&family=Pirata+One&family=Fredoka:wght@500&display=swap">
@@ -24,6 +24,8 @@ body.skin-ccdd .cam{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 2px 0
 html{height:100%}
 body{height:100%;margin:0;background:var(--page);color:var(--ink);font-family:var(--font);overflow:hidden}
 .lseg{display:inline-flex;gap:2px}.lseg .btn{flex:1}.btn.dis{opacity:.4}
+html,body{touch-action:manipulation;-webkit-text-size-adjust:100%}
+input,textarea,select{font-size:16px!important}
 .cam{--pv:8px;--ph:8px;position:relative;height:100%;display:flex;flex-direction:column;gap:6px;padding:var(--pv) var(--ph);box-sizing:border-box;max-width:560px;margin:0 auto;background:var(--camc);border:var(--camb);border-radius:var(--camr);overflow:hidden}
 body.skin-w7 .cam{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .side{display:contents}
@@ -155,8 +157,11 @@ body.skin-w7 .tabs .btn.act{background:linear-gradient(#fff,#eaf3fc);border-top:
 #ed{display:none;flex:1;min-height:0;flex-direction:column}
 #gal.edit #ed{display:flex}
 #ew{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:#000;overflow:hidden}
-#ec{max-width:100%;max-height:100%;touch-action:none;background:#222}
-.eb{padding:8px 10px;display:flex;flex-direction:column;gap:8px;max-height:48%;overflow-y:auto}
+#ec{max-width:100%;max-height:100%;touch-action:none;background:#222;transform-origin:50% 50%}
+.eb{padding:6px 10px 8px;display:flex;flex-direction:column;gap:7px;max-height:38%;overflow-y:auto}
+#gal.edit .gh2{display:none}
+.etop{display:flex;gap:6px;align-items:center;padding:6px 8px}.etop .btn{padding:6px 12px;font-size:13px}.etop #eok{margin-left:auto;padding:6px 18px;font-weight:bold}
+#ezr{font-size:11px;color:var(--menumut);margin-left:auto}#ezr+#eok{margin-left:8px}
 .sws{display:flex;gap:7px;flex-wrap:wrap}
 .sws button{width:28px;height:28px;border-radius:50%;border:2px solid var(--btnb);padding:0;cursor:pointer}
 .sws button.sel{outline:3px solid var(--acc);outline-offset:1px}
@@ -272,6 +277,7 @@ body.bm #bar,body.bm #bre,body.bm #fb,body.bm #fstrip,body.bm .tbar{display:none
       </div>
     </div>
     <div id="ed">
+      <div class="etop"><button class="btn" id="eca">取消</button><button class="btn" id="eu">撤销</button><button class="btn" id="ecl">清空</button><span id="ezr"></span><button class="btn act" id="eok">保存</button></div>
       <div id="ew"><canvas id="ec"></canvas></div>
       <div class="eb">
         <div class="chips" id="etabs"><button class="btn act" data-t="adj">调整</button><button class="btn" data-t="crop">裁剪</button><button class="btn" data-t="frame">相框</button><button class="btn" data-t="pen">画笔</button><button class="btn" data-t="er">橡皮</button><button class="btn" data-t="stk">贴纸</button></div>
@@ -304,8 +310,6 @@ body.bm #bar,body.bm #bre,body.bm #fb,body.bm #fstrip,body.bm .tbar{display:none
           </div>
           <div class="hint">点贴纸加到画面里，拖动可以移动位置</div>
         </div>
-        <div class="vr"><button class="btn" id="eu">撤销</button><button class="btn" id="ecl">清空</button><button class="btn" id="eca">取消</button></div>
-        <button class="btn act big" id="eok">保存为新照片</button>
       </div>
     </div>
   </div>
@@ -693,8 +697,6 @@ head(pS,'录音码率');addChips(pS,['64k 低','128k 标准','256k 高'],()=>S.a
 addReset(pS);
 const pM=mkPane('相机');
 head(pM,'取景辅助');addToggle(pM,'九宫格',S,'grid',()=>updGrid());
-head(pM,'镜头');
-note(pM,'镜头在主界面左上角切换：后置有「广角」（超广角，约 13mm）和「主摄」（约 24mm）；切到前置后同样两个按钮，前置「广角」用完整画幅，「主摄」略微裁切（约 29mm）。手机没有超广角时，后置「广角」会变灰。');
 head(pM,'画面方向');
 head(pM,'横屏时手机往哪边转');
 addChips(pM,['↺ 逆时针（左边朝下）','↻ 顺时针（右边朝下）'],()=>S.lo-1,i=>{S.lo=i+1;save();reO()});
@@ -1237,7 +1239,7 @@ function cropMove(p){
   E.cr={x:X/E.cw,y:Y/E.ch,w:Math.min(w,E.cw)/E.cw,h:Math.min(h,E.ch)/E.ch};
 }
 function bakeGeo(fn){
-  E.sel=-1;edRender(false);
+  evReset();E.sel=-1;edRender(false);
   const comp=document.createElement('canvas');comp.width=E.cw;comp.height=E.ch;comp.getContext('2d').drawImage(ec,0,0);
   E.geo.push({src:E.src,strokes:E.strokes,stk:E.stk,adj:{...E.adj},fr:E.fr,ftx:E.ftx});E.hist.push('g');
   setSrc(fn(comp));E.strokes=[];E.stk=[];E.adj={...ADJ0};E.fr=0;E.ftx='';syncFrameUI();syncAdj();rebuild();applyAdj();stkUI();fullCrop();edRender();
@@ -1271,7 +1273,7 @@ function openEd(it){
     setSrc(c);E.geo=[];E.adj={...ADJ0};syncAdj();E.t=it.t;E.fr=0;E.ftx='';E.fkey='';syncFrameUI();
     try{Promise.all(['16px VT323','16px "UnifrakturMaguntia"','16px Fredoka'].map(f=>document.fonts.load(f))).then(()=>{E.fkey='';edRender()})}catch(e){}E.strokes=[];E.stk=[];E.hist=[];E.sel=-1;E.cur=null;E.drag=null;E.cdrag=null;
     E.car=0;[...$('#crat').children].forEach((x,i)=>x.classList.toggle('act',i===0));fullCrop();rebuild();applyAdj();
-    gal.classList.remove('view','imm');gal.classList.add('edit');setTool('adj');
+    evReset();gal.classList.remove('view','imm');gal.classList.add('edit');setTool('adj');
   };
   im.src=it.url;
 }
@@ -1388,26 +1390,51 @@ $('#sxw').oninput=e=>{const s=E.stk[E.sel];if(s){s.sx=+e.target.value;edRender()
 $('#syh').oninput=e=>{const s=E.stk[E.sel];if(s){s.sy=+e.target.value;edRender()}};
 $('#sxr').onclick=()=>{const s=E.stk[E.sel];if(s){s.sx=1;s.sy=1;stkUI();edRender()}};
 $('#sd').onclick=()=>{if(E.sel<0)return;E.stk.splice(E.sel,1);E.sel=-1;stkUI();edRender()};
+/* view zoom: two fingers pinch / pan, one finger draws */
+const EV={s:1,x:0,y:0,pts:new Map(),pin:null,lock:false};
+function evApply(){ec.style.transform=EV.s===1&&!EV.x&&!EV.y?'':`translate(${EV.x}px,${EV.y}px) scale(${EV.s})`;$('#ezr').textContent=EV.s>1.01?EV.s.toFixed(1)+'×':''}
+function evReset(){EV.s=1;EV.x=EV.y=0;EV.pin=null;EV.pts.clear();EV.lock=false;evApply()}
+function toLocal(cx,cy){const r=$('#ew').getBoundingClientRect(),dx=cx-(r.left+r.width/2),dy=cy-(r.top+r.height/2),b=document.body.classList;
+  return b.contains('rotr')?{x:dy,y:-dx}:b.contains('rotl')?{x:-dy,y:dx}:{x:dx,y:dy}}
+function pinInfo(){const [a,b]=[...EV.pts.values()];const p=toLocal((a.x+b.x)/2,(a.y+b.y)/2);return{d:Math.hypot(a.x-b.x,a.y-b.y)||1,m:p}}
+function evClamp(){const w=ec.offsetWidth,h=ec.offsetHeight,mx=w*(EV.s-1)/2,my=h*(EV.s-1)/2;EV.x=Math.max(-mx,Math.min(mx,EV.x));EV.y=Math.max(-my,Math.min(my,EV.y))}
+function cancelAction(){if(E.cur){E.cur=null;rebuild()}E.drag=null;E.cdrag=null;edRender()}
 ec.addEventListener('pointerdown',e=>{
   e.preventDefault();try{ec.setPointerCapture(e.pointerId)}catch(_){}
+  EV.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(EV.pts.size>=2){cancelAction();EV.lock=true;const i=pinInfo();EV.pin={d0:i.d,m0:i.m,s0:EV.s,x0:EV.x,y0:EV.y};return}
+  if(EV.lock)return;
   const p=loc(e);
-  if(E.tool==='adj')return;
+  if(E.tool==='adj'||E.tool==='frame')return;
   if(E.tool==='crop'){cropDown(p);return}
   if(E.tool==='stk'){const i=hitStk(p);E.sel=i;if(i>=0)E.drag={i,ox:p.x-E.stk[i].x,oy:p.y-E.stk[i].y};stkUI();edRender();return}
   E.cur={col:E.col,w:E.sz,er:E.tool==='er',pts:[p],m:new Map()};rasterSeg(E.cur,0);edRender();
 });
 ec.addEventListener('pointermove',e=>{
+  if(EV.pts.has(e.pointerId))EV.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(EV.pin&&EV.pts.size>=2){const i=pinInfo(),P=EV.pin,s=Math.max(1,Math.min(8,P.s0*i.d/P.d0)),k=s/P.s0;
+    EV.s=s;EV.x=i.m.x-(P.m0.x-P.x0)*k;EV.y=i.m.y-(P.m0.y-P.y0)*k;evClamp();evApply();return}
+  if(EV.lock)return;
   const p=loc(e);
   if(E.cdrag){cropMove(p);edRender();return}
   if(E.drag){const s=E.stk[E.drag.i];s.x=p.x-E.drag.ox;s.y=p.y-E.drag.oy;edRender()}
   else if(E.cur){E.cur.pts.push(p);rasterSeg(E.cur,E.cur.pts.length-1);edRender()}
 });
-['pointerup','pointercancel'].forEach(n=>ec.addEventListener(n,()=>{if(E.cur){E.strokes.push(E.cur);E.hist.push('s');E.cur=null}E.drag=null;E.cdrag=null}));
+['pointerup','pointercancel'].forEach(n=>ec.addEventListener(n,e=>{EV.pts.delete(e.pointerId);
+  if(EV.pts.size<2)EV.pin=null;
+  if(EV.lock){if(!EV.pts.size){EV.lock=false;if(EV.s<1.05){EV.s=1;EV.x=EV.y=0;evApply()}}return}
+  if(E.cur){E.strokes.push(E.cur);E.hist.push('s');E.cur=null}E.drag=null;E.cdrag=null}));
+$('#ezr').onclick=evReset;
 $('#eu').onclick=()=>{const h=E.hist.pop();if(h==='s'){E.strokes.pop();rebuild()}else if(h==='k'){E.stk.pop();E.sel=-1;stkUI()}else if(h==='g'){restoreGeo(E.geo.pop())}edRender()};
 $('#ecl').onclick=()=>{E.strokes=[];E.stk=[];E.hist=E.hist.filter(h=>h==='g');E.sel=-1;rebuild();stkUI();edRender()};
-$('#eca').onclick=()=>{gal.classList.remove('edit');gal.classList.add('view')};
-$('#eok').onclick=()=>{E.sel=-1;edRender(false);
+$('#eca').onclick=()=>{evReset();gal.classList.remove('edit');gal.classList.add('view')};
+$('#eok').onclick=()=>{E.sel=-1;evReset();edRender(false);
   ec.toBlob(b=>{if(!b)return;addItem('img',b);setGf(0);gi=0;gal.classList.remove('edit');gal.classList.add('view');showView()},'image/jpeg',.92)};
 $('#ve').onclick=()=>{const it=cur();if(it&&it.k==='img')openEd(it)};
+
+/* block double-tap / pinch zoom (iOS Safari) */
+{let lt=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lt<350&&!e.target.closest('input,textarea'))e.preventDefault();lt=n},{passive:false});
+ ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+ document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false})}
 </script>
 </body></html>
