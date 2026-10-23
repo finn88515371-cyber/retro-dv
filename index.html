@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HANDYCAM DV-2000</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Silkscreen&family=Pixelify+Sans&family=Special+Elite&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Silkscreen&family=Pixelify+Sans&family=Special+Elite&family=UnifrakturMaguntia&family=Pirata+One&display=swap">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{color-scheme:light;--page:#e9ecf0;--camc:#f5f6f8;--camb:0 solid transparent;--camr:0;--deck:#fff;--deckb:#dfe3e8;--ink:#1f2328;--mut:#6b7280;--btn:#fff;--btnb:#cdd3dc;--btnk:#1f2328;--btnts:none;--btnsh:none;--act:#374151;--actb:#374151;--actk:#fff;--actts:none;--actsh:none;--lcdb:#e3e7ec;--lcdw:3px;--lcdsh:0 1px 3px rgba(0,0,0,.18);--menu:#fff;--menub:#dfe3e8;--menuink:var(--ink);--menumut:var(--mut);--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;--rad:8px;--crad:12px;--bbw:1px;--ls:.02em;--acc:#374151;--shr:#cfd5dd;--shbg:#fff;--shi:#e5484d;--shp:#4b5563;--stitch:none}
@@ -188,11 +188,23 @@ body.land .vb,body.land .eb{width:250px;flex:none;max-height:none}
 body.rotr .cam,body.rotl .cam{--pv:12px;--ph:20px;position:fixed;top:0;left:0;width:100vh;width:100dvh;height:100vw;height:100dvw;transform-origin:0 0}
 body.rotr .cam{transform:translateX(100vw) rotate(90deg);transform:translateX(100dvw) rotate(90deg)}
 body.rotl .cam{transform:translateY(100vh) rotate(-90deg);transform:translateY(100dvh) rotate(-90deg)}
+
+/* ===== black metal easter egg ===== */
+#bmt{display:none;order:0;text-align:center;font-family:'UnifrakturMaguntia','Pirata One',serif;font-size:28px;line-height:1.1;color:#e6e6e6;letter-spacing:.04em;text-shadow:0 0 10px rgba(255,255,255,.25)}
+body.bm #bmt{display:block}
+body.bm{color-scheme:dark;--page:#000;--camc:radial-gradient(ellipse at 50% -10%,#1b1b1b,#000 60%);--camb:0 solid transparent;--camr:0;--deck:#040404;--deckb:#2a2a2a;--ink:#d9d9d9;--mut:#7a7a7a;--btn:#000;--btnb:#3c3c3c;--btnk:#e6e6e6;--btnts:none;--btnsh:none;--act:#e6e6e6;--actb:#fff;--actk:#000;--actts:none;--actsh:0 0 10px rgba(255,255,255,.3);--lcdb:#0d0d0d;--lcdw:2px;--lcdsh:0 0 0 1px #333;--menu:#000;--menub:#2a2a2a;--menuink:#d9d9d9;--menumut:#7a7a7a;--font:'UnifrakturMaguntia','Pirata One','Songti SC',serif;--rad:0;--crad:0;--bbw:1px;--ls:.04em;--acc:#e6e6e6;--shr:#cfcfcf;--shbg:#000;--shi:radial-gradient(circle,#f0f0f0,#7a7a7a);--shp:radial-gradient(circle,#f0f0f0,#7a7a7a);--stitch:none}
+body.bm .btn{font-size:15px}
+body.land.bm .btn{font-size:13px}
+body.bm .zb,body.bm .zr,body.bm .evr i{font-family:Georgia,'Songti SC',serif}
+body.bm .shut.rec::after{background:#7a0000}
+body.bm #bar,body.bm #bre,body.bm #fb,body.bm #fstrip,body.bm .tbar{display:none!important}
+#egg{width:28px;margin:30px 0 4px auto;text-align:center;font-size:11px;opacity:.16;transform:rotate(180deg);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 </style></head>
 <body class="skin-light">
 <div class="cam">
   <div class="tbar"><span class="ti">Handycam DV-2000</span><span class="wc" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
   <div class="side">
+    <div id="bmt">† Handycam †</div>
     <div class="top">
       <div class="tb"><button class="btn" id="bar">4:3</button><button class="btn" id="bre">480p</button></div>
       <div class="tb"><button class="btn" id="mic">MIC OFF</button><button class="btn" id="fls">FLASH</button><button class="btn" id="mb">MENU</button></div>
@@ -278,7 +290,7 @@ const gc=document.createElement('canvas'),gl=gc.getContext('webgl');
 const VS='attribute vec2 a;varying vec2 u;void main(){u=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}';
 const FS=`precision highp float;
 uniform sampler2D t;uniform vec2 r,cr;
-uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf;
+uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf,kc,kb;
 varying vec2 u;
 vec2 PX;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
@@ -331,6 +343,7 @@ void main(){
  else if(F==11.){col=1.-col;}
  else if(F==12.){col*=mix(vec3(.75,1.,1.15),vec3(1.2,.95,.75),smoothstep(.3,.75,Y));}
  else if(F==13.){col+=b*.35*bm;col=mix(vec3(Yf(col)),col,1.2)*vec3(1.06,.98,1.1);col=col*.9+.1;nk=.6;}
+ col=(col-.5)*kc+.5;col=max(col-kb,0.)/(1.-kb);
  if(fx>.5){float ff=1.4-1.7*dot(c,c);col=col*(1.+ff*.8);col=(col-.5)*1.25+.5;col=mix(col,vec3(1.),clamp(ff*.12,0.,.25));}
  if(lf>.5){float fl=max(1.-1.6*dot(c,c),0.);col=col*(1.+fl*.55)+vec3(.03,.03,.04)*fl;}
  col*=vec3(1.+wb*.14,1.+wb*.03,1.-wb*.18);
@@ -349,7 +362,7 @@ gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_
 const la=gl.getAttribLocation(pg,'a');gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
 const tx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tx);
 [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
-const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
+const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','kc','kb'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1};
@@ -375,6 +388,7 @@ const mob=matchMedia('(pointer:coarse)').matches;
 const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
 let stream,track,facing='environment',on=false,mode='video',rec,chunks=[],t0=0,items=[],last=0,W=640,H=480,cw=0,ch=0,rot=0,szKey='',cr=[1,1];
 let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=2,ev=0,evT=0,o=0,land=false;
+let bmOn=false;const BMP={ct:1.8,cr:.12,nz:2.4,jt:2.2,vg:1.2,sn:.5,sh:1.1,bm:.5};
 let lensId=null,lenses=[],autoWide=true,curMM=24,hasTorch=false,shotReq=0,flashFx=0,torchOn=false,lightFx=0;
 const FN=['DV','VHS','夜视','黑白','家庭','赛博','胶片','蓝晒','CRT','热成像','海报','负片','青橙','梦幻'];
 const FO=['DV','VHS','NIGHT','B&W','HOME','CYBER','FILM','CYANO','CRT','THERMAL','POSTER','NEG','TEAL','DREAM'];
@@ -549,6 +563,24 @@ addToggle(pM,'后置镜头 横屏旋转 180°',S,'lfB');
 addToggle(pM,'前置镜头 横屏旋转 180°',S,'lfF');
 note(pM,'先在这里选好你横拿手机的方向，再点主界面的“横屏”。从竖着拿开始，把手机往左转（左边朝下）就是逆时针，往右转（右边朝下）就是顺时针。前置和后置镜头的横屏方向是分开校正的：哪个镜头横屏时画面是倒的，就打开对应的那个开关，只影响那个镜头的横屏，不会改到竖屏和另一个镜头。建议打开 iPhone 的“竖排方向锁定”，效果最稳定。');
 const pK=mkPane('外观');head(pK,'界面皮肤');addChips(pK,SKN,()=>SK.indexOf(S.skin),i=>{S.skin=SK[i];applySkin()});
+/* black metal pane (hidden until the egg is found) */
+DEF.set(BMP,{...BMP});
+const pB=document.createElement('div');pB.className='pane';pB.sy=[];pB.rk=[];$('#panes').append(pB);
+head(pB,'画面');
+addSlider(pB,'对比度',1,3,.01,BMP,'ct');addSlider(pB,'压暗黑位',0,.5,.01,BMP,'cr');addSlider(pB,'噪点',0,4,.01,BMP,'nz');
+addSlider(pB,'抖动',0,4,.01,BMP,'jt');addSlider(pB,'暗角',0,2,.01,BMP,'vg');addSlider(pB,'扫描线',0,2,.01,BMP,'sn');
+addSlider(pB,'锐化',0,2,.01,BMP,'sh');addSlider(pB,'高光扩散',0,2,.01,BMP,'bm');
+addReset(pB);
+note(pB,'固定黑白、240p。刷新页面退出。');
+{const egg=document.createElement('div');egg.id='egg';egg.textContent='†';egg.onclick=enterBM;pK.append(egg)}
+function enterBM(){
+  if(bmOn||recing())return;bmOn=true;
+  const b=document.body.classList;SK.forEach(x=>b.remove('skin-'+x));b.add('bm');
+  fi=3;syncTiles();cam.classList.remove('fpick');setRes(0);syncChips();
+  $('#tabs').style.display='none';panes.forEach(p=>p.classList.remove('on'));pB.classList.add('on');$('.mh b').textContent='Rituale';
+  try{document.fonts.load('20px "UnifrakturMaguntia"')}catch(e){}
+  const fl=$('#flash');fl.style.background='#000';fl.classList.add('on');setTimeout(()=>{fl.classList.remove('on');setTimeout(()=>{fl.style.background=''},500)},300);
+}
 showPane(pQ);syncChips();updMic();updBar();
 $('#mb').onclick=()=>cam.classList.toggle('menu');
 $('#mc').onclick=()=>cam.classList.remove('menu');
@@ -633,16 +665,16 @@ function size(){
 }
 const fmt=s=>{s=Math.floor(s);return Math.floor(s/3600)+':'+pad(Math.floor(s/60)%60)+':'+pad(s%60)};
 function ov(T){
-  const it=WM.items,wf=WMF[WM.font],fam=wf[0]==='monospace'?'ui-monospace,Menlo,Consolas,monospace':`"${wf[0]}",monospace`;
+  const it=WM.items,wf=bmOn?['UnifrakturMaguntia',1.25]:WMF[WM.font],fam=bmOn?'"UnifrakturMaguntia",serif':wf[0]==='monospace'?'ui-monospace,Menlo,Consolas,monospace':`"${wf[0]}",monospace`,wcol=bmOn?'#e8e8e8':WM.color;
   const u=Math.min(W,H)*.05,f=Math.max(9,u*WM.size*wf[1]),m=u*.9,ls=f*1.2,isRec=recing();
   const fr=WM.fr*1.6*(Math.min(W,H)/360);
   oc.font=`${wf[0]==='monospace'?'bold ':''}${f}px ${fam}`;oc.textBaseline='top';
   const tx2=(s,x,y,al)=>{oc.textAlign=al||'left';
-    if(WM.fr>0){oc.shadowBlur=0;oc.fillStyle='rgba(255,40,60,.7)';oc.fillText(s,x-fr,y);oc.fillStyle='rgba(40,200,255,.7)';oc.fillText(s,x+fr,y)}
-    oc.shadowColor=WM.color;oc.shadowBlur=f*.35*WM.gl;oc.fillStyle=WM.color;oc.fillText(s,x,y);oc.shadowBlur=0};
+    if(WM.fr>0&&!bmOn){oc.shadowBlur=0;oc.fillStyle='rgba(255,40,60,.7)';oc.fillText(s,x-fr,y);oc.fillStyle='rgba(40,200,255,.7)';oc.fillText(s,x+fr,y)}
+    oc.shadowColor=wcol;oc.shadowBlur=f*.35*(bmOn?.6:WM.gl);oc.fillStyle=wcol;oc.fillText(s,x,y);oc.shadowBlur=0};
   const blink=Math.floor(T*1.5)%2===0;
   if(it.rec){if(mode==='photo')tx2('PHOTO',m,m);else tx2(isRec?(blink?'● REC':'  REC'):'STBY',m,m)}
-  if(it.flt&&fi)tx2(FO[fi],m,m+(it.rec?ls:0));
+  if(it.flt&&(fi||bmOn))tx2(bmOn?'Black Metal':FO[fi],m,m+(it.rec?ls:0));
   if(it.bat)tx2('SP [###-]',W-m,m,'right');
   if(it.zm&&(zdir||Math.abs(zt-zc)>.005||performance.now()-zT<1500)){
     const n=Math.max(0,Math.min(8,Math.round(Math.log(zc)/Math.log(6)*8)));
@@ -675,7 +707,9 @@ function loop(ts){
   gl.uniform1f(UL.fb,Math.min(Math.abs(zt-zc)*.0015,.008));
   gl.uniform1f(UL.F,fi);gl.uniform1f(UL.rot,rot);
   gl.uniform1f(UL.ex,Math.pow(2,ev));gl.uniform1f(UL.fx,flashFx);gl.uniform1f(UL.fp,rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0);gl.uniform1f(UL.lf,lightFx);
-  for(const k in D)gl.uniform1f(UL[k],P[k]);
+  const PP=bmOn?{...P,nz:BMP.nz,jt:BMP.jt,vg:BMP.vg,sn:BMP.sn,sh:BMP.sh,bm:BMP.bm,ca:.25,pf:0,bd:.2,bl:0,wb:0,sat:1}:P;
+  for(const k in D)gl.uniform1f(UL[k],PP[k]);
+  gl.uniform1f(UL.kc,bmOn?BMP.ct:1);gl.uniform1f(UL.kb,bmOn?BMP.cr:0);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
   oc.imageSmoothingEnabled=false;oc.drawImage(gc,0,0,W,H);ov(T);
   if(shotReq){shotReq=0;flashFx=0;
