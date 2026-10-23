@@ -342,7 +342,7 @@ const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lflip:false};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -534,8 +534,9 @@ note(pM,'默认使用后置广角（主摄）。手机支持时，这里会列�
 head(pM,'画面方向');
 head(pM,'横屏时手机往哪边转');
 addChips(pM,['↺ 逆时针（左边朝下）','↻ 顺时针（右边朝下）'],()=>S.lo-1,i=>{S.lo=i+1;save();reO()});
-addToggle(pM,'横屏画面旋转 180°',S,'lflip');
-note(pM,'先在这里选好你横拿手机的方向，再点主界面的“横屏”。从竖着拿开始，把手机往左转（左边朝下）就是逆时针，往右转（右边朝下）就是顺时针。如果横屏时界面是正的但画面是倒的，打开“横屏画面旋转 180°”，它只影响横屏，不会改到竖屏。建议打开 iPhone 的“竖排方向锁定”，效果最稳定。');
+addToggle(pM,'后置镜头 横屏旋转 180°',S,'lfB');
+addToggle(pM,'前置镜头 横屏旋转 180°',S,'lfF');
+note(pM,'先在这里选好你横拿手机的方向，再点主界面的“横屏”。从竖着拿开始，把手机往左转（左边朝下）就是逆时针，往右转（右边朝下）就是顺时针。前置和后置镜头的横屏方向是分开校正的：哪个镜头横屏时画面是倒的，就打开对应的那个开关，只影响那个镜头的横屏，不会改到竖屏和另一个镜头。建议打开 iPhone 的“竖排方向锁定”，效果最稳定。');
 const pK=mkPane('外观');head(pK,'界面皮肤');addChips(pK,SKN,()=>SK.indexOf(S.skin),i=>{S.skin=SK[i];applySkin()});
 showPane(pQ);syncChips();updMic();updBar();
 $('#mb').onclick=()=>cam.classList.toggle('menu');
@@ -662,7 +663,7 @@ function loop(ts){
   gl.uniform1f(UL.m,facing==='user'?1:0);gl.uniform1f(UL.z,zc);
   gl.uniform1f(UL.fb,Math.min(Math.abs(zt-zc)*.0015,.008));
   gl.uniform1f(UL.F,fi);gl.uniform1f(UL.rot,rot);
-  gl.uniform1f(UL.ex,Math.pow(2,ev));gl.uniform1f(UL.fx,flashFx);gl.uniform1f(UL.fp,(S.lflip&&rot)?1:0);gl.uniform1f(UL.lf,lightFx);
+  gl.uniform1f(UL.ex,Math.pow(2,ev));gl.uniform1f(UL.fx,flashFx);gl.uniform1f(UL.fp,rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0);gl.uniform1f(UL.lf,lightFx);
   for(const k in D)gl.uniform1f(UL[k],P[k]);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
   oc.imageSmoothingEnabled=false;oc.drawImage(gc,0,0,W,H);ov(T);
