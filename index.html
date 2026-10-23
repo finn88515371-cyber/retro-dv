@@ -198,6 +198,10 @@ body.land.bm .btn{font-size:13px}
 body.bm .zb,body.bm .zr,body.bm .evr i{font-family:Georgia,'Songti SC',serif}
 body.bm .shut.rec::after{background:#7a0000}
 body.bm #bar,body.bm #bre,body.bm #fb,body.bm #fstrip,body.bm .tbar{display:none!important}
+#bmfx{position:fixed;inset:0;z-index:999;pointer-events:none}
+#bmfx>*{position:absolute;inset:0;width:100%;height:100%;opacity:0}
+#fxw{background:#fff}#fxb{background:#000}
+#fxc{display:flex;align-items:center;justify-content:center;font:300px/1 Georgia,serif;color:#000}
 #egg{width:28px;margin:30px 0 4px auto;text-align:center;font-size:16px;opacity:.42;transform:rotate(180deg);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 </style></head>
 <body class="skin-light">
@@ -577,13 +581,59 @@ addSlider(pB,'锐化',0,2,.01,BMP,'sh');addSlider(pB,'高光扩散',0,2,.01,BMP,
 addReset(pB);
 note(pB,'固定黑白、240p。刷新页面退出。');
 {const egg=document.createElement('div');egg.id='egg';egg.textContent='†';egg.onclick=enterBM;pK.append(egg)}
-function enterBM(){
-  if(bmOn||recing())return;bmOn=true;
+function applyBM(){
+  if(bmOn)return;bmOn=true;
   const b=document.body.classList;SK.forEach(x=>b.remove('skin-'+x));b.add('bm');
   fi=3;syncTiles();cam.classList.remove('fpick');setRes(0);syncChips();
   $('#tabs').style.display='none';panes.forEach(p=>p.classList.remove('on'));pB.classList.add('on');$('.mh b').textContent='Rituale';
+}
+/* --- entry animations (one picked at random) --- */
+let bmBusy=false,nzRAF=0;
+const zz=t=>new Promise(r=>setTimeout(r,t));
+const fade=(el,a,b,d,ease)=>el.animate([{opacity:a},{opacity:b}],{duration:d,easing:ease||'linear',fill:'forwards'}).finished;
+function fxBox(){let o=document.getElementById('bmfx');
+  if(!o){o=document.createElement('div');o.id='bmfx';o.innerHTML='<canvas id="fxn" width="160" height="284"></canvas><div id="fxf"></div><div id="fxw"></div><div id="fxb"></div><div id="fxc">†</div>';document.body.append(o)}
+  return o}
+function fxNoise(on){const c=document.getElementById('fxn'),x=c.getContext('2d');cancelAnimationFrame(nzRAF);if(!on)return;
+  const id=x.createImageData(c.width,c.height),d=id.data;
+  (function f(){for(let i=0;i<d.length;i+=4){const v=Math.random()*255;d[i]=d[i+1]=d[i+2]=v;d[i+3]=255}x.putImageData(id,0,0);nzRAF=requestAnimationFrame(f)})()}
+function fxClean(){const o=fxBox();fxNoise(false);
+  o.querySelectorAll('*').forEach(e=>{e.getAnimations().forEach(a=>a.cancel());e.style.opacity=0;e.style.filter='';e.style.background='';e.style.mixBlendMode=''});
+  cam.getAnimations().forEach(a=>a.cancel());cam.style.filter='';cam.style.clipPath='';cam.style.translate='';document.body.style.background=''}
+const BMFX=[
+ async(n,w,b,c,fo)=>{ /* A signal loss */
+  const k=[];for(let i=0;i<14;i++)k.push({translate:`${((Math.random()-.5)*36).toFixed(1)}px 0`,filter:`hue-rotate(${Math.random()*180|0}deg) saturate(3) contrast(1.4)`});
+  await cam.animate(k,{duration:700,easing:'steps(14)'}).finished;
+  n.style.opacity=1;fxNoise(true);await zz(450);fxNoise(false);n.style.opacity=0;b.style.opacity=1;applyBM();await zz(250);await fade(b,1,0,450)},
+ async(n,w,b)=>{ /* B CRT power off */
+  document.body.style.background='#000';
+  await cam.animate([{clipPath:'inset(0% 0% 0% 0%)',filter:'brightness(1)'},{clipPath:'inset(49.6% 0% 49.6% 0%)',filter:'brightness(4)',offset:.6},{clipPath:'inset(49.6% 49.6% 49.6% 49.6%)',filter:'brightness(6)'}],{duration:500,easing:'ease-in',fill:'forwards'}).finished;
+  b.style.opacity=1;applyBM();await zz(350);b.style.opacity=0;
+  await cam.animate([{clipPath:'inset(49.6% 49.6% 49.6% 49.6%)',filter:'brightness(6)'},{clipPath:'inset(49.6% 0% 49.6% 0%)',filter:'brightness(4)',offset:.4},{clipPath:'inset(0% 0% 0% 0%)',filter:'brightness(1)'}],{duration:550,easing:'ease-out'}).finished},
+ async(n,w,b,c)=>{ /* C lightning */
+  const bl=document.body.classList;c.style.transform=bl.contains('rotr')?'rotate(270deg)':bl.contains('rotl')?'rotate(90deg)':'rotate(180deg)';
+  await w.animate([{opacity:0},{opacity:1,offset:.1},{opacity:.2,offset:.3},{opacity:.9,offset:.45},{opacity:0}],{duration:380}).finished;
+  await zz(260);b.style.opacity=1;c.style.opacity=1;w.style.opacity=1;applyBM();
+  await fade(w,1,0,700,'ease-out');c.style.opacity=0;await fade(b,1,0,500)},
+ async(n,w,b,c,fo)=>{ /* D grainy black fog */
+  const D=1700,st=performance.now();fxNoise(true);n.style.mixBlendMode='overlay';fo.style.opacity=1;
+  await new Promise(r=>{(function f(){const t=Math.min(1,(performance.now()-st)/D),e=t*t;
+    fo.style.background=`radial-gradient(ellipse at 50% 45%,transparent ${Math.max(0,70-e*85)}%,rgba(0,0,0,.85) ${Math.max(5,80-e*80)}%,#000 ${Math.max(10,95-e*80)}%)`;
+    fo.style.filter=`blur(${(8+e*16).toFixed(1)}px)`;n.style.opacity=(.3+.55*t).toFixed(2);
+    cam.style.filter=`grayscale(${t.toFixed(2)}) contrast(${(1+t*.8).toFixed(2)}) blur(${(t*7).toFixed(1)}px)`;
+    t<1?requestAnimationFrame(f):r()})()});
+  fo.style.background='#000';fo.style.filter='';applyBM();cam.style.filter='';
+  cam.animate([{filter:'blur(7px) contrast(1.6)'},{filter:'blur(0px) contrast(1)'}],{duration:1200,easing:'ease-out'});
+  n.animate([{opacity:.85},{opacity:.5,offset:.5},{opacity:0}],{duration:1500,fill:'forwards'});
+  await fo.animate([{opacity:1},{opacity:.55,offset:.3},{opacity:.85,offset:.45},{opacity:0}],{duration:1200,fill:'forwards'}).finished;await zz(350)}
+];
+async function enterBM(){
+  if(bmOn||bmBusy||recing())return;
   try{document.fonts.load('20px "UnifrakturMaguntia"')}catch(e){}
-  const fl=$('#flash');fl.style.background='#000';fl.classList.add('on');setTimeout(()=>{fl.classList.remove('on');setTimeout(()=>{fl.style.background=''},500)},300);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){applyBM();return}
+  bmBusy=true;const o=fxBox(),q=id=>o.querySelector(id);
+  try{await BMFX[Math.floor(Math.random()*BMFX.length)](q('#fxn'),q('#fxw'),q('#fxb'),q('#fxc'),q('#fxf'))}catch(e){}
+  applyBM();fxClean();bmBusy=false;
 }
 showPane(pQ);syncChips();updMic();updBar();
 $('#mb').onclick=()=>cam.classList.toggle('menu');
