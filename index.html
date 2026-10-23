@@ -283,11 +283,12 @@ body.bm #bar,body.bm #bre,body.bm #fb,body.bm #fstrip,body.bm .tbar{display:none
           <div class="hint">拖动框的四个角调整范围，拖动框里面移动位置。应用后涂鸦、贴纸和调色会一起合并进照片，可以用“撤销”退回。</div>
         </div>
         <div id="pf" style="display:none"><div class="chips" id="frs"></div>
-          <label class="ms"><span>相框模糊</span><input type="range" id="fbl" min="0" max="3" step=".05" value="1.2"><i id="fblv">1.20</i></label>
+          <label class="ms"><span>相框粗细</span><input type="range" id="fbl" min=".3" max="1.5" step=".05" value=".6"><i id="fblv">0.60</i></label>
+          <label class="ms"><span>相框像素</span><input type="range" id="fpx" min="1" max="3" step=".1" value="2"><i id="fpxv">2.0</i></label>
           <div id="ftw"><div class="gh">相框文字</div><input class="txt" id="ftx" maxlength="24"></div>
           <div class="hint">涂鸦和贴纸会画在相框上面</div></div>
-        <div id="pp" style="display:none"><div class="sws" id="sws"></div><label class="ms"><span>粗细(格)</span><input type="range" id="es" min="1" max="10" step="1" value="2"><i id="esn">2</i></label>
-          <label class="ms"><span>像素大小</span><input type="range" id="eps" min=".5" max="3" step=".1" value="1.2"><i id="epsv">1.2</i></label></div>
+        <div id="pp" style="display:none"><div class="sws" id="sws"></div><label class="ms"><span>粗细(格)</span><input type="range" id="es" min="1" max="10" step="1" value="3"><i id="esn">3</i></label>
+          <label class="ms"><span>像素大小</span><input type="range" id="eps" min=".3" max="2" step=".1" value=".7"><i id="epsv">0.7</i></label></div>
         <div id="pk" style="display:none">
           <div class="chips" id="scat"><button class="btn act" data-c="v">柔焦</button><button class="btn" data-c="s">像素</button><button class="btn" data-c="t">文字</button></div>
           <div class="stks" id="stks"></div>
@@ -1048,7 +1049,7 @@ $('#bx').onclick=()=>{
 /* sticker / doodle editor (soft lo-fi pixel stickers + DV-style text) */
 const ec=$('#ec'),ec2=ec.getContext('2d');
 const ADJ0={ex:0,br:0,ct:0,hl:0,sh:0,sat:0,tp:0,tn:0,fd:0,vg:0,gr:0};
-const E={src:null,base:document.createElement('canvas'),adj:{...ADJ0},geo:[],cr:{x:0,y:0,w:1,h:1},car:0,cdrag:null,layer:document.createElement('canvas'),strokes:[],stk:[],hist:[],tool:'pen',col:'#ff004d',sz:2,ps:1.2,gs:8,gw:1,gh:1,fr:0,fb:1.2,ftx:'',fkey:'',fc:null,t:0,sel:-1,cw:0,ch:0,cur:null,drag:null};
+const E={src:null,base:document.createElement('canvas'),adj:{...ADJ0},geo:[],cr:{x:0,y:0,w:1,h:1},car:0,cdrag:null,layer:document.createElement('canvas'),strokes:[],stk:[],hist:[],tool:'pen',col:'#ff004d',sz:3,ps:.7,gs:8,gw:1,gh:1,fr:0,fb:.6,fpx:2,ftx:'',fkey:'',fc:null,t:0,sel:-1,cw:0,ch:0,cur:null,drag:null};
 const ECOL=['#000000','#1d2b53','#7e2553','#008751','#ab5236','#5f574f','#c2c3c7','#fff1e8','#ff004d','#ffa300','#ffec27','#00e436','#29adff','#83769c','#ff77a8','#ffccaa'];
 const PAL={k:'#2b2a33',w:'#fff4e0',r:'#ff6b8b',p:'#ffd3dc',y:'#ffd966',b:'#5b7cff',g:'#8a8fa8',t:'#6fd8c0',o:'#f2a65a',c:'#c9c3d9',l:'#cfe3ff',n:'#f6e7c8',m:'#ffe9a8',R:'#ff6a6a',O:'#ffa64d',Y:'#ffe066',G:'#7ddc7a',B:'#5ab4ff',V:'#a07aff'};
 const SPR={
@@ -1161,7 +1162,7 @@ function loc(e){
   return {x:Math.max(0,Math.min(1,x)),y:Math.max(0,Math.min(1,y))};
 }
 function edRender(sel=true){
-  ec2.clearRect(0,0,E.cw,E.ch);ec2.drawImage(E.base,0,0);drawFrame();
+  ec2.clearRect(0,0,E.cw,E.ch);if(E.fr)drawFrame();else ec2.drawImage(E.base,0,0);
   ec2.imageSmoothingEnabled=false;ec2.drawImage(E.layer,0,0,E.gw*E.gs,E.gh*E.gs);ec2.imageSmoothingEnabled=true;
   E.stk.forEach((s,i)=>{drawStk(ec2,s);if(sel&&i===E.sel)selBox(s)});
   if(sel&&E.tool==='crop')drawCrop();
@@ -1266,10 +1267,11 @@ function openEd(it){
 }
 function addStk(o2){E.stk.push({...o2,x:.5,y:.5,s:1,r:0,b:1,sx:1,sy:1});E.sel=E.stk.length-1;E.hist.push('k');stkUI();edRender()}
 /* ---------- photo frames (cartoon, drawn small then upscaled + blurred) ---------- */
-const FK='#2b2a33';
+const FK='#2b2a33';let FI=null;
 function rrp(x,X,Y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath()}
 function ring(x,W,H,u,o){const t=(o.t??12)*u,b=(o.b??12)*u,l=(o.l??12)*u,r=(o.r??12)*u;
-  x.beginPath();rrp(x,u,u,W-2*u,H-2*u,(o.or??12)*u);rrp(x,l,t,W-l-r,H-t-b,(o.ir??7)*u);x.fillStyle=o.bg;x.fill('evenodd');
+  const ir=Math.min((o.ir??7)*u,(W-l-r)/2,(H-t-b)/2);FI={l,t,r,b,ir};
+  x.beginPath();x.rect(0,0,W,H);rrp(x,l,t,W-l-r,H-t-b,ir);x.fillStyle=o.bg;x.fill('evenodd');x.beginPath();rrp(x,l,t,W-l-r,H-t-b,ir);
   if(o.lw!==0){x.lineWidth=(o.lw||2)*u;x.strokeStyle=FK;x.stroke()}return{l,t,r,b}}
 function fStar(x,cx,cy,R,f){x.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,q=i%2?R*.42:R;x.lineTo(cx+Math.cos(a)*q,cy+Math.sin(a)*q)}x.closePath();x.fillStyle=f;x.fill();x.lineJoin='round';x.lineWidth=R*.14;x.strokeStyle=FK;x.stroke()}
 function fHeart(x,cx,cy,R,f){x.beginPath();x.moveTo(cx,cy+R*.8);x.bezierCurveTo(cx-R*1.15,cy,cx-R*.7,cy-R*.95,cx,cy-R*.4);x.bezierCurveTo(cx+R*.7,cy-R*.95,cx+R*1.15,cy,cx,cy+R*.8);x.closePath();x.fillStyle=f;x.fill();x.lineWidth=R*.13;x.strokeStyle=FK;x.stroke()}
@@ -1315,21 +1317,44 @@ const FR=[
    if(tx)fTxt(x,tx,W/2,H-6*u,12*u,'UnifrakturMaguntia,serif','#e8e8e8','center')}}
 ];
 function frText(){const f=FR[E.fr];return f.t?(E.ftx||f.t(E.t)):''}
-function frameCanvas(){const key=[E.fr,E.cw,E.ch,frText(),E.fv].join('|');if(E.fkey===key)return E.fc;E.fkey=key;
-  const W=Math.max(2,Math.round(E.cw/2)),H=Math.max(2,Math.round(E.ch/2)),c=mkC(W,H);FR[E.fr].d(c.getContext('2d'),W,H,Math.min(W,H)/124,frText());return E.fc=c}
-function drawFrame(){if(!E.fr)return;const c=frameCanvas();ec2.save();ec2.imageSmoothingEnabled=true;soft(ec2,(dx,dy)=>ec2.drawImage(c,dx,dy,E.cw,E.ch),E.fb*E.cw/400);ec2.restore()}
+function frameCanvas(){const key=[E.fr,E.cw,E.ch,frText(),E.fb,E.fpx].join('|');if(E.fkey===key)return E.fc;E.fkey=key;
+  const cells=320/E.fpx,cs=Math.min(E.cw,E.ch)/cells,W=Math.max(8,Math.round(E.cw/cs)),H=Math.max(8,Math.round(E.ch/cs)),c=mkC(W,H),x=c.getContext('2d');
+  FI=null;FR[E.fr].d(x,W,H,Math.min(W,H)/124*E.fb,frText());pixelize(x,W,H);
+  return E.fc={c,W,H,fi:FI}}
+/* turn the drawing into crisp pixel art: hard alpha, 1-cell dark outline, top highlight, bottom shadow */
+function pixelize(x,W,H){const id=x.getImageData(0,0,W,H),d=id.data,n=W*H,A=new Uint8Array(n);
+  for(let i=0;i<n;i++)A[i]=d[i*4+3]>=110?1:0;
+  const op=(X,Y)=>X>=0&&Y>=0&&X<W&&Y<H&&A[Y*W+X];const ol=[0x2b,0x2a,0x33];
+  for(let Y=0;Y<H;Y++)for(let X=0;X<W;X++){const i=Y*W+X,j=i*4;
+    if(!A[i]){if(op(X-1,Y)||op(X+1,Y)||op(X,Y-1)||op(X,Y+1)){d[j]=ol[0];d[j+1]=ol[1];d[j+2]=ol[2];d[j+3]=255}else d[j+3]=0;continue}
+    d[j+3]=255}
+  const L=new Float32Array(n);for(let i=0;i<n;i++){const j=i*4;L[i]=(d[j]*.3+d[j+1]*.59+d[j+2]*.11)/255}
+  const edge=(i,X,Y)=>X<0||Y<0||X>=W||Y>=H||!A[i]||L[i]<.2;const out=new Uint8ClampedArray(d);
+  for(let Y=0;Y<H;Y++)for(let X=0;X<W;X++){const i=Y*W+X,j=i*4;if(!A[i])continue;
+    if(L[i]<.2){if(Y>0&&!A[i-W])for(let k=0;k<3;k++)out[j+k]=d[j+k]+60;continue}
+    if(edge(i-W,X,Y-1))for(let k=0;k<3;k++)out[j+k]=d[j+k]+(255-d[j+k])*.5;
+    else if(edge(i+W,X,Y+1)||edge(i+1,X+1,Y))for(let k=0;k<3;k++)out[j+k]=d[j+k]*.78}
+  id.data.set(out);
+  x.putImageData(id,0,0)}
+function drawFrame(){const f=frameCanvas(),sx=E.cw/f.W,sy=E.ch/f.H;ec2.save();
+  if(f.fi){const o=Math.max(sx,sy)*2,X=f.fi.l*sx-o,Y=f.fi.t*sy-o,w=E.cw-(f.fi.l+f.fi.r)*sx+2*o,h=E.ch-(f.fi.t+f.fi.b)*sy+2*o;
+    const k=Math.max(w/E.cw,h/E.ch),sw=w/k,sh=h/k;
+    ec2.beginPath();rrp(ec2,X,Y,w,h,f.fi.ir*sx+o);ec2.clip();ec2.drawImage(E.base,(E.cw-sw)/2,(E.ch-sh)/2,sw,sh,X,Y,w,h);ec2.restore();ec2.save()}
+  else ec2.drawImage(E.base,0,0);
+  ec2.imageSmoothingEnabled=false;ec2.drawImage(f.c,0,0,E.cw,E.ch);ec2.restore()}
 function syncFrameUI(){[...$('#frs').children].forEach((b,i)=>b.classList.toggle('act',i===E.fr));const f=FR[E.fr];
-  $('#ftw').style.display=f.t?'':'none';if(f.t){$('#ftx').placeholder=f.t(E.t);$('#ftx').value=E.ftx}$('#fbl').value=E.fb;$('#fblv').textContent=E.fb.toFixed(2)}
+  $('#ftw').style.display=f.t?'':'none';if(f.t){$('#ftx').placeholder=f.t(E.t);$('#ftx').value=E.ftx}$('#fbl').value=E.fb;$('#fblv').textContent=E.fb.toFixed(2);$('#fpx').value=E.fpx;$('#fpxv').textContent=E.fpx.toFixed(1)}
 FR.forEach((f,i)=>{const b=document.createElement('button');b.className='btn';b.textContent=f.n;b.onclick=()=>{E.fr=i;E.ftx='';syncFrameUI();edRender()};$('#frs').append(b)});
 $('#fbl').oninput=e=>{E.fb=+e.target.value;$('#fblv').textContent=E.fb.toFixed(2);edRender()};
 $('#ftx').oninput=e=>{E.ftx=e.target.value;edRender()};
+$('#fpx').oninput=e=>{E.fpx=+e.target.value;$('#fpxv').textContent=E.fpx.toFixed(1);edRender()};
 /* ---------- pixel doodle (16 colours, mosaic soft edge) ---------- */
 function gridSize(){E.gs=Math.max(2,Math.round(Math.min(E.cw,E.ch)*E.ps/100));E.gw=Math.ceil(E.cw/E.gs);E.gh=Math.ceil(E.ch/E.gs);E.layer.width=E.gw;E.layer.height=E.gh}
 function rasterSeg(st,i){
-  const c=E.layer.getContext('2d'),b=st.pts[i],a=st.pts[i-1]||b,x0=a.x*E.gw,y0=a.y*E.gh,x1=b.x*E.gw,y1=b.y*E.gh,n=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0)*2)),r=Math.max(st.w/2,.71),R=Math.ceil(r+1);
+  const c=E.layer.getContext('2d'),b=st.pts[i],a=st.pts[i-1]||b,x0=a.x*E.gw,y0=a.y*E.gh,x1=b.x*E.gw,y1=b.y*E.gh,n=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0)*2)),r=Math.max(st.w/2,.71),R=Math.ceil(r+3);
   for(let k=0;k<=n;k++){const cx=x0+(x1-x0)*k/n,cy=y0+(y1-y0)*k/n;
     for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++){const gx=Math.floor(cx)+dx,gy=Math.floor(cy)+dy;if(gx<0||gy<0||gx>=E.gw||gy>=E.gh)continue;
-      const d=Math.hypot(gx+.5-cx,gy+.5-cy),al=d<=r?1:d<=r+1?.4:0;if(!al)continue;const key=gy*E.gw+gx,old=st.m.get(key)||0;if(al<=old)continue;st.m.set(key,al);
+      const d=Math.hypot(gx+.5-cx,gy+.5-cy),al=d<=r?1:Math.max(0,Math.ceil((1-(d-r)/2.6)*4)/4*.8);if(!al)continue;const key=gy*E.gw+gx,old=st.m.get(key)||0;if(al<=old)continue;st.m.set(key,al);
       c.globalAlpha=al;if(st.er){c.globalCompositeOperation='destination-out';c.fillRect(gx,gy,1,1);c.globalCompositeOperation='source-over'}else{c.fillStyle=st.col;c.fillRect(gx,gy,1,1)}}}
   c.globalAlpha=1}
 ECOL.forEach(c=>{const b=document.createElement('button');b.style.background=c;b.className=c===E.col?'sel':'';
