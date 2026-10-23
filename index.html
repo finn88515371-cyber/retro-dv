@@ -79,6 +79,7 @@ body:not(.mob) #ori,body.natl #ori{display:none}
 .tile.sel{transform:scale(1.07)}
 .tile.sel .sw{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
 .tile .nm{display:block;margin-top:3px;white-space:nowrap}
+.tile .fcl{display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--btn);color:var(--btnk)}
 #menu{display:none;flex:none;height:42%;overflow-y:auto;background:var(--menu);color:var(--menuink);border:1px solid var(--menub);border-radius:var(--crad);padding:10px 12px 14px;box-sizing:border-box}
 .cam.menu #menu{display:block;animation:up .22s ease}
 .cam.menu .deck{display:none}
@@ -243,8 +244,10 @@ body.rotl .cam{transform:translateY(100vh) rotate(-90deg);transform:translateY(1
           <div id="sc" style="display:none">
             <label class="ms"><span>大小</span><input type="range" id="ss" min=".3" max="4" step=".05" value="1"></label>
             <label class="ms"><span>旋转</span><input type="range" id="sr" min="-180" max="180" step="1" value="0"></label>
+            <label class="ms"><span>横向拉伸</span><input type="range" id="sxw" min=".3" max="3" step=".05" value="1"></label>
+            <label class="ms"><span>纵向拉伸</span><input type="range" id="syh" min=".3" max="3" step=".05" value="1"></label>
             <label class="ms"><span>模糊</span><input type="range" id="sb" min="0" max="3" step=".05" value="1"></label>
-            <button class="btn" id="sd">删除所选贴纸</button>
+            <div class="vr"><button class="btn" id="sxr">恢复比例</button><button class="btn warn" id="sd">删除所选贴纸</button></div>
           </div>
           <div class="hint">点贴纸加到画面里，拖动可以移动位置</div>
         </div>
@@ -539,8 +542,10 @@ $('#mc').onclick=()=>cam.classList.remove('menu');
 
 /* filter strip */
 const fs=$('#fstrip');
-FN.forEach((n,i)=>{const b=document.createElement('button');b.className='tile';b.innerHTML=`<span class="sw" style="background:${SW[i]}"></span><span class="nm">${n}</span>`;b.onclick=()=>{fi=i;syncTiles()};fs.append(b)});
-function syncTiles(){[...fs.children].forEach((b,i)=>b.classList.toggle('sel',i===fi))}
+const closeF=()=>{cam.classList.remove('fpick');$('#fb').classList.remove('act')};
+{const fc=document.createElement('button');fc.className='tile';fc.innerHTML='<span class="sw fcl">✕</span><span class="nm">关闭</span>';fc.onclick=closeF;fs.append(fc)}
+FN.forEach((n,i)=>{const b=document.createElement('button');b.className='tile';b.dataset.i=i;b.innerHTML=`<span class="sw" style="background:${SW[i]}"></span><span class="nm">${n}</span>`;b.onclick=()=>{fi=i;syncTiles()};fs.append(b)});
+function syncTiles(){fs.querySelectorAll('[data-i]').forEach(b=>b.classList.toggle('sel',+b.dataset.i===fi))}
 syncTiles();
 $('#fb').onclick=()=>{cam.classList.toggle('fpick');$('#fb').classList.toggle('act',cam.classList.contains('fpick'))};
 
@@ -824,12 +829,13 @@ function soft(c,fn,b){
   const a=c.globalAlpha;fn(0,0);c.globalAlpha=a*.35;[[b,0],[-b,0],[0,b],[0,-b]].forEach(([dx,dy])=>fn(dx,dy));c.globalAlpha=a;
 }
 function boxOf(s){
-  if(s.k==='s'){const bm=mkBM(s.id),u=unitOf(bm)*s.s;return [bm.w*u,bm.h*u]}
+  const X=s.sx||1,Y=s.sy||1;
+  if(s.k==='s'){const bm=mkBM(s.id),u=unitOf(bm)*s.s;return [bm.w*u*X,bm.h*u*Y]}
   const fs2=txtFs(s);ec2.save();ec2.font=fs2+'px "VT323",monospace';const w=ec2.measureText(s.t).width+fs2*.4;ec2.restore();
-  return [w,fs2*1.15];
+  return [w*X,fs2*1.15*Y];
 }
 function drawStk(c,s){
-  c.save();c.translate(s.x*E.cw,s.y*E.ch);c.rotate(s.r*Math.PI/180);
+  c.save();c.translate(s.x*E.cw,s.y*E.ch);c.rotate(s.r*Math.PI/180);c.scale(s.sx||1,s.sy||1);
   if(s.k==='s'){
     const bm=mkBM(s.id),u=unitOf(bm)*s.s,w=bm.w*u,h=bm.h*u;
     c.imageSmoothingEnabled=true;c.shadowColor='rgba(255,245,230,.35)';c.shadowBlur=u*1.2*s.b;
@@ -870,7 +876,7 @@ function strokeSeg(c,st,i){
   c.restore();
 }
 function rebuild(){const c=E.layer.getContext('2d');c.clearRect(0,0,E.cw,E.ch);E.strokes.forEach(st=>st.pts.forEach((_,i)=>strokeSeg(c,st,i)))}
-function stkUI(){const s=E.stk[E.sel];$('#sc').style.display=s?'':'none';if(s){$('#ss').value=s.s;$('#sr').value=s.r;$('#sb').value=s.b}}
+function stkUI(){const s=E.stk[E.sel];$('#sc').style.display=s?'':'none';if(s){$('#ss').value=s.s;$('#sr').value=s.r;$('#sb').value=s.b;$('#sxw').value=s.sx||1;$('#syh').value=s.sy||1}}
 function setTool(t){
   E.tool=t;if(t!=='stk'){E.sel=-1;stkUI();edRender()}
   [...$('#etabs').children].forEach(b=>b.classList.toggle('act',b.dataset.t===t));
@@ -887,7 +893,7 @@ function openEd(it){
   };
   im.src=it.url;
 }
-function addStk(o2){E.stk.push({...o2,x:.5,y:.5,s:1,r:0,b:1});E.sel=E.stk.length-1;E.hist.push('k');stkUI();edRender()}
+function addStk(o2){E.stk.push({...o2,x:.5,y:.5,s:1,r:0,b:1,sx:1,sy:1});E.sel=E.stk.length-1;E.hist.push('k');stkUI();edRender()}
 ECOL.forEach(c=>{const b=document.createElement('button');b.style.background=c;b.className=c===E.col?'sel':'';
   b.onclick=()=>{E.col=c;[...$('#sws').children].forEach(x=>x.classList.toggle('sel',x===b))};$('#sws').append(b)});
 SPRN.forEach(id=>{const b=document.createElement('button');b.className='btn';const im=document.createElement('img');im.src=mkBM(id).c.toDataURL();b.append(im);
@@ -898,6 +904,9 @@ $('#es').oninput=e=>{E.sz=+e.target.value;$('#esn').textContent=E.sz};
 $('#ss').oninput=e=>{const s=E.stk[E.sel];if(s){s.s=+e.target.value;edRender()}};
 $('#sr').oninput=e=>{const s=E.stk[E.sel];if(s){s.r=+e.target.value;edRender()}};
 $('#sb').oninput=e=>{const s=E.stk[E.sel];if(s){s.b=+e.target.value;edRender()}};
+$('#sxw').oninput=e=>{const s=E.stk[E.sel];if(s){s.sx=+e.target.value;edRender()}};
+$('#syh').oninput=e=>{const s=E.stk[E.sel];if(s){s.sy=+e.target.value;edRender()}};
+$('#sxr').onclick=()=>{const s=E.stk[E.sel];if(s){s.sx=1;s.sy=1;stkUI();edRender()}};
 $('#sd').onclick=()=>{if(E.sel<0)return;E.stk.splice(E.sel,1);E.sel=-1;stkUI();edRender()};
 ec.addEventListener('pointerdown',e=>{
   e.preventDefault();try{ec.setPointerCapture(e.pointerId)}catch(_){}
