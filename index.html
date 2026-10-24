@@ -732,6 +732,9 @@ const pM=mkPane('相机');
 head(pM,'取景辅助');addToggle(pM,'九宫格',S,'grid',()=>updGrid());
 head(pM,'开机');addToggle(pM,'打开页面自动开机',S,'autoOn');
 note(pM,'允许过一次相机后，之后打开页面会自动开机，不再停在 POWER。如果 Safari 仍然每次都问，请在「设置 → App → Safari → 相机」或网页地址栏「ᴀA → 网站设置 → 相机」里改成「允许」。');
+head(pM,'离线使用');{const n=document.createElement('div');n.className='note';n.id='offst';pM.append(n);
+ const upd=()=>{n.textContent=!('serviceWorker' in navigator)?'这个浏览器不支持离线缓存。':location.protocol!=='https:'?'需要通过 https 网址打开才能离线使用。':navigator.serviceWorker.controller?'✓ 已可离线使用：没网也能打开相机、拍照、看相册、编辑。照片互传需要联网。':'正在准备离线缓存…联网状态下打开一次、再刷新一次就好。'};
+ upd();try{navigator.serviceWorker&&navigator.serviceWorker.addEventListener('controllerchange',upd)}catch(e){}}
 head(pM,'全屏');
 {const w=document.createElement('div');w.className='chips';const b=document.createElement('button');b.className='btn';pM.append(w);w.append(b);
  const nt=document.createElement('div');nt.className='hint';nt.style.textAlign='left';pM.append(nt);
@@ -1634,5 +1637,7 @@ $('#ve').onclick=()=>{const it=cur();if(it&&it.k==='img')openEd(it)};
 {let lt=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lt<350&&!e.target.closest('input,textarea'))e.preventDefault();lt=n},{passive:false});
  ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
  document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false})}
+/* offline: register service worker (sw.js next to index.html) */
+try{if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}catch(e){}
 </script>
 </body></html>
