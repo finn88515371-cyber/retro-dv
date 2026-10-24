@@ -166,7 +166,11 @@ body.skin-w7 .tabs .btn.act{background:linear-gradient(#fff,#eaf3fc);border-top:
 #gal.edit #ed{display:flex}
 #ew{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:#000;overflow:hidden}
 #ec{max-width:100%;max-height:100%;touch-action:none;background:#222;transform-origin:50% 50%}
-.eb{padding:6px 10px 8px;display:flex;flex-direction:column;gap:7px;max-height:38%;overflow-y:auto}
+.eb{padding:4px 8px 6px;display:flex;flex-direction:column;gap:4px;max-height:31%;overflow-y:auto}
+#etabs{flex-wrap:nowrap;overflow-x:auto;margin:0 -8px;padding:2px 8px;scrollbar-width:none;flex:none}#etabs::-webkit-scrollbar,#efl::-webkit-scrollbar{display:none}#etabs .btn{flex:none;padding:5px 10px;font-size:12px}
+#efl{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:2px -8px;padding:2px 8px}#efl .btn{flex:none;padding:5px 9px;font-size:12px}
+.eb .ms{margin:3px 0;font-size:11px}.eb .sws{gap:5px}.eb .sws button{width:22px;height:22px}.eb .gh{margin:6px 0 2px}.eb .hint{font-size:10px}.eb .efs .txt,.eb .gtw .txt{padding:5px 8px}.eb .efs .btn,.eb .gtw .btn{padding:4px 10px;font-size:12px}
+.etop{padding:4px 8px}.etop .btn{padding:5px 11px;font-size:12px}
 #gal.edit .gh2{display:none}
 .etop{display:flex;gap:6px;align-items:center;padding:6px 8px}.etop .btn{padding:6px 12px;font-size:13px}.etop #eok{margin-left:auto;padding:6px 18px;font-weight:bold}
 #ezr{font-size:11px;color:var(--menumut);margin-left:auto}#ezr+#eok{margin-left:8px}
@@ -1381,7 +1385,7 @@ function edRender(sel=true){
 }
 /* --- photo adjust --- */
 function applyAdj(){
-  const W=E.cw,H=E.ch,b=E.base.getContext('2d');b.clearRect(0,0,W,H);b.drawImage(E.src,0,0);
+  const W=E.cw,H=E.ch,b=E.base.getContext('2d');b.clearRect(0,0,W,H);b.drawImage(E.cf?camFilter(E.src,E.cf):E.src,0,0);
   const a=E.adj;if(Object.keys(a).every(k=>!a[k]))return;
   const id=b.getImageData(0,0,W,H),d=id.data,ex=Math.pow(2,a.ex),cf=1+a.ct,sf=1+a.sat,cx=W/2,cy=H/2,md=cx*cx+cy*cy;
   for(let y=0,i=0;y<H;y++){const dy=(y-cy)*(y-cy);for(let x=0;x<W;x++,i+=4){
@@ -1405,21 +1409,37 @@ ADJL.forEach(([k,n,lo,hi])=>{const l=document.createElement('label');l.className
   const i=l.children[1],v=l.children[2];adjIn[k]=[i,v];
   i.oninput=()=>{E.adj[k]=+i.value;v.textContent=(+i.value).toFixed(2);schedAdj();renderEF()};$('#adjs').append(l)});
 function syncAdj(){typeof renderEF==='function'&&renderEF();for(const k in adjIn){adjIn[k][0].value=E.adj[k];adjIn[k][1].textContent=(+E.adj[k]).toFixed(2)}}
-$('#adr').onclick=()=>{E.adj={...ADJ0};syncAdj();schedAdj();renderEF()};
-/* custom filters = saved adjustment presets */
-const EFB=[['原图',{}],['黑白',{bw:1,ct:.25,gr:.25}],['暖调胶片',{tp:.45,fd:.35,ct:.1,gr:.3,vg:.3}],['冷调',{tp:-.5,tn:-.1,sat:-.15,sh:.2}],['褪色',{fd:.7,ct:-.2,sat:-.25}],['高对比',{ct:.5,sat:.2,vg:.35}],['黑金属',{bw:1,ct:.7,ex:-.2,gr:.8,vg:.6}]];
+$('#adr').onclick=()=>{E.adj={...ADJ0};E.cf=0;syncAdj();schedAdj();renderEF()};
+/* editor filters = the camera's own filters (same shader code), plus saved presets */
+const PF={gl:null};
+function camFilter(src,f){
+  if(!PF.gl){PF.cv=document.createElement('canvas');const g=PF.gl=PF.cv.getContext('webgl',{preserveDrawingBuffer:true,premultipliedAlpha:false});if(!g)return src;
+    const fa=FS.indexOf('float Y=Yf(col);float nk=1.;'),fb=FS.indexOf(' col=(col-.5)*kc+.5');
+    const fs='precision highp float;uniform sampler2D t;uniform vec2 r;uniform float F,bm;varying vec2 u;float Yf(vec3 c){return dot(c,vec3(.299,.587,.114));}\n'+
+      'void main(){vec2 sc=u,c=sc-.5;float asp=r.x/r.y;vec3 col=texture2D(t,u).rgb;vec3 b=vec3(0.);for(int i=0;i<12;i++){float a=float(i)*.5236;vec2 d=vec2(cos(a),sin(a)*asp);b+=max(texture2D(t,u+d*.012).rgb-.55,0.)+max(texture2D(t,u+d*.03).rgb-.55,0.)*.8;}\n '+
+      FS.slice(fa,fb)+'\n gl_FragColor=vec4(clamp(col,0.,1.),1.);}';
+    const sh=(ty,src2)=>{const o=g.createShader(ty);g.shaderSource(o,src2);g.compileShader(o);return o};
+    const pr=PF.pr=g.createProgram();g.bindAttribLocation(pr,0,'a');g.attachShader(pr,sh(g.VERTEX_SHADER,VS));g.attachShader(pr,sh(g.FRAGMENT_SHADER,fs));g.linkProgram(pr);
+    if(!g.getProgramParameter(pr,g.LINK_STATUS)){PF.bad=true;return src}
+    const bf=g.createBuffer();g.bindBuffer(g.ARRAY_BUFFER,bf);g.bufferData(g.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),g.STATIC_DRAW);g.enableVertexAttribArray(0);g.vertexAttribPointer(0,2,g.FLOAT,false,0,0);
+    PF.tx=g.createTexture();g.bindTexture(g.TEXTURE_2D,PF.tx);[g.TEXTURE_WRAP_S,g.TEXTURE_WRAP_T].forEach(k=>g.texParameteri(g.TEXTURE_2D,k,g.CLAMP_TO_EDGE));
+    g.texParameteri(g.TEXTURE_2D,g.TEXTURE_MIN_FILTER,g.LINEAR);g.texParameteri(g.TEXTURE_2D,g.TEXTURE_MAG_FILTER,g.LINEAR)}
+  if(PF.bad)return src;const g=PF.gl;PF.cv.width=src.width;PF.cv.height=src.height;g.viewport(0,0,src.width,src.height);g.useProgram(PF.pr);
+  g.bindTexture(g.TEXTURE_2D,PF.tx);g.texImage2D(g.TEXTURE_2D,0,g.RGBA,g.RGBA,g.UNSIGNED_BYTE,src);
+  g.uniform1i(g.getUniformLocation(PF.pr,'t'),0);g.uniform2f(g.getUniformLocation(PF.pr,'r'),src.width,src.height);g.uniform1f(g.getUniformLocation(PF.pr,'F'),f);g.uniform1f(g.getUniformLocation(PF.pr,'bm'),.35);
+  g.drawArrays(g.TRIANGLE_STRIP,0,4);return PF.cv}
 let EF=[];try{EF=JSON.parse(localStorage.getItem('dvF')||'[]')}catch(e){}
 const saveEF=()=>{try{localStorage.setItem('dvF',JSON.stringify(EF))}catch(e){}};
 const sameAdj=a=>Object.keys(ADJ0).every(k=>Math.abs((E.adj[k]||0)-(a[k]||0))<.005);
-function useEF(a){E.adj={...ADJ0,...a};syncAdj();schedAdj();renderEF()}
+function useCF(i){E.cf=i;schedAdj();renderEF()}
+function useEF(f){E.cf=f.cf||0;E.adj={...ADJ0,...f.a};syncAdj();schedAdj();renderEF()}
 function renderEF(){const box=$('#efl');box.innerHTML='';
-  EFB.forEach(([n,a])=>{const b=document.createElement('button');b.className='btn'+(sameAdj(a)?' act':'');b.textContent=n;b.onclick=()=>useEF(a);box.append(b)});
-  EF.forEach((f,i)=>{const b=document.createElement('button');b.className='btn'+(sameAdj(f.a)?' act':'');b.innerHTML='<span></span><i>✕</i>';b.firstChild.textContent='★ '+f.n;
-    b.onclick=e=>{if(e.target.tagName==='I'){EF.splice(i,1);saveEF();renderEF();return}useEF(f.a)};box.append(b)})}
+  FN.forEach((n,i)=>{const b=document.createElement('button');b.className='btn'+((E.cf||0)===i?' act':'');b.textContent=i?n:'原图';b.onclick=()=>useCF(i);box.append(b)});
+  EF.forEach((f,i)=>{const b=document.createElement('button');b.className='btn'+((E.cf||0)===(f.cf||0)&&sameAdj(f.a)?' act':'');b.innerHTML='<span></span><i>✕</i>';b.firstChild.textContent='★ '+f.n;
+    b.onclick=e=>{if(e.target.tagName==='I'){EF.splice(i,1);saveEF();renderEF();return}useEF(f)};box.append(b)})}
 $('#efsv').onclick=()=>{const n=$('#efn').value.trim()||('我的滤镜 '+(EF.length+1));const a={};Object.keys(ADJ0).forEach(k=>{if(E.adj[k])a[k]=+(+E.adj[k]).toFixed(2)});
-  if(!Object.keys(a).length){$('#efn').placeholder='先拖动下面的滑块调好颜色';return}
-  const j=EF.findIndex(f=>f.n===n);if(j>=0)EF[j].a=a;else EF.push({n,a});saveEF();$('#efn').value='';renderEF()};
-renderEF();
+  if(!Object.keys(a).length&&!E.cf){$('#efn').placeholder='先选滤镜或调好颜色';return}
+  const o={n,a,cf:E.cf||0},j=EF.findIndex(f=>f.n===n);if(j>=0)EF[j]=o;else EF.push(o);saveEF();$('#efn').value='';renderEF()};
 /* --- geometry: crop / stretch / rotate / flip --- */
 function setSrc(c){E.src=c;E.cw=ec.width=E.base.width=c.width;E.ch=ec.height=E.base.height=c.height;gridSize()}
 function fullCrop(){E.cr={x:0,y:0,w:1,h:1};if(E.car)setRatio2(E.car)}
@@ -1455,10 +1475,10 @@ function cropMove(p){
 function bakeGeo(fn){
   evReset();E.sel=-1;edRender(false);
   const comp=document.createElement('canvas');comp.width=E.cw;comp.height=E.ch;comp.getContext('2d').drawImage(ec,0,0);
-  E.geo.push({src:E.src,strokes:E.strokes,stk:E.stk,mst:E.mst,adj:{...E.adj},fr:E.fr,ftx:E.ftx});E.hist.push('g');
-  setSrc(fn(comp));E.strokes=[];E.stk=[];E.mst=[];E.adj={...ADJ0};E.fr=0;E.ftx='';syncFrameUI();syncAdj();rebuild();applyAdj();stkUI();fullCrop();edRender();
+  E.geo.push({src:E.src,strokes:E.strokes,stk:E.stk,mst:E.mst,adj:{...E.adj},cf:E.cf,fr:E.fr,ftx:E.ftx});E.hist.push('g');
+  setSrc(fn(comp));E.strokes=[];E.stk=[];E.mst=[];E.adj={...ADJ0};E.cf=0;E.fr=0;E.ftx='';syncFrameUI();syncAdj();rebuild();applyAdj();stkUI();fullCrop();edRender();
 }
-function restoreGeo(g){setSrc(g.src);E.strokes=g.strokes;E.stk=g.stk;E.mst=g.mst||[];E.adj=g.adj;E.fr=g.fr||0;E.ftx=g.ftx||'';syncFrameUI();syncAdj();rebuild();applyAdj();stkUI();fullCrop()}
+function restoreGeo(g){setSrc(g.src);E.strokes=g.strokes;E.stk=g.stk;E.mst=g.mst||[];E.adj=g.adj;E.cf=g.cf||0;E.fr=g.fr||0;E.ftx=g.ftx||'';syncFrameUI();syncAdj();rebuild();applyAdj();stkUI();fullCrop()}
 function mkC(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
 $('#crat').onclick=e=>{const b=e.target.closest('[data-r]');if(!b)return;[...$('#crat').children].forEach(x=>x.classList.toggle('act',x===b));setRatio2(+b.dataset.r);edRender()};
 $('#gsx').oninput=e=>{$('#gsxv').textContent=(+e.target.value).toFixed(2)};
@@ -1484,7 +1504,7 @@ function openEd(it){
   im.onload=()=>{
     const s=Math.min(1,1280/Math.max(im.naturalWidth,im.naturalHeight));
     const c=mkC(Math.round(im.naturalWidth*s),Math.round(im.naturalHeight*s));c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-    setSrc(c);E.geo=[];E.adj={...ADJ0};syncAdj();E.t=it.t;E.fr=0;E.ftx='';E.fkey='';syncFrameUI();
+    setSrc(c);E.geo=[];E.adj={...ADJ0};E.cf=0;syncAdj();E.t=it.t;E.fr=0;E.ftx='';E.fkey='';syncFrameUI();
     try{Promise.all(['16px VT323','16px "UnifrakturMaguntia"','16px Fredoka'].map(f=>document.fonts.load(f))).then(()=>{E.fkey='';edRender()})}catch(e){}E.strokes=[];E.stk=[];E.mst=[];E.mcur=null;E.hist=[];E.sel=-1;E.cur=null;E.drag=null;E.cdrag=null;
     E.car=0;[...$('#crat').children].forEach((x,i)=>x.classList.toggle('act',i===0));fullCrop();rebuild();applyAdj();
     evReset();gal.classList.remove('view','imm');gal.classList.add('edit');setTool('adj');
