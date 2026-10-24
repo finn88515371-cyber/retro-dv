@@ -116,6 +116,8 @@ body.skin-w7 .tabs .btn.act{background:linear-gradient(#fff,#eaf3fc);border-top:
 .txt{width:100%;box-sizing:border-box;padding:7px 9px;border-radius:var(--rad);border:1px solid var(--btnb);background:#fff;color:#111;font:inherit;font-size:13px}
 #lvl{height:8px;background:rgba(128,128,128,.3);border-radius:4px;overflow:hidden;margin:6px 0}
 #lvl b{display:block;height:100%;width:0;background:#3fae6a}
+.gtw{display:flex;gap:6px;width:100%}.gtw .txt{flex:1}.stks .btn.bk{background:#2a2a2e}.stks .btn.bk img{filter:none}
+#efl .btn i{font-style:normal;margin-left:6px;opacity:.6}.efs{display:flex;gap:6px;margin:4px 0 6px}.efs .txt{flex:1}
 #askd{position:absolute;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45)}
 .askb{background:var(--menu);color:var(--menuink);border:1px solid var(--menub);border-radius:var(--crad);padding:16px;max-width:280px;box-shadow:0 8px 30px rgba(0,0,0,.5)}.askb p{margin:0 0 12px;font-size:14px;line-height:1.6}
 #gal{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;background:var(--menu);color:var(--menuink)}
@@ -316,7 +318,7 @@ body.land .cam{grid-template-rows:auto auto minmax(0,1fr)}
       <div id="ew"><canvas id="ec"></canvas></div>
       <div class="eb">
         <div class="chips" id="etabs"><button class="btn act" data-t="adj">调整</button><button class="btn" data-t="crop">裁剪</button><button class="btn" data-t="frame">相框</button><button class="btn" data-t="pen">画笔</button><button class="btn" data-t="er">橡皮</button><button class="btn" data-t="shape">形状</button><button class="btn" data-t="mos">马赛克</button><button class="btn" data-t="stk">贴纸</button></div>
-        <div id="pa" style="display:none"><div id="adjs"></div><button class="btn" id="adr">重置调整</button></div>
+        <div id="pa" style="display:none"><div class="gh">滤镜</div><div class="chips" id="efl"></div><div class="efs"><input class="txt" id="efn" maxlength="12" placeholder="给当前调色起个名字"><button class="btn" id="efsv">保存为滤镜</button></div><div class="gh">调整</div><div id="adjs"></div><button class="btn" id="adr">重置调整</button></div>
         <div id="pc" style="display:none">
           <div class="chips" id="crat"><button class="btn act" data-r="0">自由</button><button class="btn" data-r="1">1:1</button><button class="btn" data-r="1.3333">4:3</button><button class="btn" data-r="0.75">3:4</button><button class="btn" data-r="1.7778">16:9</button><button class="btn" data-r="0.5625">9:16</button></div>
           <label class="ms"><span>横向拉伸</span><input type="range" id="gsx" min=".5" max="2" step=".01" value="1"><i id="gsxv">1.00</i></label>
@@ -335,7 +337,7 @@ body.land .cam{grid-template-rows:auto auto minmax(0,1fr)}
         <div id="pp" style="display:none"><div class="sws" id="sws"></div><label class="ms"><span>粗细(格)</span><input type="range" id="es" min="1" max="10" step="1" value="3"><i id="esn">3</i></label>
           <label class="ms"><span>像素大小</span><input type="range" id="eps" min=".3" max="2" step=".1" value=".7"><i id="epsv">0.7</i></label></div>
         <div id="pk" style="display:none">
-          <div class="chips" id="scat"><button class="btn act" data-c="v">柔焦</button><button class="btn" data-c="s">像素</button><button class="btn" data-c="t">文字</button></div>
+          <div class="chips" id="scat"><button class="btn act" data-c="v">柔焦</button><button class="btn" data-c="s">像素</button><button class="btn" data-c="t">文字</button><button class="btn" data-c="b">黑金属</button></div>
           <div class="stks" id="stks"></div>
           <div id="sc" style="display:none">
             <label class="ms"><span>大小</span><input type="range" id="ss" min=".3" max="4" step=".05" value="1"></label>
@@ -763,7 +765,7 @@ head(pY,'设置码（导出 / 导入全部参数）');
  const b64=u=>{let s='';for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
  const ub64=t=>{t=t.replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';const s=atob(t),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u};
  const zip=async(u,dir)=>{const cs=dir?new CompressionStream('deflate-raw'):new DecompressionStream('deflate-raw');return new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(cs)).arrayBuffer())};
- $('#scx').onclick=async()=>{const u=new TextEncoder().encode(JSON.stringify({v:1,P,S,W:WM}));let c;
+ $('#scx').onclick=async()=>{const u=new TextEncoder().encode(JSON.stringify({v:1,P,S,W:WM,F:(()=>{try{return JSON.parse(localStorage.getItem('dvF')||'[]')}catch(e){return[]}})()}));let c;
    try{c=window.CompressionStream?'DV1z.'+b64(await zip(u,1)):'DV1.'+b64(u)}catch(e){c='DV1.'+b64(u)}
    ta.value=c;let ok=false;try{await navigator.clipboard.writeText(c);ok=true}catch(e){try{ta.select();ok=document.execCommand('copy')}catch(_){}}
    st.textContent=ok?'已复制到剪贴板（'+c.length+' 个字符），到另一边粘贴导入即可。':'自动复制失败，请手动全选上面的码复制。'};
@@ -772,7 +774,7 @@ head(pY,'设置码（导出 / 导入全部参数）');
    if(!c){st.textContent='请先把设置码粘贴到上面的框里。';return}
    try{const m=c.match(/^DV1(z?)\.(.+)$/);if(!m)throw 0;let u=ub64(m[2].replace(/\s/g,''));if(m[1])u=await zip(u,0);
      const o=JSON.parse(new TextDecoder().decode(u));if(!o||o.v!==1)throw 0;
-     if(o.P)Object.assign(P,o.P);if(o.S)Object.assign(S,o.S);if(o.W)Object.assign(WM,o.W);save();st.textContent='导入成功，正在刷新…';setTimeout(()=>location.reload(),400)}
+     if(o.P)Object.assign(P,o.P);if(o.S)Object.assign(S,o.S);if(o.W)Object.assign(WM,o.W);if(Array.isArray(o.F))try{localStorage.setItem('dvF',JSON.stringify(o.F))}catch(e){};save();st.textContent='导入成功，正在刷新…';setTimeout(()=>location.reload(),400)}
    catch(e){st.textContent='这个码无法识别，请确认复制完整（以 DV1 开头）。'}};
  note(pY,'包含所有画面参数、滤镜、皮肤、水印、镜头和方向设置。同一台手机从 Safari 搬到主屏幕 App 也用这个：复制 → 切过去 → 导入。');
 }
@@ -1195,6 +1197,13 @@ $('#vx').onclick=()=>{const it=cur();if(!it||!confirm('删除这个文件？删�
 $('#vp').onclick=()=>{gi--;if(gi<0)gi=flt().length-1;showView()};
 $('#vn').onclick=()=>{gi++;if(gi>=flt().length)gi=0;showView()};
 $('#gtabs').onclick=e=>{const b=e.target.closest('[data-g]');if(!b)return;setGf(+b.dataset.g);renderGal()};
+/* release the camera whenever the viewfinder isn't on screen (gallery open / app in background) */
+let camPaused=false;
+function pauseCam(){if(!on||!stream||recing())return;try{stream.getTracks().forEach(t=>t.stop())}catch(e){}stream=null;vid.srcObject=null;on=false;camPaused=true;torchOn=false}
+function resumeCam(){if(!camPaused||galOpen()||document.visibilityState!=='visible')return;camPaused=false;start()}
+new MutationObserver(()=>galOpen()?pauseCam():resumeCam()).observe(gal,{attributes:true,attributeFilter:['class']});
+document.addEventListener('visibilitychange',()=>document.visibilityState==='hidden'?pauseCam():resumeCam());
+window.addEventListener('pagehide',pauseCam);window.addEventListener('pageshow',()=>setTimeout(resumeCam,50));
 $('#gb').onclick=()=>{if(recing())return;gal.classList.remove('view','edit');selMode=false;selSet.clear();gal.classList.remove('sel');$('#gsel').textContent='选择';renderGal();gal.classList.add('on');applyMic();applyLight()};
 $('#gc').onclick=()=>{
   if(gal.classList.contains('edit')){gal.classList.remove('edit');gal.classList.add('view')}
@@ -1219,7 +1228,7 @@ $('#bx').onclick=()=>{
 
 /* sticker / doodle editor (soft lo-fi pixel stickers + DV-style text) */
 const ec=$('#ec'),ec2=ec.getContext('2d');
-const ADJ0={ex:0,br:0,ct:0,hl:0,sh:0,sat:0,tp:0,tn:0,fd:0,vg:0,gr:0};
+const ADJ0={ex:0,br:0,ct:0,hl:0,sh:0,sat:0,tp:0,tn:0,fd:0,vg:0,gr:0,bw:0};
 const E={src:null,base:document.createElement('canvas'),adj:{...ADJ0},geo:[],cr:{x:0,y:0,w:1,h:1},car:0,cdrag:null,layer:document.createElement('canvas'),strokes:[],stk:[],hist:[],tool:'pen',col:'#ff004d',sz:3,ps:.7,shp:'rect',sfill:false,mst:[],mcur:null,mbs:5,msz:2,snap:null,gs:8,gw:1,gh:1,fr:0,fb:.6,fpx:2,ftx:'',fkey:'',fc:null,t:0,sel:-1,cw:0,ch:0,cur:null,drag:null};
 const ECOL=['#000000','#1d2b53','#7e2553','#008751','#ab5236','#5f574f','#c2c3c7','#fff1e8','#ff004d','#ffa300','#ffec27','#00e436','#29adff','#83769c','#ff77a8','#ffccaa'];
 const PAL={k:'#2b2a33',w:'#fff4e0',r:'#ff6b8b',p:'#ffd3dc',y:'#ffd966',b:'#5b7cff',g:'#8a8fa8',t:'#6fd8c0',o:'#f2a65a',c:'#c9c3d9',l:'#cfe3ff',n:'#f6e7c8',m:'#ffe9a8',R:'#ff6a6a',O:'#ffa64d',Y:'#ffe066',G:'#7ddc7a',B:'#5ab4ff',V:'#a07aff'};
@@ -1275,7 +1284,35 @@ function mkVB(id){
   z.shadowColor='rgba(40,40,70,.35)';z.shadowBlur=3;z.shadowOffsetY=1;z.drawImage(o,0,0);z.shadowColor='transparent';z.drawImage(a,0,0);
   return BM[key]={c:f,w:N,h:N};
 }
-const getBM=s=>s.k==='v'?mkVB(s.id):mkBM(s.id);
+/* black metal stickers: drawn on 128px, white ink + black outline + grit */
+const BKS={
+ icross:x=>{x.fillRect(56,14,16,100);x.fillRect(30,74,68,15)},
+ cross:x=>{x.fillRect(56,14,16,100);x.fillRect(30,38,68,15)},
+ ortho:x=>{x.fillRect(58,10,12,108);x.fillRect(46,24,36,9);x.fillRect(28,46,72,12);x.save();x.translate(64,86);x.rotate(-.35);x.fillRect(-22,-5,44,10);x.restore()},
+ pentagram:x=>{x.lineWidth=7;x.beginPath();x.arc(64,64,50,0,7);x.stroke();x.beginPath();for(let i=0;i<5;i++){const a=Math.PI/2+i*4*Math.PI/5;x.lineTo(64+Math.cos(a)*48,64+Math.sin(a)*48)}x.closePath();x.stroke()},
+ bat:x=>{x.beginPath();x.moveTo(64,52);x.lineTo(58,40);x.lineTo(54,52);x.quadraticCurveTo(30,30,6,46);x.quadraticCurveTo(22,54,20,70);x.quadraticCurveTo(34,60,42,74);x.quadraticCurveTo(52,64,64,84);
+   x.quadraticCurveTo(76,64,86,74);x.quadraticCurveTo(94,60,108,70);x.quadraticCurveTo(106,54,122,46);x.quadraticCurveTo(98,30,74,52);x.lineTo(70,40);x.closePath();x.fill()},
+ skull:x=>{x.beginPath();x.arc(64,56,38,Math.PI*.85,Math.PI*2.15);x.lineTo(92,92);x.lineTo(36,92);x.closePath();x.fill();x.fillRect(42,88,44,20);
+   x.globalCompositeOperation='destination-out';x.beginPath();x.ellipse(49,62,11,13,0,0,7);x.ellipse(79,62,11,13,0,0,7);x.fill();x.beginPath();x.moveTo(64,72);x.lineTo(57,86);x.lineTo(71,86);x.fill();
+   for(let i=0;i<4;i++)x.fillRect(48+i*9,96,3,14);x.globalCompositeOperation='source-over'},
+ candle:x=>{x.fillRect(48,56,32,62);x.beginPath();x.moveTo(64,10);x.quadraticCurveTo(80,32,64,48);x.quadraticCurveTo(48,32,64,10);x.fill();x.beginPath();x.moveTo(48,56);x.quadraticCurveTo(44,72,48,80);x.lineTo(52,58);x.fill()},
+ coffin:x=>{x.beginPath();x.moveTo(50,6);x.lineTo(78,6);x.lineTo(98,36);x.lineTo(84,122);x.lineTo(44,122);x.lineTo(30,36);x.closePath();x.fill();x.globalCompositeOperation='destination-out';x.fillRect(60,30,8,46);x.fillRect(48,42,32,8);x.globalCompositeOperation='source-over'},
+ moon:x=>{x.beginPath();x.arc(58,64,44,0,7);x.fill();x.globalCompositeOperation='destination-out';x.beginPath();x.arc(80,52,40,0,7);x.fill();x.globalCompositeOperation='source-over';
+   [[96,26,5],[110,56,3],[100,96,4]].forEach(([a,b,r])=>{x.beginPath();for(let i=0;i<8;i++){const t=i*Math.PI/4,q=i%2?r*.35:r*1.6;x.lineTo(a+Math.cos(t)*q,b+Math.sin(t)*q)}x.fill()})},
+ dagger:x=>{x.beginPath();x.moveTo(64,6);x.lineTo(72,70);x.lineTo(56,70);x.closePath();x.fill();x.fillRect(38,70,52,9);x.fillRect(59,79,10,30);x.beginPath();x.arc(64,114,8,0,7);x.fill()},
+ thorns:x=>{x.lineWidth=6;x.beginPath();x.arc(64,64,38,0,7);x.stroke();for(let i=0;i<14;i++){const a=i/14*Math.PI*2;x.beginPath();x.moveTo(64+Math.cos(a)*36,64+Math.sin(a)*36);x.lineTo(64+Math.cos(a+.12)*58,64+Math.sin(a+.12)*58);x.lineTo(64+Math.cos(a+.24)*38,64+Math.sin(a+.24)*38);x.fill()}},
+ tree:x=>{x.lineCap='round';const br=(a,b,l,an,w)=>{if(w<1.2)return;const c=a+Math.cos(an)*l,d=b+Math.sin(an)*l;x.lineWidth=w;x.beginPath();x.moveTo(a,b);x.lineTo(c,d);x.stroke();br(c,d,l*.72,an-.45,w*.62);br(c,d,l*.7,an+.4,w*.62)};br(64,124,34,-Math.PI/2,11)}
+};
+const BKSN=Object.keys(BKS);
+function mkBK(id){const key='b_'+id;if(BM[key])return BM[key];const N=128;
+  const a=document.createElement('canvas');a.width=a.height=N;const x=a.getContext('2d');x.fillStyle=x.strokeStyle='#f2f2f2';BKS[id](x);
+  x.globalCompositeOperation='destination-out';for(let i=0;i<260;i++){x.fillRect(Math.random()*N,Math.random()*N,Math.random()*2.2,Math.random()*2.2)}x.globalCompositeOperation='source-over';
+  const f=document.createElement('canvas');f.width=f.height=N;const z=f.getContext('2d');
+  for(let i=0;i<12;i++){const t=i/12*Math.PI*2;z.drawImage(a,Math.cos(t)*4,Math.sin(t)*4)}z.globalCompositeOperation='source-in';z.fillStyle='#050505';z.fillRect(0,0,N,N);z.globalCompositeOperation='source-over';z.drawImage(a,0,0);
+  return BM[key]={c:f,w:N,h:N}}
+const getBM=s=>s.k==='v'?mkVB(s.id):s.k==='b'?mkBK(s.id):mkBM(s.id);
+const GOTH={col:'#f2f2f2'};
+const gothFont=fs2=>fs2+'px "UnifrakturMaguntia","Pirata One",serif';
 
 const TXT=['● REC','▶ PLAY','LOW BATT','SP',"'99",'TAPE 01','AUTO','HI8','~ lofi ~','NOW PLAYING','SIDE A','NO SIGNAL'];
 const BM={},ZC=6;
@@ -1290,7 +1327,7 @@ function mkBM(id){
   og.forEach((r,y)=>r.forEach((ch2,x)=>{if(ch2){x2.fillStyle=PAL[ch2]||'#000';x2.fillRect(x*ZC,y*ZC,ZC,ZC)}}));
   return BM[id]={c,w,h};
 }
-const unitOf=(bm,k)=>Math.min(E.cw,E.ch)*(k==='v'?.2:.15)/Math.max(bm.w,bm.h);
+const unitOf=(bm,k)=>Math.min(E.cw,E.ch)*(k==='v'||k==='b'?.2:.15)/Math.max(bm.w,bm.h);
 const txtFs=s=>Math.min(E.cw,E.ch)*.1*s.s;
 function soft(c,fn,b){
   if(b<=.05){fn(0,0);return}
@@ -1299,13 +1336,17 @@ function soft(c,fn,b){
 }
 function boxOf(s){
   const X=s.sx||1,Y=s.sy||1;
+  if(s.k==='g'){const fs2=txtFs(s)*1.2;ec2.save();ec2.font=gothFont(fs2);const w=ec2.measureText(s.t).width+fs2*.4;ec2.restore();return [w*X,fs2*1.3*Y]}
   if(s.k!=='t'){const bm=getBM(s),u=unitOf(bm,s.k)*s.s;return [bm.w*u*X,bm.h*u*Y]}
   const fs2=txtFs(s);ec2.save();ec2.font=fs2+'px "VT323",monospace';const w=ec2.measureText(s.t).width+fs2*.4;ec2.restore();
   return [w*X,fs2*1.15*Y];
 }
 function drawStk(c,s){
   c.save();c.translate(s.x*E.cw,s.y*E.ch);c.rotate(s.r*Math.PI/180);c.scale(s.sx||1,s.sy||1);
-  if(s.k!=='t'){
+  if(s.k==='g'){const fs2=txtFs(s)*1.2;c.font=gothFont(fs2);c.textAlign='center';c.textBaseline='middle';c.lineJoin='round';
+    const ink=s.col||'#f2f2f2',dark=ink==='#0a0a0a';
+    soft(c,(dx,dy)=>{c.lineWidth=fs2*.12;c.strokeStyle=dark?'#f2f2f2':'#050505';c.strokeText(s.t,dx,dy);c.fillStyle=ink;c.fillText(s.t,dx,dy)},fs2*.02*s.b);
+  }else if(s.k!=='t'){
     const bm=getBM(s),u=unitOf(bm,s.k)*s.s,w=bm.w*u,h=bm.h*u,px=s.k==='s'?u:Math.max(w,h)/14;
     c.imageSmoothingEnabled=true;c.shadowColor='rgba(255,245,230,.35)';c.shadowBlur=px*1.2*s.b;
     soft(c,(dx,dy)=>c.drawImage(bm.c,-w/2+dx,-h/2+dy,w,h),px*.4*s.b);
@@ -1347,7 +1388,7 @@ function applyAdj(){
     let r=d[i]/255*ex+a.br*.25,g=d[i+1]/255*ex+a.br*.25,bb=d[i+2]/255*ex+a.br*.25;
     let Y=.299*r+.587*g+.114*bb;const yy=Y<0?0:Y>1?1:Y,ad=a.sh*.3*(1-yy)*(1-yy)+a.hl*.3*yy*yy;r+=ad;g+=ad;bb+=ad;
     r=(r-.5)*cf+.5;g=(g-.5)*cf+.5;bb=(bb-.5)*cf+.5;
-    Y=.299*r+.587*g+.114*bb;r=Y+(r-Y)*sf;g=Y+(g-Y)*sf;bb=Y+(bb-Y)*sf;
+    Y=.299*r+.587*g+.114*bb;const sf2=sf*(1-a.bw);r=Y+(r-Y)*sf2;g=Y+(g-Y)*sf2;bb=Y+(bb-Y)*sf2;
     r+=a.tp*.08+a.tn*.03;bb+=-a.tp*.08+a.tn*.03;g-=a.tn*.06;
     if(a.fd){const k=1-a.fd*.3;r=r*k+a.fd*.12;g=g*k+a.fd*.12;bb=bb*k+a.fd*.14}
     if(a.vg){const v=1-a.vg*1.1*((x-cx)*(x-cx)+dy)/md;r*=v;g*=v;bb*=v}
@@ -1357,14 +1398,28 @@ function applyAdj(){
 }
 let adjPend=false;
 function schedAdj(){if(adjPend)return;adjPend=true;requestAnimationFrame(()=>{adjPend=false;applyAdj();edRender()})}
-const ADJL=[['ex','曝光',-1,1],['br','亮度',-1,1],['ct','对比度',-1,1],['hl','高光',-1,1],['sh','阴影',-1,1],['sat','饱和度',-1,1],['tp','色温 蓝↔黄',-1,1],['tn','色调 绿↔品红',-1,1],['fd','褪色',0,1],['vg','暗角',0,1],['gr','颗粒',0,1]];
+const ADJL=[['ex','曝光',-1,1],['br','亮度',-1,1],['ct','对比度',-1,1],['hl','高光',-1,1],['sh','阴影',-1,1],['sat','饱和度',-1,1],['tp','色温 蓝↔黄',-1,1],['tn','色调 绿↔品红',-1,1],['fd','褪色',0,1],['vg','暗角',0,1],['gr','颗粒',0,1],['bw','黑白',0,1]];
 const adjIn={};
 ADJL.forEach(([k,n,lo,hi])=>{const l=document.createElement('label');l.className='ms';
   l.innerHTML=`<span>${n}</span><input type="range" min="${lo}" max="${hi}" step=".01" value="0"><i>0.00</i>`;
   const i=l.children[1],v=l.children[2];adjIn[k]=[i,v];
-  i.oninput=()=>{E.adj[k]=+i.value;v.textContent=(+i.value).toFixed(2);schedAdj()};$('#adjs').append(l)});
-function syncAdj(){for(const k in adjIn){adjIn[k][0].value=E.adj[k];adjIn[k][1].textContent=(+E.adj[k]).toFixed(2)}}
-$('#adr').onclick=()=>{E.adj={...ADJ0};syncAdj();schedAdj()};
+  i.oninput=()=>{E.adj[k]=+i.value;v.textContent=(+i.value).toFixed(2);schedAdj();renderEF()};$('#adjs').append(l)});
+function syncAdj(){typeof renderEF==='function'&&renderEF();for(const k in adjIn){adjIn[k][0].value=E.adj[k];adjIn[k][1].textContent=(+E.adj[k]).toFixed(2)}}
+$('#adr').onclick=()=>{E.adj={...ADJ0};syncAdj();schedAdj();renderEF()};
+/* custom filters = saved adjustment presets */
+const EFB=[['原图',{}],['黑白',{bw:1,ct:.25,gr:.25}],['暖调胶片',{tp:.45,fd:.35,ct:.1,gr:.3,vg:.3}],['冷调',{tp:-.5,tn:-.1,sat:-.15,sh:.2}],['褪色',{fd:.7,ct:-.2,sat:-.25}],['高对比',{ct:.5,sat:.2,vg:.35}],['黑金属',{bw:1,ct:.7,ex:-.2,gr:.8,vg:.6}]];
+let EF=[];try{EF=JSON.parse(localStorage.getItem('dvF')||'[]')}catch(e){}
+const saveEF=()=>{try{localStorage.setItem('dvF',JSON.stringify(EF))}catch(e){}};
+const sameAdj=a=>Object.keys(ADJ0).every(k=>Math.abs((E.adj[k]||0)-(a[k]||0))<.005);
+function useEF(a){E.adj={...ADJ0,...a};syncAdj();schedAdj();renderEF()}
+function renderEF(){const box=$('#efl');box.innerHTML='';
+  EFB.forEach(([n,a])=>{const b=document.createElement('button');b.className='btn'+(sameAdj(a)?' act':'');b.textContent=n;b.onclick=()=>useEF(a);box.append(b)});
+  EF.forEach((f,i)=>{const b=document.createElement('button');b.className='btn'+(sameAdj(f.a)?' act':'');b.innerHTML='<span></span><i>✕</i>';b.firstChild.textContent='★ '+f.n;
+    b.onclick=e=>{if(e.target.tagName==='I'){EF.splice(i,1);saveEF();renderEF();return}useEF(f.a)};box.append(b)})}
+$('#efsv').onclick=()=>{const n=$('#efn').value.trim()||('我的滤镜 '+(EF.length+1));const a={};Object.keys(ADJ0).forEach(k=>{if(E.adj[k])a[k]=+(+E.adj[k]).toFixed(2)});
+  if(!Object.keys(a).length){$('#efn').placeholder='先拖动下面的滑块调好颜色';return}
+  const j=EF.findIndex(f=>f.n===n);if(j>=0)EF[j].a=a;else EF.push({n,a});saveEF();$('#efn').value='';renderEF()};
+renderEF();
 /* --- geometry: crop / stretch / rotate / flip --- */
 function setSrc(c){E.src=c;E.cw=ec.width=E.base.width=c.width;E.ch=ec.height=E.base.height=c.height;gridSize()}
 function fullCrop(){E.cr={x:0,y:0,w:1,h:1};if(E.car)setRatio2(E.car)}
@@ -1569,6 +1624,15 @@ ECOL.forEach(c=>{const b=document.createElement('button');b.style.background=c;b
 let scat='v';
 function renderStk(){const box=$('#stks');box.innerHTML='';
   [...$('#scat').children].forEach(b=>b.classList.toggle('act',b.dataset.c===scat));
+  box.style.flexDirection=scat==='b'?'column':'';box.style.alignItems=scat==='b'?'stretch':'';
+  if(scat==='b'){const w=document.createElement('div');w.className='gtw';
+    w.innerHTML='<input class="txt" id="gtx" maxlength="28" placeholder="输入文字，生成哥特字体"><button class="btn" id="gta">添加</button>';box.append(w);
+    const cw=document.createElement('div');cw.className='chips';[['#f2f2f2','白'],['#0a0a0a','黑'],['#b3001b','血红']].forEach(([c2,n])=>{const b=document.createElement('button');b.className='btn'+(GOTH.col===c2?' act':'');b.textContent=n;
+      b.onclick=()=>{GOTH.col=c2;[...cw.children].forEach(x=>x.classList.toggle('act',x===b));const s2=E.stk[E.sel];if(s2&&s2.k==='g'){s2.col=c2;edRender()}};cw.append(b)});box.append(cw);
+    const gi=w.querySelector('#gtx');const sel=E.stk[E.sel];if(sel&&sel.k==='g')gi.value=sel.t;
+    gi.oninput=()=>{const s2=E.stk[E.sel];if(s2&&s2.k==='g'&&gi.value.trim()){s2.t=gi.value;edRender()}};
+    w.querySelector('#gta').onclick=()=>{const t=gi.value.trim();if(!t){gi.placeholder='先输入文字';return}addStk({k:'g',t,col:GOTH.col})};
+    const ic=document.createElement('div');ic.className='stks';BKSN.forEach(id=>{const b=document.createElement('button');b.className='btn bk';const im=document.createElement('img');im.src=mkBK(id).c.toDataURL();b.append(im);b.onclick=()=>addStk({k:'b',id});ic.append(b)});box.append(ic);return}
   if(scat==='t'){TXT.forEach(t=>{const b=document.createElement('button');b.className='btn tg';b.textContent=t;b.onclick=()=>addStk({k:'t',t});box.append(b)});return}
   (scat==='v'?VSTN:SPRN).forEach(id=>{const b=document.createElement('button');b.className='btn';const im=document.createElement('img');
     im.src=(scat==='v'?mkVB(id):mkBM(id)).c.toDataURL();b.append(im);b.onclick=()=>addStk({k:scat,id});box.append(b)});
