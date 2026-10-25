@@ -265,6 +265,38 @@ body.bm{--bzm:linear-gradient(#141414,#050505);--bzs:none;--bzl:0 solid transpar
 #ibar .lx{display:none}
 body.land #ibar{grid-column:1/3;grid-row:1}body.land #ibar .lx{display:inline}
 body.land .cam{grid-template-rows:auto auto minmax(0,1fr)}
+
+.ctl1{gap:6px}.zgrp{display:flex;align-items:center;gap:4px}
+.zpill{display:flex;border-radius:999px;overflow:hidden;border:var(--bbw,1px) solid var(--btnb);box-shadow:var(--btnsh);flex:none}
+body .cam .zpill .zb{width:36px;height:28px;padding:0;margin:0;border:0;border-radius:0;box-shadow:none;font-size:15px;line-height:28px}
+body .cam .zpill .zb:first-child{border-right:1px solid var(--btnb)}
+body .cam .zpill .zb:active{box-shadow:inset 0 2px 5px rgba(0,0,0,.35);transform:none}
+.zr{min-width:34px;font-size:11px}
+.ib{padding:4px 9px;line-height:0;min-width:38px}.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.skin-ccd .btn.ib.act,body.skin-ccdd .btn.ib.act{padding-left:16px}
+.iseg{gap:4px}
+.dial{position:relative;width:62px;height:62px;flex:none;touch-action:none;cursor:grab;--dkA:#2b2d31;--dkB:#9aa0a7;--dfc:radial-gradient(circle at 35% 30%,#fbfcfd,#d3d7dc 55%,#a4aab2);--dtc:#262a2f;--dsel:#d8281a}
+.dial .dk{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,transparent 58%,rgba(0,0,0,.25) 100%),repeating-conic-gradient(var(--dkA) 0 4deg,var(--dkB) 4deg 8deg);box-shadow:0 2px 4px rgba(0,0,0,.45),inset 0 1px 1px rgba(255,255,255,.4)}
+.dial .df{position:absolute;inset:6px;border-radius:50%;background:var(--dfc);box-shadow:inset 0 1px 2px rgba(255,255,255,.7),inset 0 -2px 4px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.35);transition:transform .18s cubic-bezier(.3,1.4,.5,1)}
+.dial .df span{position:absolute;left:50%;top:2px;width:2px;height:6px;margin-left:-1px;background:var(--dtc);opacity:.55;transform-origin:1px 23px;border-radius:1px}
+.dial .df span.da{background:var(--dsel);opacity:.9;height:7px}.dial .df span.on{opacity:1;height:8px}.dial .df span.off{opacity:.15}
+.dial .dv{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--font);color:var(--dtc);pointer-events:none;letter-spacing:-.03em;text-shadow:0 1px 0 rgba(255,255,255,.25)}
+.dial .dv.da{color:var(--dsel);font-size:17px}
+.dial .dp{position:absolute;left:50%;top:-5px;margin-left:-4px;border:4px solid transparent;border-top:6px solid var(--dsel);filter:drop-shadow(0 1px 0 rgba(0,0,0,.4))}
+body.gyro #ori{display:none}
+body.land .dial{width:54px;height:54px}body.land .dial .df span{transform-origin:1px 19px}body.land .dial .dv{font-size:13px}body.land .ctl1{display:grid;grid-template-columns:minmax(0,1fr) 54px;grid-template-rows:auto auto;gap:5px;align-items:center}body.land .zgrp{grid-column:1;grid-row:1;justify-content:center}body.land .zr{display:none}body.land .ctl1 .iseg{grid-column:1;grid-row:2;display:flex;justify-content:center}body.land .ib{padding:3px 6px}body.land .zpill .zb{height:26px;line-height:26px}body.land .dial{grid-column:2;grid-row:1/3;align-self:center}body.land .iseg .ib{flex:1;min-width:0}
+body.skin-dv .dial{--dkA:#0d0d10;--dkB:#3a3a40;--dfc:radial-gradient(circle at 35% 30%,#3a3a42,#16161a 70%);--dtc:#e6e6e6;--dsel:#ff4d4d}
+body.skin-xp .dial{--dkA:#0a3ccf;--dkB:#7aa8ff;--dfc:radial-gradient(circle at 35% 30%,#fffef8,#ece9d8 60%,#cfcab4);--dtc:#0b2a8a}
+body.skin-w7 .dial{--dkA:#5d8fc4;--dkB:#e8f3ff;--dfc:radial-gradient(circle at 35% 25%,#ffffff,#dbeafa 50%,#9cc2e8);--dtc:#1e3a5f}
+body.skin-leather .dial{--dkA:#5b3d15;--dkB:#d9b46a;--dfc:radial-gradient(circle at 35% 30%,#4a2f1b,#21140b 75%);--dtc:#f0dcb0;--dsel:#ff7a45}
+body.skin-linen .dial{--dkA:#4f545c;--dkB:#d9dce1;--dfc:radial-gradient(circle at 35% 30%,#f4f5f7,#c3c7cd 65%);--dtc:#2f3338}
+body.skin-wood .dial{--dkA:#6b4a1c;--dkB:#e2c27a;--dfc:radial-gradient(circle at 35% 30%,#fbf3de,#e8d6ae 65%,#c8b083);--dtc:#3a2414;--dsel:#b3261e}
+body.skin-metal .dial,body.skin-ccd .dial{--dkA:#4f555d;--dkB:#f1f3f5;--dfc:repeating-conic-gradient(rgba(255,255,255,.18) 0 2deg,rgba(0,0,0,.05) 2deg 4deg),radial-gradient(circle at 35% 30%,#ffffff,#c9ced4 60%,#9aa1a9)}
+body.skin-paper .dial{--dkA:#8a6a3a;--dkB:#e5c88f;--dfc:radial-gradient(circle at 35% 30%,#fffbe6,#f3e7a8 70%);--dtc:#3a3020;--dsel:#d6463c}
+body.skin-retro .dial{--dkA:#4aa8dc;--dkB:#ffffff;--dfc:radial-gradient(circle at 35% 25%,#ffffff,#e8f6ff 55%,#b7dff5);--dtc:#1f6fae;--dsel:#ff4f9a}
+body.skin-dark .dial{--dkA:#0b0d11;--dkB:#454c57;--dfc:radial-gradient(circle at 35% 30%,#2e343e,#14171c 75%);--dtc:#cfd6e0;--dsel:#5aa8ff}
+body.skin-ccdd .dial{--dkA:#08090a;--dkB:#8a9099;--dfc:repeating-conic-gradient(rgba(255,255,255,.08) 0 2deg,rgba(0,0,0,.12) 2deg 4deg),radial-gradient(circle at 35% 30%,#6a7079,#2a2d32 70%);--dtc:#e6e9ec;--dsel:#7dff5a}
+body.bm .dial{--dkA:#000;--dkB:#3a3a3a;--dfc:radial-gradient(circle at 35% 30%,#1c1c1c,#050505 75%);--dtc:#d9d9d9;--dsel:#ffffff}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -278,15 +310,16 @@ body.land .cam{grid-template-rows:auto auto minmax(0,1fr)}
     </div>
     <div id="fstrip"></div>
     <div class="deck">
-      <div class="ctl">
-        <div class="seg zseg"><button class="btn zb" id="zo">－</button><span class="zr" id="zr">1.0×</span><button class="btn zb" id="zi">＋</button></div>
-        <div class="seg"><button class="btn" id="fb">FILTER</button><button class="btn" id="gb">GALLERY 0</button></div>
+      <div class="ctl ctl1">
+        <div class="zgrp"><div class="zpill"><button class="btn zb" id="zo" aria-label="缩小">－</button><button class="btn zb" id="zi" aria-label="放大">＋</button></div><span class="zr" id="zr">1.0×</span></div>
+        <div class="seg iseg"><button class="btn ib" id="fb" aria-label="滤镜"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/><circle cx="12" cy="15" r="5"/></svg></button><button class="btn ib" id="gb" aria-label="相册"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg></button></div>
+        <div class="dial" id="dial" aria-label="快门速度"><div class="dk"></div><div class="df" id="dface"></div><b class="dv" id="dval">A</b><i class="dp"></i></div>
       </div>
       <div class="evr"><button class="btn" id="evr">EV</button><input type="range" id="ev" min="-2" max="2" step=".1" value="0"><i id="evv">0.0</i></div>
       <div class="ctl">
-        <div class="seg"><button class="btn" id="mV">VIDEO</button><button class="btn act" id="mP">PHOTO</button></div>
+        <div class="seg iseg"><button class="btn ib act" id="mP" aria-label="拍照"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.5-2.5h5L16 7"/><circle cx="12" cy="13.5" r="3.5"/></svg></button><button class="btn ib" id="mV" aria-label="录像"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7" width="13" height="10" rx="2"/><path d="M15.5 10.5l6-3v9l-6-3z"/></svg></button></div>
         <button class="shut photo" id="sh" aria-label="shutter"></button>
-        <div class="seg"><button class="btn" id="ori">横屏</button><button class="btn" id="fl">FLIP</button></div>
+        <div class="seg"><button class="btn" id="ori">横屏</button><button class="btn ib" id="fl" aria-label="前后切换"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6"/><path d="M18 3v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6"/><path d="M6 21v-4h4"/></svg></button></div>
       </div>
     </div>
     <div id="menu">
@@ -529,7 +562,7 @@ gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);gl.uniform1i(gl.getUniformLocatio
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,camOK:false};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,gyro:false,gyInv:false,shi:0,camOK:false};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -552,7 +585,7 @@ const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
 let stream,track,facing='environment',on=false,mode='photo',rec,chunks=[],t0=0,items=[],last=0,W=640,H=480,cw=0,ch=0,rot=0,szKey='',cr=[1,1];
 let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=2,ev=0,evT=0,o=0,land=false;
 let bmOn=false;const BMP={ct:1.8,cr:.12,nz:2.4,jt:2.2,vg:1.2,sn:.5,sh:1.1,bm:.5};
-let shotFD=2,sceneY=.45,lensId=null,lenses=[],autoWide=true,curMM=24,hasTorch=false,shotReq=0,flashFx=0,torchOn=false,lightFx=0;
+let shGain=1,shGainT=1,shotFD=2,sceneY=.45,lensId=null,lenses=[],autoWide=true,curMM=24,hasTorch=false,shotReq=0,flashFx=0,torchOn=false,lightFx=0;
 const FN=['DV','VHS','夜视','黑白','家庭','赛博','胶片','蓝晒','CRT','热成像','海报','负片','青橙','梦幻','富士','Velvia','徕卡','徕卡黑白','Portra','柯达金','800T','HP5'];
 const FO=['DV','VHS','NIGHT','B&W','HOME','CYBER','FILM','CYANO','CRT','THERMAL','POSTER','NEG','TEAL','DREAM','FUJI','VELVIA','LEICA','LEICA MONO','PORTRA','GOLD','800T','HP5'];
 const SW=['linear-gradient(135deg,#9db3c9,#e6edf3)','repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px),linear-gradient(135deg,#b58be0,#f08ac0)','radial-gradient(circle,#4dff6a,#0a3d12)','linear-gradient(135deg,#fff,#222)','linear-gradient(135deg,#ffd49a,#b8722a)','linear-gradient(135deg,#00c8d8,#ff5fb0)','linear-gradient(135deg,#e8d8b8,#7d9a96)','linear-gradient(135deg,#c8ecff,#0d4f8c)','repeating-linear-gradient(90deg,rgba(255,60,60,.85) 0 1px,rgba(60,255,60,.85) 1px 2px,rgba(80,80,255,.85) 2px 3px),#222','linear-gradient(135deg,#1a0066,#a0007a,#f23c10,#ffe040,#fff)','linear-gradient(135deg,#2a5db0 25%,#7ac0e8 25% 50%,#f2c14e 50% 75%,#e8503a 75%)','linear-gradient(135deg,#1a1a1a,#e8e8e8)','linear-gradient(135deg,#1a8a9a 50%,#f09a4a 50%)','radial-gradient(circle at 50% 40%,#fff,#f6c8e8 55%,#b9a2f0)','linear-gradient(135deg,#2f7d6a,#cfe6c8)','linear-gradient(135deg,#1d4fbf,#29a35a,#f2c230)','radial-gradient(circle at 50% 45%,#e8dccb,#5a4632 75%,#1a120c)','linear-gradient(135deg,#f2efe8,#1a1a1a)','linear-gradient(135deg,#f3d1b8,#c9a98e,#8fa7a0)','linear-gradient(135deg,#ffd36b,#e8892a)','radial-gradient(circle at 60% 40%,#ff7a5a,#1b3b6f 60%)','repeating-radial-gradient(circle,#777 0 1px,#bbb 1px 2px)'];
@@ -575,7 +608,7 @@ const pad=n=>String(n).padStart(2,'0');
 function mkItem(r){const d=new Date(r.t),ext=r.k==='img'?'jpg':(r.blob.type.includes('mp4')?'mp4':'webm');
   const name=`DV_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.${ext}`;
   return {...r,url:URL.createObjectURL(r.blob),file:new File([r.blob],name,{type:r.blob.type})}}
-function updCount(){$('#gb').textContent='GALLERY '+items.length;$('#gn').textContent=items.length+' 项'}
+function updCount(){$('#gn').textContent=items.length+' 项'}
 function addItem(k,blob,dur){
   const r={id:Date.now()+'-'+Math.floor(Math.random()*1000),k,blob,t:Date.now(),d:dur||0,fav:false};
   idbPut(r);items.unshift(mkItem(r));updCount();
@@ -756,6 +789,8 @@ head(pM,'全屏');
  nt.innerHTML='iPhone 的 Safari 不允许网页自己进入全屏。可以这样做：用 Safari 打开本页 → 点底部「分享」按钮 → 「添加到主屏幕」→ 以后从主屏幕图标打开，就没有地址栏和工具栏，是完整全屏。<br>注意：主屏幕版和 Safari 版的相册是分开存的，之前在 Safari 里拍的照片要先下载保存。';
  document.addEventListener('fullscreenchange',sync);document.addEventListener('webkitfullscreenchange',sync);sync()}
 head(pM,'画面方向');
+head(pM,'实验功能');addToggle(pM,'陀螺仪自动横竖屏',S,'gyro',()=>gyroSetup());addToggle(pM,'陀螺仪方向反向（转反了就打开）',S,'gyInv');
+note(pM,'打开后主界面的「横屏」按钮会隐藏，手机横过来自动切换横屏、竖回来自动切回。手机开着「竖排方向锁定」也能用。iPhone 第一次会请求「动作与方向」权限。如果转过去画面方向反了，打开上面的「反向」。');
 head(pM,'横屏时手机往哪边转');
 addChips(pM,['↺ 逆时针（左边朝下）','↻ 顺时针（右边朝下）'],()=>S.lo-1,i=>{S.lo=i+1;save();reO()});
 addToggle(pM,'后置镜头 横屏旋转 180°',S,'lfB');
@@ -971,6 +1006,32 @@ $('#pwb').onclick=()=>{applyMic();start()};
 {const auto=()=>{if(!on&&S.autoOn!==false){applyMic();start()}};let done=false;
  try{navigator.permissions&&navigator.permissions.query({name:'camera'}).then(r=>{if(r.state==='granted'){done=true;auto()}else if(r.state==='denied')done=true}).catch(()=>{})}catch(e){}
  setTimeout(()=>{if(!done&&S.camOK)auto()},300)}
+/* shutter speed dial: A = auto; manual speeds change brightness (auto ISO 50–3200) and add motion trails at 1/15 and slower */
+const SHV=['A',4000,2000,1000,500,250,125,60,30,15,8,4],SHVID=8;
+const dialIdx=()=>{const i=S.shi||0;return mode==='video'?Math.min(i,SHVID):i};
+const trailA=()=>{const i=dialIdx();return i>SHVID?Math.max(.12,Math.min(1,(1/30)*SHV[i])):1};
+{const face=$('#dface');SHV.forEach((v,i)=>{const e=document.createElement('span');e.style.transform=`rotate(${i*30}deg)`;if(v==='A')e.className='da';face.append(e)});
+ const upd=()=>{const i=dialIdx();face.style.transform=`rotate(${-i*30}deg)`;[...face.children].forEach((e,k)=>{e.classList.toggle('on',k===i);e.classList.toggle('off',mode==='video'&&k>SHVID)});
+   const v=$('#dval');v.textContent=SHV[i]==='A'?'A':(SHV[i]>=1000?SHV[i]/1000+'K':SHV[i]);v.classList.toggle('da',i===0)};
+ window.updDial=upd;upd();
+ const d=$('#dial');let st=null;
+ const ang=e=>{const r=d.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI};
+ const setI=i=>{const mx=mode==='video'?SHVID:SHV.length-1;i=Math.max(0,Math.min(mx,i));if(i!==dialIdx()){S.shi=i;save();upd();try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}}};
+ d.addEventListener('pointerdown',e=>{e.preventDefault();try{d.setPointerCapture(e.pointerId)}catch(_){}st={a:ang(e),x:e.clientX,y:e.clientY,i:dialIdx(),mv:false}});
+ d.addEventListener('pointermove',e=>{if(!st)return;let da=ang(e)-st.a;if(da>180)da-=360;if(da<-180)da+=360;const lin=(e.clientX-st.x)+(st.y-e.clientY);
+   if(Math.abs(da)>8||Math.abs(lin)>8)st.mv=true;const steps=Math.abs(da)>Math.abs(lin)/1.2?Math.round(da/30):Math.round(lin/16);setI(st.i+steps)});
+ ['pointerup','pointercancel'].forEach(n=>d.addEventListener(n,()=>{if(st&&!st.mv){const mx=mode==='video'?SHVID:SHV.length-1;setI(st.i>=mx?0:st.i+1)}st=null}))}
+/* experimental: auto landscape from the motion sensor */
+const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+let gyCand=null,gyT=0,gyOn=false;
+function onMotion(e){if(!S.gyro||!mob)return;const g=e.accelerationIncludingGravity;if(!g||g.x==null)return;const x=g.x,y=g.y,ax=Math.abs(x),ay=Math.abs(y);let want=null;
+  if(ax>6.5&&ax>ay*1.6){const left=(x>0)!==IOS;want=(left!==!!S.gyInv)?1:2}else if(ay>6.5&&ay>ax*1.6)want=0;
+  if(want===null||want===o){gyCand=null;return}const n=performance.now();if(gyCand!==want){gyCand=want;gyT=n;return}
+  if(n-gyT>350&&!recing()){o=want;layout();gyCand=null}}
+function gyroSetup(){document.body.classList.toggle('gyro',!!S.gyro);if(!S.gyro){if(gyOn){removeEventListener('devicemotion',onMotion);gyOn=false}return}
+  const add=()=>{if(!gyOn){addEventListener('devicemotion',onMotion);gyOn=true}};
+  try{if(typeof DeviceMotionEvent!=='undefined'&&DeviceMotionEvent.requestPermission){DeviceMotionEvent.requestPermission().then(r=>{if(r==='granted')add()}).catch(()=>{})}else add()}catch(e){add()}}
+document.body.classList.toggle('gyro',!!S.gyro);if(S.gyro){if(IOS)document.addEventListener('pointerdown',gyroSetup,{once:true});else gyroSetup()}
 /* top info bar: estimated exposure (program AE, f/1.8) */
 {const sc=document.createElement('canvas');sc.width=16;sc.height=12;const sx=sc.getContext('2d',{willReadFrequently:true});let lv=10,first=true;
  const TS=[15,20,25,30,40,50,60,80,100,125,160,200,250,320,400,500,640,800,1000,1250,1600,2000,2500,3200,4000];
@@ -983,8 +1044,9 @@ $('#pwb').onclick=()=>{applyMic();start()};
    const e=ev||0,need=lv-e,N2=3.24;let iso=100,t=N2/Math.pow(2,need);
    if(mode==='video'){t=1/60;iso=100*N2/(t*Math.pow(2,need))}
    else{if(t>1/60){iso=Math.min(3200,100*t*60);t=N2*iso/100/Math.pow(2,need);t=Math.min(t,1/15)}if(t<1/4000)t=1/4000;if(iso<50){iso=50}}
-   iso=Math.max(50,Math.min(3200,iso));
-   tx('iev','EV '+(e>0?'+':e<0?'−':'±')+Math.abs(e).toFixed(1));tx('ish','1/'+near(TS,1/t));tx('iiso','ISO '+near(IS,iso));
+   iso=Math.max(50,Math.min(3200,iso));let shTxt='1/'+near(TS,1/t);
+   const si2=dialIdx();if(si2>0){const tm=1/SHV[si2],T0=t*iso,iso2=Math.max(50,Math.min(3200,T0/tm));shGainT=Math.max(1/8,Math.min(8,tm*iso2/T0));iso=iso2;shTxt='1/'+SHV[si2]}else shGainT=1;
+   tx('iev','EV '+(e>0?'+':e<0?'−':'±')+Math.abs(e).toFixed(1));tx('ish',shTxt);tx('iiso','ISO '+near(IS,iso));
    tx('ifl',(typeof FN!=='undefined'&&FN[fi])||'');tx('imm',Math.round(curMM*zc*lensK)+'mm');tx('irs',RES[si]+'p')},250)}
 $('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';lensId=null;start()};
 
@@ -1041,7 +1103,7 @@ function ov(T){
   const d=new Date();
   if(it.date)tx2(d.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).toUpperCase(),m,H-m-f-ls);
   if(it.time)tx2(d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),m,H-m-f);
-  if(it.tc)tx2(isRec?fmt((performance.now()-t0)/1000):'0:00:00',W-m,H-m-f,'right');
+  if(it.tc&&mode!=='photo')tx2(isRec?fmt((performance.now()-t0)/1000):'0:00:00',W-m,H-m-f,'right');
   if(WM.txt)tx2(WM.txt,W/2,H-m-f,'center');
 }
 function loop(ts){
@@ -1060,7 +1122,7 @@ function loop(ts){
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,vid);
   const P0=bmOn?{...P,nz:BMP.nz,jt:BMP.jt,vg:BMP.vg,sn:BMP.sn,sh:BMP.sh,bm:BMP.bm,ca:.25,pf:0,bd:.2,bl:0,wb:0,sat:1}:P;
   const PP=(P0.skOn&&P0.bkOn)?P0:{...P0,skk:P0.skOn?P0.skk:0,bkk:P0.bkOn?P0.bkk:0};
-  const fpv=rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0,mv=facing==='user'?1:0,exv=Math.pow(2,ev)*(shotFD<1.5?shotFD:1);
+  const fpv=rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0,mv=facing==='user'?1:0,exv=Math.pow(2,ev)*(shotFD<1.5?shotFD:1)*(shGain+=(shGainT-shGain)*.15);
   if(PP.skk>0||PP.bkk>0){
     [1,3,4].forEach(n=>{gl.activeTexture(gl.TEXTURE0+n);gl.bindTexture(gl.TEXTURE_2D,null)});gl.activeTexture(gl.TEXTURE0);
     gl.useProgram(pb);gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.viewport(0,0,BN,BN);
@@ -1092,7 +1154,7 @@ function loop(ts){
   for(const k in D)gl.uniform1f(UL[k],PP[k]);
   gl.uniform1f(UL.kc,bmOn?BMP.ct:1);gl.uniform1f(UL.kb,bmOn?BMP.cr:0);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  oc.imageSmoothingEnabled=false;oc.drawImage(gc,0,0,W,H);ov(T);
+  oc.imageSmoothingEnabled=false;oc.globalAlpha=trailA();oc.drawImage(gc,0,0,W,H);oc.globalAlpha=1;ov(T);
   if(S.grid){const g=$('#grid'),bw=out.clientWidth,bh=out.clientHeight,k=Math.min(bw/W,bh/H),iw=W*k,ih=H*k;
     g.style.left=((bw-iw)/2+out.offsetLeft)+'px';g.style.top=((bh-ih)/2+out.offsetTop)+'px';g.style.width=iw+'px';g.style.height=ih+'px'}
   if(shotReq){shotReq=0;flashFx=0;shotFD=2;
@@ -1103,7 +1165,7 @@ oc.fillStyle='#000';oc.fillRect(0,0,640,480);requestAnimationFrame(loop);
 
 function setMode(m){
   if(recing()){if(m==='video')return;stopRec()}
-  mode=m;$('#mV').classList.toggle('act',m==='video');$('#mP').classList.toggle('act',m==='photo');
+  mode=m;$('#mV').classList.toggle('act',m==='video');$('#mP').classList.toggle('act',m==='photo');window.updDial&&updDial();
   $('#sh').className='shut'+(m==='photo'?' photo':'');
   applyMic();applyLight();
 }
