@@ -339,7 +339,7 @@ body.land .lcL{grid-column:1}body.land .lcR{grid-column:3}
 body.land .lrow{display:flex;gap:4px;width:100%;justify-content:center}body.land .lrow>.btn{flex:1;min-width:0;padding:0 2px}
 body.land .lrow3>.btn{padding:0}
 body.land .lcol .zgrp{justify-content:center}body.land .lcol .zr{display:none}
-body.land .lcol .evr{width:100%;gap:4px}body.land .lcol .evr input{flex:1;min-width:0}body.land .lcol .evr i{display:none}body.land .lcol #evr{padding:0 6px}
+body.land .lcol .evr{width:100%;gap:4px}body.land .lcol .evr input{flex:1;min-width:0}body.land .lcol .evr #evv{display:none}body.land .lcol #evr{padding:0 6px}
 body.land .lcol .dial{width:66px;height:66px}body.land .lcol .dial .df span{transform-origin:1px 24px}body.land .lcol .dial .dv{font-size:15px}
 body.land .lcol .shut{width:56px;height:56px}
 body.land .lcol .rseg2{display:flex;gap:4px}body.land .lcol .rseg2 .ib{min-width:0;padding:0 7px}
@@ -350,6 +350,34 @@ body.land #menu{position:absolute;z-index:40;top:var(--bzw);bottom:var(--bzw);ri
 body.land .cam.fpick .deck{display:none}
 
 .tbar{margin-top:0!important}
+
+/* filter window */
+.ctl1{display:grid!important;grid-template-columns:1fr auto 1fr;align-items:center}
+.ctl1 .zgrp{justify-self:start}.ctl1 #fb{justify-self:center}.ctl1 .dial{justify-self:end}
+.fsq{width:84px;height:62px;padding:4px;border-radius:calc(var(--rad) + 3px);background:var(--btn);border:1px solid var(--btnb);box-shadow:var(--btnsh);touch-action:none;cursor:grab;flex:none;box-sizing:border-box}
+.fwin{position:relative;width:100%;height:100%;overflow:hidden;border-radius:var(--rad);background:#000;box-shadow:inset 0 2px 5px rgba(0,0,0,.7),0 0 0 1px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.35)}
+.ftrk{display:flex;width:300%;height:100%;transform:translateX(-33.333%)}
+.fcard{flex:0 0 33.333%;height:100%;position:relative}
+.fcard i{position:absolute;inset:0;display:block}
+.fcard b{position:absolute;left:0;right:0;bottom:0;padding:2px 0;font:600 10px/12px var(--font);letter-spacing:0;color:#fff;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.65));text-shadow:0 1px 1px #000;white-space:nowrap;overflow:hidden}
+.fgl{position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,0) 40%);border-radius:inherit}
+.fsq.act{box-shadow:0 0 0 2px var(--acc),var(--btnsh)}
+/* vertical EV (landscape only) */
+.evs{display:none;position:relative;width:26px;height:120px;touch-action:none;cursor:pointer;flex:none}
+.evs i{position:absolute;left:50%;top:6px;bottom:6px;width:4px;margin-left:-2px;border-radius:2px;background:var(--btnb);box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+.evs b{position:absolute;left:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:var(--btn);border:1px solid var(--btnb);box-shadow:var(--btnsh)}
+body.land .lcR{flex-direction:row;align-items:stretch;justify-content:center;gap:4px}
+body.land .cam,body.land .cam.menu{grid-template-columns:100px minmax(0,1fr) 136px}
+body.land .lsub{display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;gap:6px;flex:1;min-width:0}
+body.land .lthin{flex:0 0 38px}
+body.land .lthin .zpill{flex-direction:column-reverse;border-radius:19px}
+body.land .lthin .zpill .zb{width:34px;height:32px}
+body.land .lthin .zpill .zb:first-child{border-right:0;border-top:1px solid var(--btnb)}
+body.land .lthin .evr{flex-direction:column;width:auto;gap:4px}
+body.land .lthin .evr #ev,body.land .lthin .evr i#evv{display:none}
+body.land .lthin .evs{display:block}
+body.land .lthin #evr{width:34px;padding:0}
+body.land .lcol .fsq{width:84px;height:64px}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -365,7 +393,7 @@ body.land .cam.fpick .deck{display:none}
     <div class="deck">
       <div class="ctl ctl1">
         <div class="zgrp"><div class="zpill"><button class="btn zb" id="zo" aria-label="缩小">－</button><button class="btn zb" id="zi" aria-label="放大">＋</button></div><span class="zr" id="zr">1.0×</span></div>
-        <button class="btn fsq" id="fb" aria-label="滤镜"><span class="fsw"></span><span class="fnm">DV</span></button>
+        <div class="fsq" id="fb" aria-label="滤镜"><div class="fwin"><div class="ftrk"><div class="fcard"><i></i><b></b></div><div class="fcard"><i></i><b></b></div><div class="fcard"><i></i><b></b></div></div><span class="fgl"></span></div></div>
         <div class="dial" id="dial" aria-label="快门速度"><div class="dk"></div><div class="df" id="dface"></div><b class="dv" id="dval">A</b><i class="dp"></i></div>
       </div>
       <div class="evr"><button class="btn" id="evr">EV</button><input type="range" id="ev" min="-2" max="2" step=".1" value="0"><i id="evv">0.0</i></div>
@@ -751,13 +779,14 @@ async function applyLight(){
 const LB={L:null,R:null,marks:new Map(),on:false};
 function landB(on){if(LB.on===on)return;LB.on=on;
   if(!LB.L){LB.L=document.createElement('div');LB.L.className='lcol lcL';LB.R=document.createElement('div');LB.R.className='lcol lcR';cam.append(LB.L,LB.R);
-    LB.l1=document.createElement('div');LB.l1.className='lrow';LB.r1=document.createElement('div');LB.r1.className='lrow lrow3';LB.r2=document.createElement('div');LB.r2.className='lrow lrow3'}
-  const L=[[LB.l1,['#bar','#bre']],['.lseg'],['.zgrp'],['#fb'],['.mseg'],['.evr']],Rr=[[LB.r1,['#mic','#fls','#mb']],['#dial'],['#sh'],['.rseg2']];
+    LB.l1=document.createElement('div');LB.l1.className='lrow';LB.r1=document.createElement('div');LB.r1.className='lrow lrow3';LB.r2=document.createElement('div');LB.r2.className='lrow lrow3';LB.ra=document.createElement('div');LB.ra.className='lsub';LB.rb=document.createElement('div');LB.rb.className='lsub lthin';LB.R.append(LB.ra,LB.rb)}
+  const L=[[LB.l1,['#bar','#bre']],['.lseg'],['#fb'],['.mseg']],Rr=[[LB.r1,['#mic','#fls','#mb']],['#dial'],['#sh'],['.rseg2']],Rb=[['.zgrp'],['.evr']];
   const mv=(el,to)=>{if(!LB.marks.has(el)){const m=document.createComment('m');el.parentNode.insertBefore(m,el);LB.marks.set(el,m)}to.append(el)};
   const back=el=>{const m=LB.marks.get(el);if(m)m.parentNode.insertBefore(el,m.nextSibling)};
   const each=(spec,fn)=>spec.forEach(x=>{if(x.length===2&&x[0] instanceof Element){x[1].forEach(q=>fn($(q),x[0]))}else fn(document.querySelector(x[0]),null)});
-  if(on){each(L,(el,row)=>{if(row){mv(el,row);if(row.parentNode!==LB.L)LB.L.append(row)}else mv(el,LB.L)});each(Rr,(el,row)=>{if(row){mv(el,row);if(row.parentNode!==LB.R)LB.R.append(row)}else mv(el,LB.R)})}
-  else{each(L,el=>back(el));each(Rr,el=>back(el))}}
+  if(on){each(L,(el,row)=>{if(row){mv(el,row);if(row.parentNode!==LB.L)LB.L.append(row)}else mv(el,LB.L)});each(Rr,(el,row)=>{if(row){mv(el,row);if(row.parentNode!==LB.ra)LB.ra.append(row)}else mv(el,LB.ra)});each(Rb,el=>mv(el,LB.rb))}
+  else{each(L,el=>back(el));each(Rr,el=>back(el));each(Rb,el=>back(el))}
+  window.updEVS&&updEVS()}
 function layout(){
   const dp=innerHeight>=innerWidth,b=document.body.classList;
   land=mob?(dp?o!==0:true):!dp;
@@ -1023,15 +1052,19 @@ FN.forEach((n,i)=>{const b=document.createElement('button');b.className='tile';b
 function syncTiles(){fs.querySelectorAll('[data-i]').forEach(b=>b.classList.toggle('sel',+b.dataset.i===fi));typeof updFsq==='function'&&updFsq()}
 syncTiles();
 /* filter square: swipe = next/prev filter, tap = open the filter strip */
-function updFsq(){const b=$('#fb');b.querySelector('.fsw').style.background=SW[fi];b.querySelector('.fnm').textContent=FN[fi]}
+function updFsq(){const n=FN.length,cs=$('#fb').querySelectorAll('.fcard');[fi-1,fi,fi+1].forEach((k,j)=>{k=(k+n)%n;cs[j].querySelector('i').style.background=SW[k];cs[j].querySelector('b').textContent=FN[k]})}
 updFsq();
-{const b=$('#fb');let st=null;
- const lxy=e=>{const c=document.body.classList,dx=e.clientX-st.x,dy=e.clientY-st.y;return c.contains('rotr')?[dy,-dx]:c.contains('rotl')?[-dy,dx]:[dx,dy]};
- b.addEventListener('pointerdown',e=>{st={x:e.clientX,y:e.clientY};try{b.setPointerCapture(e.pointerId)}catch(_){}});
- b.addEventListener('pointerup',e=>{if(!st)return;const [dx,dy]=lxy(e);st=null;
-   if(Math.abs(dx)>18&&Math.abs(dx)>Math.abs(dy)){fi=(fi+(dx<0?1:-1)+FN.length)%FN.length;syncTiles();b.classList.remove('swp');void b.offsetWidth;b.classList.add('swp');return}
-   cam.classList.toggle('fpick');b.classList.toggle('act',cam.classList.contains('fpick'))});
- b.addEventListener('pointercancel',()=>st=null)}
+/* filter window: drag to slide to the next/previous filter like flipping photos, tap opens the strip */
+{const b=$('#fb'),trk=b.querySelector('.ftrk');let st=null,busy=false;
+ const lx=e=>{const c=document.body.classList,dx=e.clientX-st.x,dy=e.clientY-st.y;return c.contains('rotr')?[dy,-dx]:c.contains('rotl')?[-dy,dx]:[dx,dy]};
+ const put=(px,anim)=>{trk.style.transition=anim?'transform .22s cubic-bezier(.2,.8,.3,1)':'none';trk.style.transform=`translateX(calc(-33.333% + ${px}px))`};
+ b.addEventListener('pointerdown',e=>{if(busy)return;st={x:e.clientX,y:e.clientY,t:performance.now(),w:b.querySelector('.fwin').offsetWidth,mv:false};try{b.setPointerCapture(e.pointerId)}catch(_){}});
+ b.addEventListener('pointermove',e=>{if(!st)return;const [dx,dy]=lx(e);if(Math.abs(dx)>5)st.mv=true;if(st.mv)put(Math.max(-st.w,Math.min(st.w,dx)),false)});
+ const end=e=>{if(!st)return;const [dx]=lx(e),w=st.w,v=Math.abs(dx)/Math.max(1,performance.now()-st.t),mv=st.mv;st=null;
+   if(!mv){cam.classList.toggle('fpick');b.classList.toggle('act',cam.classList.contains('fpick'));return}
+   if(Math.abs(dx)>w*.28||v>.5){const dir=dx<0?1:-1;busy=true;put(-dir*w,true);
+     setTimeout(()=>{fi=(fi+dir+FN.length)%FN.length;syncTiles();put(0,false);busy=false},230)}else put(0,true)};
+ b.addEventListener('pointerup',end);b.addEventListener('pointercancel',()=>{st=null;put(0,true)})}
 
 /* camera + lenses */
 const mmOf=l=>{l=(l||'').toLowerCase();return /ultra|0\.5|超广角/.test(l)?13:/tele|长焦/.test(l)?77:/front|前置|user/.test(l)?23:24};
@@ -1100,10 +1133,15 @@ const trailT=()=>{const i=dialIdx();return i>SHVID?1/SHV[i]:0};
 /* experimental: auto landscape from the motion sensor */
 const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 let gyCand=null,gyT=0,gyOn=false,nativeRot=false;
-function onMotion(e){if(S.rotMan||!mob||nativeRot||innerWidth>innerHeight)return;const g=e.accelerationIncludingGravity;if(!g||g.x==null)return;const x=g.x,y=g.y,ax=Math.abs(x),ay=Math.abs(y);let want=null;
-  if(ax>6.5&&ax>ay*1.6){const left=(x>0)!==IOS;want=(left!==!!S.gyInv)?1:2}else if(ay>6.5&&ay>ax*1.6)want=0;
+let gyUp=0;
+function onMotion(e){if(S.rotMan||!mob||nativeRot||innerWidth>innerHeight)return;const g=e.accelerationIncludingGravity;if(!g||g.x==null)return;
+  const x=g.x,y=g.y,ax=Math.abs(x),ay=Math.abs(y);
+  if(!gyUp&&ay>8&&ax<2.5)gyUp=o?0:Math.sign(y);/* first upright reading tells us this phone's axis signs */
+  const up=gyUp||(IOS?-1:1);let want=null;
+  if(ax>7.5&&ax>ay*1.8){const left=x*up>0;want=(left!==!!S.gyInv)?1:2}
+  else if(y*up>7.8&&ax<y*up*.45)want=0; /* portrait only when held upright; upside-down / flat keeps the current mode */
   if(want===null||want===o){gyCand=null;return}const n=performance.now();if(gyCand!==want){gyCand=want;gyT=n;return}
-  if(n-gyT>350&&!recing()){o=want;layout();gyCand=null}}
+  if(n-gyT>650&&!recing()){o=want;layout();gyCand=null}}
 function gyroSetup(){document.body.classList.toggle('gyro',!S.rotMan);if(S.rotMan){if(gyOn){removeEventListener('devicemotion',onMotion);gyOn=false}return}
   const add=()=>{if(!gyOn){addEventListener('devicemotion',onMotion);gyOn=true}};
   try{if(typeof DeviceMotionEvent!=='undefined'&&DeviceMotionEvent.requestPermission){DeviceMotionEvent.requestPermission().then(r=>{if(r==='granted')add()}).catch(()=>{})}else add()}catch(e){add()}}
@@ -1135,7 +1173,13 @@ function zb(id,d){const e=$(id);
   e.addEventListener('contextmenu',ev2=>ev2.preventDefault());
 }
 zb('#zi',1);zb('#zo',-1);
-const showEV=()=>{$('#evv').textContent=(ev>0?'+':'')+ev.toFixed(1)};
+const showEV=()=>{$('#evv').textContent=(ev>0?'+':'')+ev.toFixed(1);window.updEVS&&updEVS()};
+{const w=document.createElement('div');w.className='evs';w.innerHTML='<i></i><b></b>';$('.evr').insertBefore(w,$('#ev'));
+ window.updEVS=()=>{w.querySelector('b').style.top=((2-ev)/4*100)+'%'};
+ const set=e=>{const r=w.getBoundingClientRect(),c=document.body.classList;let f=c.contains('rotr')?(r.right-e.clientX)/r.width:c.contains('rotl')?(e.clientX-r.left)/r.width:(e.clientY-r.top)/r.height;
+   f=Math.max(0,Math.min(1,f));const v=Math.round((2-f*4)*10)/10;if(v!==ev){$('#ev').value=v;$('#ev').dispatchEvent(new Event('input'))}};
+ let on2=false;w.addEventListener('pointerdown',e=>{on2=true;try{w.setPointerCapture(e.pointerId)}catch(_){}set(e)});w.addEventListener('pointermove',e=>{if(on2)set(e)});
+ ['pointerup','pointercancel'].forEach(n=>w.addEventListener(n,()=>on2=false));updEVS()}
 $('#ev').oninput=e=>{ev=+e.target.value;evT=performance.now();showEV()};
 $('#evr').onclick=()=>{ev=0;$('#ev').value=0;evT=performance.now();showEV()};
 const updGrid=()=>document.body.classList.toggle('grid',!!S.grid);updGrid();
