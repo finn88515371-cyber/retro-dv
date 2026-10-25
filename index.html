@@ -282,6 +282,7 @@ body.skin-ccd .btn.ib.act,body.skin-ccdd .btn.ib.act{padding-left:16px}
 .dial .df span.da{background:var(--dsel);opacity:.9;height:7px}.dial .df span.on{opacity:1;height:8px}.dial .df span.off{opacity:.15}
 .dial .dv{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--font);color:var(--dtc);pointer-events:none;letter-spacing:-.03em;text-shadow:0 1px 0 rgba(255,255,255,.25)}
 .dial .dv.da{color:var(--dsel);font-size:17px}
+.dial.hold .dk{filter:brightness(1.12)}.dial.hold{transform:scale(1.04)}.dial{transition:transform .12s}
 .dial .dp{position:absolute;left:50%;top:-5px;margin-left:-4px;border:4px solid transparent;border-top:6px solid var(--dsel);filter:drop-shadow(0 1px 0 rgba(0,0,0,.4))}
 body.gyro #ori{display:none}
 body.land .dial{width:54px;height:54px}body.land .dial .df span{transform-origin:1px 19px}body.land .dial .dv{font-size:13px}body.land .ctl1{display:grid;grid-template-columns:minmax(0,1fr) 54px;grid-template-rows:auto auto;gap:5px;align-items:center}body.land .zgrp{grid-column:1;grid-row:1;justify-content:center}body.land .zr{display:none}body.land .ctl1 .iseg{grid-column:1;grid-row:2;display:flex;justify-content:center}body.land .ib{padding:3px 6px}body.land .zpill .zb{height:26px;line-height:26px}body.land .dial{grid-column:2;grid-row:1/3;align-self:center}body.land .iseg .ib{flex:1;min-width:0}
@@ -1030,10 +1031,12 @@ const trailT=()=>{const i=dialIdx();return i>SHVID?1/SHV[i]:0};
  const d=$('#dial');let st=null;
  const ang=e=>{const r=d.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI};
  const setI=i=>{const mx=mode==='video'?SHVID:SHV.length-1;i=Math.max(0,Math.min(mx,i));if(i!==dialIdx()){S.shi=i;save();upd();try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}}};
- d.addEventListener('pointerdown',e=>{e.preventDefault();try{d.setPointerCapture(e.pointerId)}catch(_){}st={a:ang(e),x:e.clientX,y:e.clientY,i:dialIdx(),mv:false}});
- d.addEventListener('pointermove',e=>{if(!st)return;let da=ang(e)-st.a;if(da>180)da-=360;if(da<-180)da+=360;const lin=(e.clientX-st.x)+(st.y-e.clientY);
-   if(Math.abs(da)>8||Math.abs(lin)>8)st.mv=true;const steps=Math.abs(da)>Math.abs(lin)/1.2?Math.round(da/(360/SHV.length)):Math.round(lin/14);setI(st.i+steps)});
- ['pointerup','pointercancel'].forEach(n=>d.addEventListener(n,()=>{if(st&&!st.mv){const mx=mode==='video'?SHVID:SHV.length-1;setI(st.i>=mx?0:st.i+1)}st=null}))}
+ /* knob look, slider behaviour: hold and drag left = faster shutter, drag right = slower (longer) */
+ d.addEventListener('pointerdown',e=>{e.preventDefault();try{d.setPointerCapture(e.pointerId)}catch(_){}st={x:e.clientX,y:e.clientY,i:dialIdx()};d.classList.add('hold')});
+ d.addEventListener('pointermove',e=>{if(!st)return;const b=document.body.classList;let dx=e.clientX-st.x;
+   if(b.contains('rotr'))dx=e.clientY-st.y;else if(b.contains('rotl'))dx=st.y-e.clientY;
+   setI(st.i+Math.round(dx/16))});
+ ['pointerup','pointercancel'].forEach(n=>d.addEventListener(n,()=>{st=null;d.classList.remove('hold')}))}
 /* experimental: auto landscape from the motion sensor */
 const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 let gyCand=null,gyT=0,gyOn=false;
