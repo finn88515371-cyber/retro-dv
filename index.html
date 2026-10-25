@@ -383,6 +383,15 @@ html{background:#000}
 body.land .lthin{flex:0 0 44px}
 body.land .lthin #mb{width:44px;padding:0;font-size:10px!important;letter-spacing:0!important;flex:none}
 body.land .lrow>#mic{font-size:11px!important;letter-spacing:0!important}
+
+.fxb{width:40px;height:40px!important;border-radius:50%!important;padding:0}.fxb svg{width:22px;height:22px}
+.ctl1{grid-template-columns:auto 1fr auto auto!important;column-gap:8px}
+.ctl1 #fb{justify-self:center}.ctl1 .fxb{justify-self:end}
+#xstrip{display:none;flex:none;gap:6px;overflow-x:auto;padding:4px 2px;order:3;scrollbar-width:none}#xstrip::-webkit-scrollbar{display:none}
+.cam.xpick #xstrip{display:flex;animation:up .22s ease}
+#xstrip .xt{flex:none;padding:0 12px;height:32px;font-size:12px!important}
+body.land #xstrip{grid-column:2;grid-row:3;align-self:end;z-index:6;background:rgba(0,0,0,.55);border-radius:var(--crad);margin:0 4px 4px;padding:6px}
+body.land .lcol .fxb{width:36px;height:36px!important}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -395,11 +404,12 @@ body.land .lrow>#mic{font-size:11px!important;letter-spacing:0!important}
       <div class="tb"><button class="btn" id="mic">MIC</button><button class="btn ib" id="fls" aria-label="闪光灯"></button><button class="btn" id="mb">MENU</button></div>
     </div>
     <div id="fstrip"></div>
+    <div id="xstrip"></div>
     <div class="deck">
       <div class="ctl ctl1">
         <div class="zgrp"><div class="zpill"><button class="btn zb" id="zo" aria-label="缩小">－</button><button class="btn zb" id="zi" aria-label="放大">＋</button></div><span class="zr" id="zr">1.0×</span></div>
         <div class="fsq" id="fb" aria-label="滤镜"><div class="fwin"><div class="ftrk"><div class="fcard"><i></i><b></b></div><div class="fcard"><i></i><b></b></div><div class="fcard"><i></i><b></b></div></div><span class="fgl"></span></div></div>
-        <div class="dial" id="dial" aria-label="快门速度"><div class="dk"></div><div class="df" id="dface"></div><b class="dv" id="dval">A</b><i class="dp"></i></div>
+        <button class="btn ib fxb" id="fxb" aria-label="特效"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17"/><circle cx="12" cy="12" r="3"/></svg></button><div class="dial" id="dial" aria-label="快门速度"><div class="dk"></div><div class="df" id="dface"></div><b class="dv" id="dval">A</b><i class="dp"></i></div>
       </div>
       <div class="evr"><button class="btn" id="evr">EV</button><input type="range" id="ev" min="-2" max="2" step=".1" value="0"><i id="evv">0.0</i></div>
       <div class="ctl">
@@ -487,11 +497,26 @@ const gc=document.createElement('canvas'),gl=gc.getContext('webgl');
 const VS='attribute vec2 a;varying vec2 u;void main(){u=vec2(a.x*.5+.5,.5-a.y*.5);gl_Position=vec4(a,0.,1.);}';
 const FS=`precision highp float;
 uniform sampler2D t,tb,tk,ta;uniform vec2 r,cr,st;
+uniform sampler2D tsr;uniform float srk;
 uniform float T,m,z,fb,F,rot,pf,ca,bl,bd,bm,nz,sn,vg,jt,sat,wb,sh,ex,fx,fp,lf,fd,kc,kb,skk,ska,skt,skw,bkk,bkt;
 varying vec2 u;
 vec2 PX;
 float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
-vec3 S(vec2 p){p=(p-.5)*cr/(z*st)+.5;if(fp>.5)p=1.-p;p.x=mix(p.x,1.-p.x,m);
+uniform float wf;
+vec2 WP(vec2 p){if(wf<.5)return p;float asp=r.x/r.y;vec2 c=p-.5;c.x*=asp;float d=length(c),a=atan(c.y,c.x);
+ if(wf<1.5){float R=.62;if(d<R)c*=pow(d/R,.75);}
+ else if(wf<2.5){float R=.62;if(d<R)c*=pow(max(d/R,.001),-.32)*.92+.08;}
+ else if(wf<3.5){return vec2(p.x>.5?1.-p.x:p.x,p.y);}
+ else if(wf<4.5){return vec2(p.x,p.y>.5?1.-p.y:p.y);}
+ else if(wf<5.5){return fract(p*2.);}
+ else if(wf<6.5){return fract(p*3.);}
+ else if(wf<7.5){float R=.55;if(d<R){float k=(1.-d/R);float t=a+k*k*3.2;c=vec2(cos(t),sin(t))*d;}}
+ else if(wf<8.5){float w=1.0472;a=mod(a,w);a=abs(a-w*.5);c=vec2(cos(a),sin(a))*d;}
+ else if(wf<9.5){float R=.24;if(d>R)c=c/d*R*(1.+(d-R)*.15);}
+ else if(wf<10.5){c.x*=mix(.55,1.,smoothstep(0.,.45,abs(c.x)));}
+ else {c=floor(c*14.)/14.+.5/14.;}
+ c.x/=asp;return c+.5;}
+vec3 S(vec2 p){p=WP(p);p=(p-.5)*cr/(z*st)+.5;if(fp>.5)p=1.-p;p.x=mix(p.x,1.-p.x,m);
  if(rot>1.5)p=vec2(p.y,1.-p.x);else if(rot>.5)p=vec2(1.-p.y,p.x);
  return texture2D(t,clamp(p,0.,1.)).rgb*ex;}
 vec3 Sb(vec2 p){vec2 o=PX*.35;return (S(p+o)+S(p+vec2(-o.x,o.y))+S(p+vec2(o.x,-o.y))+S(p-o))*.25;}
@@ -522,6 +547,7 @@ void main(){
   b+=max(S(uv+d*.012)-.55,0.)+max(S(uv+d*.03)-.55,0.)*.8;}
  col+=b*.14*bm*vec3(.85,.92,1.);
  if(skk>0.)col+=texture2D(tb,vec2(uv.x,1.-uv.y)).rgb*skk*.4;
+ if(srk>0.){vec3 sr=texture2D(tsr,vec2(sc.x,1.-sc.y)).rgb*srk;col=col+sr;col=mix(col,vec3(1.)-(vec3(1.)-col)*.6,clamp(dot(sr,vec3(.33))*.5,0.,.6));}
  if(bkk>0.){vec2 tu=vec2(uv.x,1.-uv.y);vec3 la=texture2D(ta,tu).rgb;float hm=smoothstep(.03,.2,Yf(la))*min(bkk,1.);vec3 bk=texture2D(tk,tu).rgb*bkk;
   col=mix(col+bk*.85,max(bk*1.05,la*.55)+bk*.1,hm);}
  col=(col-.5)*1.1+.5;col=mix(vec3(Yf(col)),col,1.1*sat);
@@ -572,7 +598,21 @@ const la=gl.getAttribLocation(pg,'a');gl.enableVertexAttribArray(la);gl.vertexAt
 const tx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tx);
 [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
 const BFS=`precision mediump float;uniform sampler2D t;uniform vec2 r,cr,st;uniform float m,z,rot,fp,ex,skt,sk2,ska;varying vec2 u;
-vec3 S(vec2 p){p=(p-.5)*cr/(z*st)+.5;if(fp>.5)p=1.-p;p.x=mix(p.x,1.-p.x,m);
+uniform float wf;
+vec2 WP(vec2 p){if(wf<.5)return p;float asp=r.x/r.y;vec2 c=p-.5;c.x*=asp;float d=length(c),a=atan(c.y,c.x);
+ if(wf<1.5){float R=.62;if(d<R)c*=pow(d/R,.75);}
+ else if(wf<2.5){float R=.62;if(d<R)c*=pow(max(d/R,.001),-.32)*.92+.08;}
+ else if(wf<3.5){return vec2(p.x>.5?1.-p.x:p.x,p.y);}
+ else if(wf<4.5){return vec2(p.x,p.y>.5?1.-p.y:p.y);}
+ else if(wf<5.5){return fract(p*2.);}
+ else if(wf<6.5){return fract(p*3.);}
+ else if(wf<7.5){float R=.55;if(d<R){float k=(1.-d/R);float t=a+k*k*3.2;c=vec2(cos(t),sin(t))*d;}}
+ else if(wf<8.5){float w=1.0472;a=mod(a,w);a=abs(a-w*.5);c=vec2(cos(a),sin(a))*d;}
+ else if(wf<9.5){float R=.24;if(d>R)c=c/d*R*(1.+(d-R)*.15);}
+ else if(wf<10.5){c.x*=mix(.55,1.,smoothstep(0.,.45,abs(c.x)));}
+ else {c=floor(c*14.)/14.+.5/14.;}
+ c.x/=asp;return c+.5;}
+vec3 S(vec2 p){p=WP(p);p=(p-.5)*cr/(z*st)+.5;if(fp>.5)p=1.-p;p.x=mix(p.x,1.-p.x,m);
  if(rot>1.5)p=vec2(p.y,1.-p.x);else if(rot>.5)p=vec2(1.-p.y,p.x);
  return texture2D(t,clamp(p,0.,1.)).rgb*ex;}
 void main(){vec3 mx=vec3(0.),av=vec3(0.);float s1=0.,s2=0.;
@@ -586,7 +626,7 @@ void main(){float asp=r.x/r.y,an=ska*.0174533;vec2 dv=vec2(cos(an),sin(an)*asp);
   vec4 k0=texture2D(tm,s),k1=texture2D(tm,s+ps),k2=texture2D(tm,s-ps);a+=(k0.rgb*k0.a+.5*k1.rgb*k1.a+.5*k2.rgb*k2.a)*wt;}
  gl_FragColor=vec4(a*.25,1.);}`;
 const pb=gl.createProgram();gl.bindAttribLocation(pb,0,'a');gl.attachShader(pb,mk(gl.VERTEX_SHADER,VS));gl.attachShader(pb,mk(gl.FRAGMENT_SHADER,BFS));gl.linkProgram(pb);
-const UB={};['r','cr','st','m','z','rot','fp','ex','skt','sk2','ska'].forEach(n=>UB[n]=gl.getUniformLocation(pb,n));
+const UB={};['r','cr','st','m','z','rot','fp','ex','skt','sk2','ska','wf'].forEach(n=>UB[n]=gl.getUniformLocation(pb,n));
 const BN=128,btx=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,btx);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,BN,BN,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
 [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
 const fbo=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,btx,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
@@ -607,6 +647,32 @@ const UC={};['r','R','rt'].forEach(n=>UC[n]=gl.getUniformLocation(pc,n));gl.useP
 const BN3=256,btx3=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,btx3);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,BN3,BN3,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
 [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
 const fbo3=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fbo3);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,btx3,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+/* starburst (CCD sun): point-only mask -> long thin golden rays + vertical CCD smear + wide halo */
+const PFS=`precision mediump float;uniform sampler2D tm;varying vec2 u;
+void main(){vec2 s=vec2(u.x,1.-u.y);vec3 c=texture2D(tm,s).rgb,av=vec3(0.);
+ for(int i=0;i<8;i++){float a=float(i)*.7854;av+=texture2D(tm,s+vec2(cos(a),sin(a))*5./128.).rgb;}
+ av/=8.;gl_FragColor=vec4(max(c-av*1.15,0.)*1.6,1.);}`;
+const SRS=`precision mediump float;uniform sampler2D tm,tw;uniform vec2 r;uniform float n,ang,len,sm,hl;varying vec2 u;
+void main(){float asp=r.x/r.y;vec3 a=vec3(0.);
+ for(int k=0;k<8;k++){if(float(k)>=n)break;float th=ang+float(k)*6.2832/n;vec2 d=vec2(cos(th),sin(th)*asp);
+  float L=len*(.45+.55*max(0.,sin(th))+.15);
+  for(int i=1;i<36;i++){float f=float(i)/36.,t=f*L;vec2 q=u-d*t;if(q.x<0.||q.x>1.||q.y<0.||q.y>1.)break;
+   a+=texture2D(tm,vec2(q.x,1.-q.y)).rgb*exp(-f*3.2);}}
+ a*=.3/max(n,1.);
+ vec3 sv=vec3(0.);for(int i=0;i<48;i++){float yy=(float(i)+.5)/48.;sv+=texture2D(tm,vec2(u.x,1.-yy)).rgb*(.25+.75*exp(-abs(yy-u.y)*3.));}
+ sv*=sm*.035;
+ vec3 h=vec3(0.);for(int j=1;j<=5;j++)for(int i=0;i<12;i++){float th=float(i)*.5236+float(j)*.4;float R=float(j)*.045*hl;vec2 q=u+vec2(cos(th),sin(th)*asp)*R;h+=texture2D(tw,vec2(q.x,1.-q.y)).rgb*(1.25-float(j)*.2);}
+ h*=.022*hl;
+ float Y=dot(a,vec3(.33));vec3 gold=mix(vec3(1.,.74,.22),vec3(1.,.95,.8),smoothstep(.8,2.2,Y));
+ gl_FragColor=vec4(a*gold*1.6+sv*vec3(1.,.97,.9)+h*vec3(1.,.96,.88),1.);}`;
+const mkFB=N=>{const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,N,N,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+  [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([a,b])=>gl.texParameteri(gl.TEXTURE_2D,a,b));
+  const f=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,f);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,t,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);return{t,f}};
+const SM5=mkFB(BN),SM7=mkFB(BN),SR6=mkFB(256);
+const ppt=gl.createProgram();gl.bindAttribLocation(ppt,0,'a');gl.attachShader(ppt,mk(gl.VERTEX_SHADER,VS));gl.attachShader(ppt,mk(gl.FRAGMENT_SHADER,PFS));gl.linkProgram(ppt);
+gl.useProgram(ppt);gl.uniform1i(gl.getUniformLocation(ppt,'tm'),1);
+const psr=gl.createProgram();gl.bindAttribLocation(psr,0,'a');gl.attachShader(psr,mk(gl.VERTEX_SHADER,VS));gl.attachShader(psr,mk(gl.FRAGMENT_SHADER,SRS));gl.linkProgram(psr);
+const USR={};['r','n','ang','len','sm','hl'].forEach(n=>USR[n]=gl.getUniformLocation(psr,n));gl.useProgram(psr);gl.uniform1i(gl.getUniformLocation(psr,'tm'),1);gl.uniform1i(gl.getUniformLocation(psr,'tw'),2);
 gl.useProgram(pg);
 /* bokeh sprites */
 const SVS='attribute vec2 a;uniform vec2 c,sz;uniform float rt;varying vec2 v;void main(){v=a*.5+.5;vec2 p=vec2(a.x*cos(rt)-a.y*sin(rt),a.x*sin(rt)+a.y*cos(rt));gl_Position=vec4(c+p*sz,0.,1.);}';
@@ -643,12 +709,12 @@ function drawBokeh(PP){const pts=findPeaks(Math.round(PP.bkn));if(!pts.length)re
     gl.uniform3f(US.col,r,g,b);gl.uniform1f(US.al,PP.bkk*.6*Math.min(1,v*1.4));gl.drawArrays(gl.TRIANGLE_STRIP,0,4)}
   gl.disable(gl.BLEND);gl.useProgram(pg)}
 gl.bindTexture(gl.TEXTURE_2D,tx);
-const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','fd','kc','kb','st','skk','ska','skt','skw','bkk','bkt'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));
+const UL={};['r','cr','T','m','z','fb','F','rot','pf','ca','bl','bd','bm','nz','sn','vg','jt','sat','wb','sh','ex','fx','fp','lf','fd','kc','kb','st','skk','ska','skt','skw','bkk','bkt','wf','srk'].forEach(n=>UL[n]=gl.getUniformLocation(pg,n));gl.uniform1i(gl.getUniformLocation(pg,'tsr'),5);
 gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);gl.uniform1i(gl.getUniformLocation(pg,'tk'),3);gl.uniform1i(gl.getUniformLocation(pg,'ta'),4);
 
 /* settings */
-const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,rotMan:false,gyInv:false,shi:0,shiM:7,camOK:false};
+const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false,srOn:false,srk:1,srt:.96,srl:1,srn:6,sra:0,srs:.6,srh:.8};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,rotMan:false,gyInv:false,fx:0,shi:0,shiM:7,camOK:false};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -785,7 +851,7 @@ const LB={L:null,R:null,marks:new Map(),on:false};
 function landB(on){if(LB.on===on)return;LB.on=on;
   if(!LB.L){LB.L=document.createElement('div');LB.L.className='lcol lcL';LB.R=document.createElement('div');LB.R.className='lcol lcR';cam.append(LB.L,LB.R);
     LB.l1=document.createElement('div');LB.l1.className='lrow';LB.r1=document.createElement('div');LB.r1.className='lrow lrow3';LB.r2=document.createElement('div');LB.r2.className='lrow lrow3';LB.ra=document.createElement('div');LB.ra.className='lsub';LB.rb=document.createElement('div');LB.rb.className='lsub lthin';LB.R.append(LB.ra,LB.rb)}
-  const L=[[LB.l1,['#bar','#bre']],['.lseg'],['#fb'],['.mseg']],Rr=[[LB.r1,['#mic','#fls']],['#dial'],['#sh'],['.rseg2']],Rb=[['#mb'],['.zgrp'],['.evr']];
+  const L=[[LB.l1,['#bar','#bre']],['.lseg'],['#fb'],['#fxb'],['.mseg']],Rr=[[LB.r1,['#mic','#fls']],['#dial'],['#sh'],['.rseg2']],Rb=[['#mb'],['.zgrp'],['.evr']];
   const mv=(el,to)=>{if(!LB.marks.has(el)){const m=document.createComment('m');el.parentNode.insertBefore(m,el);LB.marks.set(el,m)}to.append(el)};
   const back=el=>{const m=LB.marks.get(el);if(m)m.parentNode.insertBefore(el,m.nextSibling)};
   const each=(spec,fn)=>spec.forEach(x=>{if(x.length===2&&x[0] instanceof Element){x[1].forEach(q=>fn($(q),x[0]))}else fn(document.querySelector(x[0]),null)});
@@ -837,6 +903,12 @@ addSlider(pR,'强度',0,2,.01,P,'skk');addSlider(pR,'触发亮度',.5,.98,.01,P,
  i.oninput=()=>{let a=+i.value;for(const t of [0,90,180])if(Math.abs(a-t)<=6)a=t;P.ska=a;i.value=a;v.textContent=lab(a);save()};
  sync();pR.append(l);pR.sy.push(sync);pR.rk.push([P,'ska',D.ska,null])}
 note(pR,'画面里很亮的光源（路灯、太阳、车灯）会拉出一条贯穿画面的光带，颜色跟着光源本身。角度拖到 0°、90°、180° 附近会自动吸附到横向或竖向。');
+head(pR,'星芒（CCD 太阳光）');
+addToggle(pR,'星芒',P,'srOn',()=>{if(P.srOn&&!P.srk){P.srk=1;save();pR.sy.forEach(f=>f())}});
+addChips(pR,['4 根','6 根','8 根'],()=>[4,6,8].indexOf(P.srn),i=>{P.srn=[4,6,8][i];save()});pR.rk.push([P,'srn',D.srn,null]);
+addSlider(pR,'星芒强度',0,2.5,.01,P,'srk');addSlider(pR,'触发亮度',.85,.995,.005,P,'srt');addSlider(pR,'星芒长度',.3,2.5,.01,P,'srl');
+addSlider(pR,'星芒角度',-45,45,1,P,'sra');addSlider(pR,'CCD 竖条',0,2,.01,P,'srs');addSlider(pR,'光晕',0,2,.01,P,'srh');
+note(pR,'模仿 2000 年代 CCD 机对着太阳拍的效果：只有非常亮的小光点（太阳、灯）才会触发，射出细长的金色星芒（朝下的更长），再加一道 CCD 特有的竖向亮条和一圈大光晕。大片过曝的天空和白墙不会触发星芒。');
 head(pR,'光斑');
 addToggle(pR,'光斑',P,'bkOn',()=>{if(P.bkOn&&!P.bkk){P.bkk=1;save();pR.sy.forEach(f=>f())}});
 addChips(pR,BKN,()=>P.bksh|0,i=>{P.bksh=i;save()});
@@ -1060,6 +1132,12 @@ const closeF=()=>{cam.classList.remove('fpick');$('#fb').classList.remove('act')
 FN.forEach((n,i)=>{const b=document.createElement('button');b.className='tile';b.dataset.i=i;b.innerHTML=`<span class="sw" style="background:${SW[i]}"></span><span class="nm">${n}</span>`;b.onclick=()=>{fi=i;syncTiles()};fs.append(b)});
 function syncTiles(){fs.querySelectorAll('[data-i]').forEach(b=>b.classList.toggle('sel',+b.dataset.i===fi));typeof updFsq==='function'&&updFsq()}
 syncTiles();
+/* camera effects (Photo Booth style lens warps) */
+const FXN=['无','鱼眼','挤压','左右对称','上下对称','四宫格','九宫格','漩涡','万花筒','光隧道','拉伸','马赛克'];
+{const xs=$('#xstrip');FXN.forEach((n,i)=>{const b=document.createElement('button');b.className='btn xt';b.dataset.i=i;b.textContent=n;b.onclick=()=>{S.fx=i;save();syncFX()};xs.append(b)});
+ const c=document.createElement('button');c.className='btn xt';c.textContent='✕ 关闭';c.onclick=()=>{cam.classList.remove('xpick');syncFX()};xs.prepend(c)}
+function syncFX(){$('#xstrip').querySelectorAll('[data-i]').forEach(b=>b.classList.toggle('act',+b.dataset.i===(S.fx||0)));$('#fxb').classList.toggle('act',!!S.fx||cam.classList.contains('xpick'))}
+$('#fxb').onclick=()=>{cam.classList.remove('fpick');$('#fb').classList.remove('act');cam.classList.toggle('xpick');syncFX()};syncFX();
 /* filter square: swipe = next/prev filter, tap = open the filter strip */
 function updFsq(){const n=FN.length,cs=$('#fb').querySelectorAll('.fcard');[fi-1,fi,fi+1].forEach((k,j)=>{k=(k+n)%n;cs[j].querySelector('i').style.background=SW[k];cs[j].querySelector('b').textContent=FN[k]})}
 updFsq();
@@ -1070,7 +1148,7 @@ updFsq();
  b.addEventListener('pointerdown',e=>{if(busy)return;st={x:e.clientX,y:e.clientY,t:performance.now(),w:b.querySelector('.fwin').offsetWidth,mv:false};try{b.setPointerCapture(e.pointerId)}catch(_){}});
  b.addEventListener('pointermove',e=>{if(!st)return;const [dx,dy]=lx(e);if(Math.abs(dx)>5)st.mv=true;if(st.mv)put(Math.max(-st.w,Math.min(st.w,dx)),false)});
  const end=e=>{if(!st)return;const [dx]=lx(e),w=st.w,v=Math.abs(dx)/Math.max(1,performance.now()-st.t),mv=st.mv;st=null;
-   if(!mv){cam.classList.toggle('fpick');b.classList.toggle('act',cam.classList.contains('fpick'));return}
+   if(!mv){cam.classList.remove('xpick');syncFX();cam.classList.toggle('fpick');b.classList.toggle('act',cam.classList.contains('fpick'));return}
    if(Math.abs(dx)>w*.28||v>.5){const dir=dx<0?1:-1;busy=true;put(-dir*w,true);
      setTimeout(()=>{fi=(fi+dir+FN.length)%FN.length;syncTiles();put(0,false);busy=false},230)}else put(0,true)};
  b.addEventListener('pointerup',end);b.addEventListener('pointercancel',()=>{st=null;put(0,true)})}
@@ -1252,13 +1330,13 @@ function loop(ts){
   gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tx);
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,vid);
   const P0=bmOn?{...P,nz:BMP.nz,jt:BMP.jt,vg:BMP.vg,sn:BMP.sn,sh:BMP.sh,bm:BMP.bm,ca:.25,pf:0,bd:.2,bl:0,wb:0,sat:1}:P;
-  const PP=(P0.skOn&&P0.bkOn)?P0:{...P0,skk:P0.skOn?P0.skk:0,bkk:P0.bkOn?P0.bkk:0};
+  const PP={...P0,skk:P0.skOn?P0.skk:0,bkk:P0.bkOn?P0.bkk:0,srk:P0.srOn?P0.srk:0};
   const fpv=rot?(facing==='user'?(S.lfF?0:1):(S.lfB?1:0)):0,mv=facing==='user'?1:0,exv=Math.pow(2,ev)*(shotFD<1.5?shotFD:1)*(shGain+=(shGainT-shGain)*.15);
   if(PP.skk>0||PP.bkk>0){
     [1,3,4].forEach(n=>{gl.activeTexture(gl.TEXTURE0+n);gl.bindTexture(gl.TEXTURE_2D,null)});gl.activeTexture(gl.TEXTURE0);
     gl.useProgram(pb);gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.viewport(0,0,BN,BN);
     gl.uniform2f(UB.r,cw,ch);gl.uniform2f(UB.cr,cr[0],cr[1]);gl.uniform2f(UB.st,S.stx,S.sty);gl.uniform1f(UB.m,mv);gl.uniform1f(UB.z,zc*lensK);
-    gl.uniform1f(UB.rot,rot);gl.uniform1f(UB.fp,fpv);gl.uniform1f(UB.ex,exv);{const sE=1-(1-PP.skt)*.4;gl.uniform1f(UB.skt,Math.min(PP.skk>0?sE:1,PP.bkk>0?PP.bkt:1));gl.uniform1f(UB.sk2,sE)}gl.uniform1f(UB.ska,PP.ska);
+    gl.uniform1f(UB.wf,S.fx||0);gl.uniform1f(UB.rot,rot);gl.uniform1f(UB.fp,fpv);gl.uniform1f(UB.ex,exv);{const sE=1-(1-PP.skt)*.4;gl.uniform1f(UB.skt,Math.min(PP.skk>0?sE:1,PP.bkk>0?PP.bkt:1));gl.uniform1f(UB.sk2,sE)}gl.uniform1f(UB.ska,PP.ska);
     gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,btx);gl.activeTexture(gl.TEXTURE0);
     if(PP.bkk>0){
@@ -1276,7 +1354,23 @@ function loop(ts){
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,btx2);
     gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,btx3);gl.activeTexture(gl.TEXTURE4);gl.bindTexture(gl.TEXTURE_2D,btx);gl.activeTexture(gl.TEXTURE0);
   }
+  if(PP.srk>0){
+    [1,2,5].forEach(n=>{gl.activeTexture(gl.TEXTURE0+n);gl.bindTexture(gl.TEXTURE_2D,null)});gl.activeTexture(gl.TEXTURE0);
+    gl.useProgram(pb);gl.bindFramebuffer(gl.FRAMEBUFFER,SM5.f);gl.viewport(0,0,BN,BN);
+    gl.uniform2f(UB.r,cw,ch);gl.uniform2f(UB.cr,cr[0],cr[1]);gl.uniform2f(UB.st,S.stx,S.sty);gl.uniform1f(UB.m,mv);gl.uniform1f(UB.z,zc*lensK);gl.uniform1f(UB.wf,S.fx||0);
+    gl.uniform1f(UB.rot,rot);gl.uniform1f(UB.fp,fpv);gl.uniform1f(UB.ex,exv);gl.uniform1f(UB.skt,PP.srt);gl.uniform1f(UB.sk2,PP.srt);gl.uniform1f(UB.ska,0);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,SM5.t);gl.activeTexture(gl.TEXTURE0);
+    gl.useProgram(ppt);gl.bindFramebuffer(gl.FRAMEBUFFER,SM7.f);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,SM7.t);gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,SM5.t);gl.activeTexture(gl.TEXTURE0);
+    gl.useProgram(psr);gl.bindFramebuffer(gl.FRAMEBUFFER,SR6.f);gl.viewport(0,0,256,256);
+    gl.uniform2f(USR.r,cw,ch);gl.uniform1f(USR.n,PP.srn);gl.uniform1f(USR.ang,PP.sra*Math.PI/180+Math.PI/2);gl.uniform1f(USR.len,.8*PP.srl);gl.uniform1f(USR.sm,PP.srs);gl.uniform1f(USR.hl,PP.srh);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+    gl.activeTexture(gl.TEXTURE5);gl.bindTexture(gl.TEXTURE_2D,SR6.t);
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,btx2);gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,null);gl.activeTexture(gl.TEXTURE0);
+  }
   gl.useProgram(pg);gl.viewport(0,0,cw,ch);
+  gl.uniform1f(UL.wf,S.fx||0);gl.uniform1f(UL.srk,PP.srk||0);
   gl.uniform2f(UL.r,cw,ch);gl.uniform2f(UL.cr,cr[0],cr[1]);gl.uniform2f(UL.st,S.stx,S.sty);gl.uniform1f(UL.T,T%1000);
   gl.uniform1f(UL.m,mv);gl.uniform1f(UL.z,zc*lensK);
   gl.uniform1f(UL.fb,Math.min(Math.abs(zt-zc)*.0015,.008));
