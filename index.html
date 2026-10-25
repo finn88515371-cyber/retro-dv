@@ -297,6 +297,18 @@ body.skin-retro .dial{--dkA:#4aa8dc;--dkB:#ffffff;--dfc:radial-gradient(circle a
 body.skin-dark .dial{--dkA:#0b0d11;--dkB:#454c57;--dfc:radial-gradient(circle at 35% 30%,#2e343e,#14171c 75%);--dtc:#cfd6e0;--dsel:#5aa8ff}
 body.skin-ccdd .dial{--dkA:#08090a;--dkB:#8a9099;--dfc:repeating-conic-gradient(rgba(255,255,255,.08) 0 2deg,rgba(0,0,0,.12) 2deg 4deg),radial-gradient(circle at 35% 30%,#6a7079,#2a2d32 70%);--dtc:#e6e9ec;--dsel:#7dff5a}
 body.bm .dial{--dkA:#000;--dkB:#3a3a3a;--dfc:radial-gradient(circle at 35% 30%,#1c1c1c,#050505 75%);--dtc:#d9d9d9;--dsel:#ffffff}
+
+.dial{width:74px;height:74px}.dial .df{inset:7px}.dial .df span{transform-origin:1px 28px;height:7px}.dial .dv{font-size:17px}.dial .dv.da{font-size:20px}
+.mseg{gap:0;border:var(--bbw,1px) solid var(--btnb);border-radius:calc(var(--rad) + 2px);overflow:hidden;box-shadow:var(--btnsh)}
+body .cam .mseg .ib{border:0;border-radius:0;margin:0;box-shadow:none;height:32px;min-width:44px;transform:none}
+body .cam .mseg .ib:first-child{border-right:1px solid var(--btnb)}
+body .cam .mseg .ib.act{box-shadow:inset 0 2px 5px rgba(0,0,0,.35);padding-left:9px}
+/* one size for every skin so buttons don't jump */
+.cam .top .btn,.cam .deck .btn,.cam #mc{font-size:12px!important;line-height:16px!important;letter-spacing:.04em!important;height:30px;padding-top:0;padding-bottom:0;margin-bottom:0!important;box-sizing:border-box;white-space:nowrap}
+.cam .deck .ib{height:32px}.cam .tabs .btn{font-size:12px!important;letter-spacing:.04em!important}
+.cam .zr,.cam .evr i{font-size:11px!important;letter-spacing:0!important}
+body.land .dial{width:58px;height:58px}body.land .dial .df span{transform-origin:1px 20px}body.land .dial .dv{font-size:13px}body.land .ctl1{grid-template-columns:minmax(0,1fr) 58px}
+body.land .cam .top .btn,body.land .cam .deck .btn:not(.zb):not(.ib){height:28px}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -317,7 +329,7 @@ body.bm .dial{--dkA:#000;--dkB:#3a3a3a;--dfc:radial-gradient(circle at 35% 30%,#
       </div>
       <div class="evr"><button class="btn" id="evr">EV</button><input type="range" id="ev" min="-2" max="2" step=".1" value="0"><i id="evv">0.0</i></div>
       <div class="ctl">
-        <div class="seg iseg"><button class="btn ib act" id="mP" aria-label="拍照"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.5-2.5h5L16 7"/><circle cx="12" cy="13.5" r="3.5"/></svg></button><button class="btn ib" id="mV" aria-label="录像"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7" width="13" height="10" rx="2"/><path d="M15.5 10.5l6-3v9l-6-3z"/></svg></button></div>
+        <div class="seg iseg mseg"><button class="btn ib act" id="mP" aria-label="拍照"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.5-2.5h5L16 7"/><circle cx="12" cy="13.5" r="3.5"/></svg></button><button class="btn ib" id="mV" aria-label="录像"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7" width="13" height="10" rx="2"/><path d="M15.5 10.5l6-3v9l-6-3z"/></svg></button></div>
         <button class="shut photo" id="sh" aria-label="shutter"></button>
         <div class="seg"><button class="btn" id="ori">横屏</button><button class="btn ib" id="fl" aria-label="前后切换"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6"/><path d="M18 3v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6"/><path d="M6 21v-4h4"/></svg></button></div>
       </div>
@@ -562,7 +574,7 @@ gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);gl.uniform1i(gl.getUniformLocatio
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'light',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,gyro:false,gyInv:false,shi:0,camOK:false};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,gyro:false,gyInv:false,shi:0,camOK:false};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -573,8 +585,8 @@ const DEF=new Map([[P,D],[S,DS],[WM,DW],[WM.items,DWI]]);
 const save=()=>{try{localStorage.setItem('dvP3',JSON.stringify(P));localStorage.setItem('dvS',JSON.stringify(S));localStorage.setItem('dvW',JSON.stringify(WM))}catch(e){}};
 
 /* skins */
-const SK=['light','dv','xp','w7','leather','linen','wood','metal','paper','retro','dark','ccd','ccdd'];
-const SKN=['清淡','DV 摄像机','Windows XP','Windows 7','iOS 皮革','iOS 亚麻','iOS 木纹','iOS 金属','iOS 便签','2000s','暗色','CCD','暗色 CCD'];
+const SK=['ccd','ccdd','light','dv','xp','w7','leather','linen','wood','metal','paper','retro','dark'];
+const SKN=['CCD','暗色 CCD','简约','暗色简约','Windows XP','Windows 7','iOS 皮革','iOS 亚麻','iOS 木纹','iOS 金属','iOS 便签','2000s','暗色'];
 if(!SK.includes(S.skin))S.skin='light';
 function applySkin(){const b=document.body.classList;SK.forEach(s=>b.remove('skin-'+s));b.add('skin-'+S.skin);save()}
 applySkin();
@@ -1007,19 +1019,20 @@ $('#pwb').onclick=()=>{applyMic();start()};
  try{navigator.permissions&&navigator.permissions.query({name:'camera'}).then(r=>{if(r.state==='granted'){done=true;auto()}else if(r.state==='denied')done=true}).catch(()=>{})}catch(e){}
  setTimeout(()=>{if(!done&&S.camOK)auto()},300)}
 /* shutter speed dial: A = auto; manual speeds change brightness (auto ISO 50–3200) and add motion trails at 1/15 and slower */
-const SHV=['A',4000,2000,1000,500,250,125,60,30,15,8,4],SHVID=8;
+const SHV=['A',4000,2000,1000,500,250,125,60,30,15,8,4,2,1,.5,.2],SHVID=8;
+const shLbl=v=>v==='A'?'A':v>=1000?v/1000+'K':v>=1?String(v):(1/v)+'"';
 const dialIdx=()=>{const i=S.shi||0;return mode==='video'?Math.min(i,SHVID):i};
-const trailA=()=>{const i=dialIdx();return i>SHVID?Math.max(.12,Math.min(1,(1/30)*SHV[i])):1};
-{const face=$('#dface');SHV.forEach((v,i)=>{const e=document.createElement('span');e.style.transform=`rotate(${i*30}deg)`;if(v==='A')e.className='da';face.append(e)});
- const upd=()=>{const i=dialIdx();face.style.transform=`rotate(${-i*30}deg)`;[...face.children].forEach((e,k)=>{e.classList.toggle('on',k===i);e.classList.toggle('off',mode==='video'&&k>SHVID)});
-   const v=$('#dval');v.textContent=SHV[i]==='A'?'A':(SHV[i]>=1000?SHV[i]/1000+'K':SHV[i]);v.classList.toggle('da',i===0)};
+const trailT=()=>{const i=dialIdx();return i>SHVID?1/SHV[i]:0};
+{const face=$('#dface');SHV.forEach((v,i)=>{const e=document.createElement('span');e.style.transform=`rotate(${i*360/SHV.length}deg)`;if(v==='A')e.className='da';face.append(e)});
+ const upd=()=>{const i=dialIdx();face.style.transform=`rotate(${-i*360/SHV.length}deg)`;[...face.children].forEach((e,k)=>{e.classList.toggle('on',k===i);e.classList.toggle('off',mode==='video'&&k>SHVID)});
+   const v=$('#dval');v.textContent=shLbl(SHV[i]);v.classList.toggle('da',i===0)};
  window.updDial=upd;upd();
  const d=$('#dial');let st=null;
  const ang=e=>{const r=d.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI};
  const setI=i=>{const mx=mode==='video'?SHVID:SHV.length-1;i=Math.max(0,Math.min(mx,i));if(i!==dialIdx()){S.shi=i;save();upd();try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}}};
  d.addEventListener('pointerdown',e=>{e.preventDefault();try{d.setPointerCapture(e.pointerId)}catch(_){}st={a:ang(e),x:e.clientX,y:e.clientY,i:dialIdx(),mv:false}});
  d.addEventListener('pointermove',e=>{if(!st)return;let da=ang(e)-st.a;if(da>180)da-=360;if(da<-180)da+=360;const lin=(e.clientX-st.x)+(st.y-e.clientY);
-   if(Math.abs(da)>8||Math.abs(lin)>8)st.mv=true;const steps=Math.abs(da)>Math.abs(lin)/1.2?Math.round(da/30):Math.round(lin/16);setI(st.i+steps)});
+   if(Math.abs(da)>8||Math.abs(lin)>8)st.mv=true;const steps=Math.abs(da)>Math.abs(lin)/1.2?Math.round(da/(360/SHV.length)):Math.round(lin/14);setI(st.i+steps)});
  ['pointerup','pointercancel'].forEach(n=>d.addEventListener(n,()=>{if(st&&!st.mv){const mx=mode==='video'?SHVID:SHV.length-1;setI(st.i>=mx?0:st.i+1)}st=null}))}
 /* experimental: auto landscape from the motion sensor */
 const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -1045,7 +1058,7 @@ document.body.classList.toggle('gyro',!!S.gyro);if(S.gyro){if(IOS)document.addEv
    if(mode==='video'){t=1/60;iso=100*N2/(t*Math.pow(2,need))}
    else{if(t>1/60){iso=Math.min(3200,100*t*60);t=N2*iso/100/Math.pow(2,need);t=Math.min(t,1/15)}if(t<1/4000)t=1/4000;if(iso<50){iso=50}}
    iso=Math.max(50,Math.min(3200,iso));let shTxt='1/'+near(TS,1/t);
-   const si2=dialIdx();if(si2>0){const tm=1/SHV[si2],T0=t*iso,iso2=Math.max(50,Math.min(3200,T0/tm));shGainT=Math.max(1/8,Math.min(8,tm*iso2/T0));iso=iso2;shTxt='1/'+SHV[si2]}else shGainT=1;
+   const si2=dialIdx();if(si2>0){const tm=1/SHV[si2],T0=t*iso,iso2=Math.max(50,Math.min(3200,T0/tm));shGainT=Math.max(1/8,Math.min(tm>=.5?2:4,tm*iso2/T0));iso=iso2;shTxt=SHV[si2]>=1?'1/'+SHV[si2]:(1/SHV[si2])+'"'}else shGainT=1;
    tx('iev','EV '+(e>0?'+':e<0?'−':'±')+Math.abs(e).toFixed(1));tx('ish',shTxt);tx('iiso','ISO '+near(IS,iso));
    tx('ifl',(typeof FN!=='undefined'&&FN[fi])||'');tx('imm',Math.round(curMM*zc*lensK)+'mm');tx('irs',RES[si]+'p')},250)}
 $('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';lensId=null;start()};
@@ -1154,7 +1167,13 @@ function loop(ts){
   for(const k in D)gl.uniform1f(UL[k],PP[k]);
   gl.uniform1f(UL.kc,bmOn?BMP.ct:1);gl.uniform1f(UL.kb,bmOn?BMP.cr:0);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  oc.imageSmoothingEnabled=false;oc.globalAlpha=trailA();oc.drawImage(gc,0,0,W,H);oc.globalAlpha=1;ov(T);
+  oc.imageSmoothingEnabled=false;
+  {const tt=trailT();
+   if(!tt)oc.drawImage(gc,0,0,W,H);
+   else if(tt<1){oc.globalAlpha=Math.max(.05,Math.min(1,(1/30)/tt*.8));oc.drawImage(gc,0,0,W,H);oc.globalAlpha=1}
+   else{/* long exposure: lights paint trails that fade slowly */oc.globalAlpha=Math.min(.12,.09/tt);oc.fillStyle='#000';oc.fillRect(0,0,W,H);oc.globalAlpha=1;
+     oc.globalCompositeOperation='lighten';oc.drawImage(gc,0,0,W,H);oc.globalCompositeOperation='source-over';oc.globalAlpha=.06;oc.drawImage(gc,0,0,W,H);oc.globalAlpha=1}}
+  ov(T);
   if(S.grid){const g=$('#grid'),bw=out.clientWidth,bh=out.clientHeight,k=Math.min(bw/W,bh/H),iw=W*k,ih=H*k;
     g.style.left=((bw-iw)/2+out.offsetLeft)+'px';g.style.top=((bh-ih)/2+out.offsetTop)+'px';g.style.width=iw+'px';g.style.height=ih+'px'}
   if(shotReq){shotReq=0;flashFx=0;shotFD=2;
