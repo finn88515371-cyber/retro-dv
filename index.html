@@ -310,6 +310,46 @@ body .cam .mseg .ib.act{box-shadow:inset 0 2px 5px rgba(0,0,0,.35);padding-left:
 .cam .zr,.cam .evr i{font-size:11px!important;letter-spacing:0!important}
 body.land .dial{width:58px;height:58px}body.land .dial .df span{transform-origin:1px 20px}body.land .dial .dv{font-size:13px}body.land .ctl1{grid-template-columns:minmax(0,1fr) 58px}
 body.land .cam .top .btn,body.land .cam .deck .btn:not(.zb):not(.ib){height:28px}
+
+/* no text selection / page dragging outside text inputs */
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none}
+input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+/* icon segments */
+.rseg{display:inline-flex;gap:0;border:var(--bbw,1px) solid var(--btnb);border-radius:calc(var(--rad) + 2px);overflow:hidden;box-shadow:var(--btnsh)}
+body .cam .rseg .ib{border:0;border-radius:0;margin:0;box-shadow:none;height:28px;min-width:38px;transform:none;padding:0 8px}
+body .cam .rseg .ib:first-child{border-right:1px solid var(--btnb)}body .cam .rseg .ib.act{box-shadow:inset 0 2px 5px rgba(0,0,0,.35);padding-left:8px}
+.cam .top .ib{height:30px}.ib.dis{opacity:.35}
+#fls.ib svg{width:18px;height:18px}
+/* filter square */
+.fsq{width:60px;height:60px;padding:3px;display:flex;flex-direction:column;gap:2px;flex:none;touch-action:none}
+.cam .deck .fsq{height:60px}
+.fsq .fsw{flex:1;border-radius:calc(var(--rad) - 2px);box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);display:block}
+.fsq .fnm{font-size:10px!important;line-height:12px;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsq.swp .fsw{animation:fsw .25s ease}@keyframes fsw{0%{transform:scale(.8);opacity:.4}100%{transform:none;opacity:1}}
+.rseg2{gap:4px}
+/* ===== landscape B: thumbs on both sides ===== */
+.lcol{display:none}
+body.land .cam,body.land .cam.menu{grid-template-columns:104px minmax(0,1fr) 104px;grid-template-rows:auto auto minmax(0,1fr)}
+body.land #ibar{grid-column:1/4;grid-row:1}body.land .tbar{grid-column:1/4;grid-row:2}
+body.land .lcd{grid-column:2;grid-row:3}
+body.land .side{display:contents}
+body.land .top,body.land .deck{display:none!important}
+body.land .lcol{display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;gap:6px;grid-row:3;min-height:0;overflow:hidden;padding:4px 0}
+body.land .lcL{grid-column:1}body.land .lcR{grid-column:3}
+body.land .lrow{display:flex;gap:4px;width:100%;justify-content:center}body.land .lrow>.btn{flex:1;min-width:0;padding:0 2px}
+body.land .lrow3>.btn{padding:0}
+body.land .lcol .zgrp{justify-content:center}body.land .lcol .zr{display:none}
+body.land .lcol .evr{width:100%;gap:4px}body.land .lcol .evr input{flex:1;min-width:0}body.land .lcol .evr i{display:none}body.land .lcol #evr{padding:0 6px}
+body.land .lcol .dial{width:66px;height:66px}body.land .lcol .dial .df span{transform-origin:1px 24px}body.land .lcol .dial .dv{font-size:15px}
+body.land .lcol .shut{width:56px;height:56px}
+body.land .lcol .rseg2{display:flex;gap:4px}body.land .lcol .rseg2 .ib{min-width:0;padding:0 7px}
+body.land .lcol .mseg .ib{min-width:40px}
+body.land #fstrip{grid-column:2;grid-row:3;align-self:end;z-index:6;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;background:rgba(0,0,0,.55);border-radius:var(--crad);margin:0 4px 4px;padding:6px}
+body.land .tile{width:46px}body.land .tile .sw{width:46px;height:46px}
+body.land #menu{position:absolute;z-index:40;top:var(--bzw);bottom:var(--bzw);right:var(--bzw);width:min(330px,60%);height:auto;margin:0}
+body.land .cam.fpick .deck{display:none}
+
+.tbar{margin-top:0!important}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -318,21 +358,21 @@ body.land .cam .top .btn,body.land .cam .deck .btn:not(.zb):not(.ib){height:28px
   <div class="side">
     <div id="bmt">† Handycam †</div>
     <div class="top">
-      <div class="tb"><button class="btn" id="bar">4:3</button><button class="btn" id="bre">480p</button><span class="lseg"><button class="btn" id="lw">广角</button><button class="btn" id="lm">主摄</button></span></div>
-      <div class="tb"><button class="btn" id="mic">MIC OFF</button><button class="btn" id="fls">FLASH</button><button class="btn" id="mb">MENU</button></div>
+      <div class="tb"><button class="btn" id="bar">4:3</button><button class="btn" id="bre">480p</button><span class="lseg rseg"><button class="btn ib" id="lw" aria-label="广角"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19L3.5 8.5a13 13 0 0 1 17 0z"/><circle cx="12" cy="12.5" r="1.4"/></svg></button><button class="btn ib" id="lm" aria-label="主摄"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3.2"/></svg></button></span></div>
+      <div class="tb"><button class="btn" id="mic">MIC OFF</button><button class="btn ib" id="fls" aria-label="闪光灯"></button><button class="btn" id="mb">MENU</button></div>
     </div>
     <div id="fstrip"></div>
     <div class="deck">
       <div class="ctl ctl1">
         <div class="zgrp"><div class="zpill"><button class="btn zb" id="zo" aria-label="缩小">－</button><button class="btn zb" id="zi" aria-label="放大">＋</button></div><span class="zr" id="zr">1.0×</span></div>
-        <div class="seg iseg"><button class="btn ib" id="fb" aria-label="滤镜"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/><circle cx="12" cy="15" r="5"/></svg></button><button class="btn ib" id="gb" aria-label="相册"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg></button></div>
+        <button class="btn fsq" id="fb" aria-label="滤镜"><span class="fsw"></span><span class="fnm">DV</span></button>
         <div class="dial" id="dial" aria-label="快门速度"><div class="dk"></div><div class="df" id="dface"></div><b class="dv" id="dval">A</b><i class="dp"></i></div>
       </div>
       <div class="evr"><button class="btn" id="evr">EV</button><input type="range" id="ev" min="-2" max="2" step=".1" value="0"><i id="evv">0.0</i></div>
       <div class="ctl">
         <div class="seg iseg mseg"><button class="btn ib act" id="mP" aria-label="拍照"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.5-2.5h5L16 7"/><circle cx="12" cy="13.5" r="3.5"/></svg></button><button class="btn ib" id="mV" aria-label="录像"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7" width="13" height="10" rx="2"/><path d="M15.5 10.5l6-3v9l-6-3z"/></svg></button></div>
         <button class="shut photo" id="sh" aria-label="shutter"></button>
-        <div class="seg"><button class="btn" id="ori">横屏</button><button class="btn ib" id="fl" aria-label="前后切换"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6"/><path d="M18 3v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6"/><path d="M6 21v-4h4"/></svg></button></div>
+        <div class="seg rseg2"><button class="btn ib" id="gb" aria-label="相册"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg></button><button class="btn ib" id="ori" aria-label="横竖屏"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7.5" y="3" width="9" height="16" rx="2"/><path d="M4 15a8 8 0 0 0 5 6"/><path d="M8.5 21.5l.7-2.6-2.6-.5"/></svg></button><button class="btn ib" id="fl" aria-label="前后切换"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6"/><path d="M18 3v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6"/><path d="M6 21v-4h4"/></svg></button></div>
       </div>
     </div>
     <div id="menu">
@@ -575,7 +615,7 @@ gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);gl.uniform1i(gl.getUniformLocatio
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,gyro:false,gyInv:false,shi:0,camOK:false};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,rotMan:false,gyInv:false,shi:0,shiM:7,camOK:false};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -680,7 +720,7 @@ function stopMic(){if(astream)astream.getTracks().forEach(t=>t.stop());astream=a
 function updMic(){
   const b=$('#mic');b.textContent=S.mic?'MIC ON':'MIC OFF';b.classList.toggle('act',S.mic);
   b.style.display=mode==='video'?'':'none';
-  const f=$('#fls');f.textContent=mode==='photo'?'FLASH':'LIGHT';f.classList.toggle('act',mode==='photo'?S.flash:S.light);
+  const f=$('#fls');const fi2=mode==='photo'?'p':'v';if(f.dataset.i!==fi2){f.dataset.i=fi2;f.innerHTML=mode==='photo'?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2.5L5.5 13.5h5.5l-1 8 8-11.5h-5.5z"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 18h5M10.5 21h3"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/></svg>'}f.classList.toggle('act',mode==='photo'?S.flash:S.light);
 }
 async function startMic(){
   try{
@@ -708,12 +748,22 @@ async function applyLight(){
 /* orientation (manual, no sensors)
    o=0 竖屏; o=1 横屏·手机逆时针转(左边朝下); o=2 横屏·手机顺时针转(右边朝下)
    S.lo = 设置里选的横屏方向 (1 或 2) */
+const LB={L:null,R:null,marks:new Map(),on:false};
+function landB(on){if(LB.on===on)return;LB.on=on;
+  if(!LB.L){LB.L=document.createElement('div');LB.L.className='lcol lcL';LB.R=document.createElement('div');LB.R.className='lcol lcR';cam.append(LB.L,LB.R);
+    LB.l1=document.createElement('div');LB.l1.className='lrow';LB.r1=document.createElement('div');LB.r1.className='lrow lrow3';LB.r2=document.createElement('div');LB.r2.className='lrow lrow3'}
+  const L=[[LB.l1,['#bar','#bre']],['.lseg'],['.zgrp'],['#fb'],['.mseg'],['.evr']],Rr=[[LB.r1,['#mic','#fls','#mb']],['#dial'],['#sh'],['.rseg2']];
+  const mv=(el,to)=>{if(!LB.marks.has(el)){const m=document.createComment('m');el.parentNode.insertBefore(m,el);LB.marks.set(el,m)}to.append(el)};
+  const back=el=>{const m=LB.marks.get(el);if(m)m.parentNode.insertBefore(el,m.nextSibling)};
+  const each=(spec,fn)=>spec.forEach(x=>{if(x.length===2&&x[0] instanceof Element){x[1].forEach(q=>fn($(q),x[0]))}else fn(document.querySelector(x[0]),null)});
+  if(on){each(L,(el,row)=>{if(row){mv(el,row);if(row.parentNode!==LB.L)LB.L.append(row)}else mv(el,LB.L)});each(Rr,(el,row)=>{if(row){mv(el,row);if(row.parentNode!==LB.R)LB.R.append(row)}else mv(el,LB.R)})}
+  else{each(L,el=>back(el));each(Rr,el=>back(el))}}
 function layout(){
   const dp=innerHeight>=innerWidth,b=document.body.classList;
   land=mob?(dp?o!==0:true):!dp;
   b.toggle('mob',mob);b.toggle('land',land);b.toggle('natl',mob&&!dp);
-  b.toggle('rotr',mob&&dp&&o===1);b.toggle('rotl',mob&&dp&&o===2);
-  $('#ori').textContent=o?'竖屏':'横屏';
+  b.toggle('rotr',mob&&dp&&o===1);b.toggle('rotl',mob&&dp&&o===2);landB(land);
+  $('#ori').classList.toggle('act',!!o);
 }
 if(S.lo!==1&&S.lo!==2)S.lo=1;
 const reO=()=>{if(o&&!recing()){o=S.lo;layout()}};
@@ -802,8 +852,8 @@ head(pM,'全屏');
  nt.innerHTML='iPhone 的 Safari 不允许网页自己进入全屏。可以这样做：用 Safari 打开本页 → 点底部「分享」按钮 → 「添加到主屏幕」→ 以后从主屏幕图标打开，就没有地址栏和工具栏，是完整全屏。<br>注意：主屏幕版和 Safari 版的相册是分开存的，之前在 Safari 里拍的照片要先下载保存。';
  document.addEventListener('fullscreenchange',sync);document.addEventListener('webkitfullscreenchange',sync);sync()}
 head(pM,'画面方向');
-head(pM,'实验功能');addToggle(pM,'陀螺仪自动横竖屏',S,'gyro',()=>gyroSetup());addToggle(pM,'陀螺仪方向反向（转反了就打开）',S,'gyInv');
-note(pM,'打开后主界面的「横屏」按钮会隐藏，手机横过来自动切换横屏、竖回来自动切回。手机开着「竖排方向锁定」也能用。iPhone 第一次会请求「动作与方向」权限。如果转过去画面方向反了，打开上面的「反向」。');
+head(pM,'横竖屏');addToggle(pM,'改用手动横竖屏',S,'rotMan',()=>{gyroSetup();if(!S.rotMan&&o){}});addToggle(pM,'自动旋转方向反向（转反了就打开）',S,'gyInv');
+note(pM,'默认自动旋转：手机横过来自动切横屏。关掉手机的「竖排方向锁定」时直接用系统旋转，不需要任何权限；开着方向锁定时用陀螺仪，iPhone 每次打开页面后第一次点屏幕会询问「动作与方向」权限（Safari 不允许网页长期保存这个权限）。万一用不了，打开「改用手动横竖屏」，主界面会出现手动切换按钮。');
 head(pM,'横屏时手机往哪边转');
 addChips(pM,['↺ 逆时针（左边朝下）','↻ 顺时针（右边朝下）'],()=>S.lo-1,i=>{S.lo=i+1;save();reO()});
 addToggle(pM,'后置镜头 横屏旋转 180°',S,'lfB');
@@ -970,9 +1020,18 @@ const fs=$('#fstrip');
 const closeF=()=>{cam.classList.remove('fpick');$('#fb').classList.remove('act')};
 {const fc=document.createElement('button');fc.className='tile';fc.innerHTML='<span class="sw fcl">✕</span><span class="nm">关闭</span>';fc.onclick=closeF;fs.append(fc)}
 FN.forEach((n,i)=>{const b=document.createElement('button');b.className='tile';b.dataset.i=i;b.innerHTML=`<span class="sw" style="background:${SW[i]}"></span><span class="nm">${n}</span>`;b.onclick=()=>{fi=i;syncTiles()};fs.append(b)});
-function syncTiles(){fs.querySelectorAll('[data-i]').forEach(b=>b.classList.toggle('sel',+b.dataset.i===fi))}
+function syncTiles(){fs.querySelectorAll('[data-i]').forEach(b=>b.classList.toggle('sel',+b.dataset.i===fi));typeof updFsq==='function'&&updFsq()}
 syncTiles();
-$('#fb').onclick=()=>{cam.classList.toggle('fpick');$('#fb').classList.toggle('act',cam.classList.contains('fpick'))};
+/* filter square: swipe = next/prev filter, tap = open the filter strip */
+function updFsq(){const b=$('#fb');b.querySelector('.fsw').style.background=SW[fi];b.querySelector('.fnm').textContent=FN[fi]}
+updFsq();
+{const b=$('#fb');let st=null;
+ const lxy=e=>{const c=document.body.classList,dx=e.clientX-st.x,dy=e.clientY-st.y;return c.contains('rotr')?[dy,-dx]:c.contains('rotl')?[-dy,dx]:[dx,dy]};
+ b.addEventListener('pointerdown',e=>{st={x:e.clientX,y:e.clientY};try{b.setPointerCapture(e.pointerId)}catch(_){}});
+ b.addEventListener('pointerup',e=>{if(!st)return;const [dx,dy]=lxy(e);st=null;
+   if(Math.abs(dx)>18&&Math.abs(dx)>Math.abs(dy)){fi=(fi+(dx<0?1:-1)+FN.length)%FN.length;syncTiles();b.classList.remove('swp');void b.offsetWidth;b.classList.add('swp');return}
+   cam.classList.toggle('fpick');b.classList.toggle('act',cam.classList.contains('fpick'))});
+ b.addEventListener('pointercancel',()=>st=null)}
 
 /* camera + lenses */
 const mmOf=l=>{l=(l||'').toLowerCase();return /ultra|0\.5|超广角/.test(l)?13:/tele|长焦/.test(l)?77:/front|前置|user/.test(l)?23:24};
@@ -1030,24 +1089,27 @@ const trailT=()=>{const i=dialIdx();return i>SHVID?1/SHV[i]:0};
  window.updDial=upd;upd();
  const d=$('#dial');let st=null;
  const ang=e=>{const r=d.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI};
- const setI=i=>{const mx=mode==='video'?SHVID:SHV.length-1;i=Math.max(0,Math.min(mx,i));if(i!==dialIdx()){S.shi=i;save();upd();try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}}};
- /* knob look, slider behaviour: hold and drag left = faster shutter, drag right = slower (longer) */
- d.addEventListener('pointerdown',e=>{e.preventDefault();try{d.setPointerCapture(e.pointerId)}catch(_){}st={x:e.clientX,y:e.clientY,i:dialIdx()};d.classList.add('hold')});
- d.addEventListener('pointermove',e=>{if(!st)return;const b=document.body.classList;let dx=e.clientX-st.x;
-   if(b.contains('rotr'))dx=e.clientY-st.y;else if(b.contains('rotl'))dx=st.y-e.clientY;
-   setI(st.i+Math.round(dx/16))});
- ['pointerup','pointercancel'].forEach(n=>d.addEventListener(n,()=>{st=null;d.classList.remove('hold')}))}
+ const setI=i=>{const mx=mode==='video'?SHVID:SHV.length-1;i=Math.max(0,Math.min(mx,i));if(i!==dialIdx()){S.shi=i;if(i>0)S.shiM=i;save();upd();try{navigator.vibrate&&navigator.vibrate(6)}catch(e){}}};
+ /* knob look, slider behaviour: drag up/left = faster, down/right = slower; tap = auto <-> manual */
+ d.addEventListener('pointerdown',e=>{e.preventDefault();try{d.setPointerCapture(e.pointerId)}catch(_){}st={x:e.clientX,y:e.clientY,i:dialIdx(),mv:false};d.classList.add('hold')});
+ d.addEventListener('pointermove',e=>{if(!st)return;const b=document.body.classList;let dx=e.clientX-st.x,dy=e.clientY-st.y;
+   if(b.contains('rotr'))[dx,dy]=[dy,-dx];else if(b.contains('rotl'))[dx,dy]=[-dy,dx];
+   if(Math.hypot(dx,dy)>7)st.mv=true;if(!st.mv)return;const v=Math.abs(dx)>Math.abs(dy)?dx:dy;
+   let base=st.i;if(base===0&&st.mv){base=S.shiM||7;st.i=base}setI(Math.max(1,base+Math.round(v/16)))});
+ ['pointerup','pointercancel'].forEach(n=>d.addEventListener(n,()=>{if(st&&!st.mv){setI(dialIdx()===0?(S.shiM||7):0)}st=null;d.classList.remove('hold')}))}
 /* experimental: auto landscape from the motion sensor */
 const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-let gyCand=null,gyT=0,gyOn=false;
-function onMotion(e){if(!S.gyro||!mob)return;const g=e.accelerationIncludingGravity;if(!g||g.x==null)return;const x=g.x,y=g.y,ax=Math.abs(x),ay=Math.abs(y);let want=null;
+let gyCand=null,gyT=0,gyOn=false,nativeRot=false;
+function onMotion(e){if(S.rotMan||!mob||nativeRot||innerWidth>innerHeight)return;const g=e.accelerationIncludingGravity;if(!g||g.x==null)return;const x=g.x,y=g.y,ax=Math.abs(x),ay=Math.abs(y);let want=null;
   if(ax>6.5&&ax>ay*1.6){const left=(x>0)!==IOS;want=(left!==!!S.gyInv)?1:2}else if(ay>6.5&&ay>ax*1.6)want=0;
   if(want===null||want===o){gyCand=null;return}const n=performance.now();if(gyCand!==want){gyCand=want;gyT=n;return}
   if(n-gyT>350&&!recing()){o=want;layout();gyCand=null}}
-function gyroSetup(){document.body.classList.toggle('gyro',!!S.gyro);if(!S.gyro){if(gyOn){removeEventListener('devicemotion',onMotion);gyOn=false}return}
+function gyroSetup(){document.body.classList.toggle('gyro',!S.rotMan);if(S.rotMan){if(gyOn){removeEventListener('devicemotion',onMotion);gyOn=false}return}
   const add=()=>{if(!gyOn){addEventListener('devicemotion',onMotion);gyOn=true}};
   try{if(typeof DeviceMotionEvent!=='undefined'&&DeviceMotionEvent.requestPermission){DeviceMotionEvent.requestPermission().then(r=>{if(r==='granted')add()}).catch(()=>{})}else add()}catch(e){add()}}
-document.body.classList.toggle('gyro',!!S.gyro);if(S.gyro){if(IOS)document.addEventListener('pointerdown',gyroSetup,{once:true});else gyroSetup()}
+document.body.classList.toggle('gyro',!S.rotMan);if(!S.rotMan){if(IOS&&typeof DeviceMotionEvent!=='undefined'&&DeviceMotionEvent.requestPermission)document.addEventListener('pointerdown',gyroSetup,{once:true,capture:true});else gyroSetup()}
+/* if the system itself rotates the page (rotation lock off) use that and stop the sensor switching */
+addEventListener('resize',()=>{if(mob&&innerWidth>innerHeight){nativeRot=true;if(o){o=0;layout()}}});
 /* top info bar: estimated exposure (program AE, f/1.8) */
 {const sc=document.createElement('canvas');sc.width=16;sc.height=12;const sx=sc.getContext('2d',{willReadFrequently:true});let lv=10,first=true;
  const TS=[15,20,25,30,40,50,60,80,100,125,160,200,250,320,400,500,640,800,1000,1250,1600,2000,2500,3200,4000];
