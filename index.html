@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -558,7 +559,7 @@ const RATIOS=[['4:3',4/3],['16:9',16/9],['1:1',1],['2.35:1',2.35],['自定义',-
 const RES=[240,360,480,720];
 const WMF=[['VT323',1.3,'VT323 像素'],['Press Start 2P',.62,'Press Start'],['Silkscreen',.85,'Silkscreen'],['Pixelify Sans',1,'Pixelify'],['Special Elite',.95,'打字机'],['monospace',1,'系统等宽']];
 const COLS=['#f4f4ee','#ffb84d','#7dff9a','#ff6b6b','#6fd8ff','#ffe14d'];
-const recing=()=>rec&&rec.state==='recording';
+let recOn=false;const recing=()=>recOn;
 const galOpen=()=>$('#gal').classList.contains('on');
 function loadFont(i){try{if(document.fonts&&WMF[i][0]!=='monospace')document.fonts.load('16px "'+WMF[i][0]+'"')}catch(e){}}
 loadFont(WM.font);loadFont(0);
@@ -1091,7 +1092,7 @@ function loop(ts){
 oc.fillStyle='#000';oc.fillRect(0,0,640,480);requestAnimationFrame(loop);
 
 function setMode(m){
-  if(recing())return;
+  if(recing()){if(m==='video')return;stopRec()}
   mode=m;$('#mV').classList.toggle('act',m==='video');$('#mP').classList.toggle('act',m==='photo');
   $('#sh').className='shut'+(m==='photo'?' photo':'');
   applyMic();applyLight();
@@ -1114,17 +1115,29 @@ async function takePhoto(){
 $('#sh').onclick=()=>{
   if(!on)return;
   if(mode==='photo'){const s=$('#sh');s.classList.remove('snap');void s.offsetWidth;s.classList.add('snap');takePhoto();return}
-  if(recing()){rec.stop();return}
+  if(recing()){stopRec();return}
   if(typeof MediaRecorder==='undefined'){alert('此浏览器不支持录像');return}
-  const cs=out.captureStream(30);
+  const cs=out.captureStream(30);recCS=cs;
   if(aDst)aDst.stream.getAudioTracks().forEach(a=>cs.addTrack(a));
   const mt=['video/mp4','video/webm;codecs=vp9,opus','video/webm'].find(x=>MediaRecorder.isTypeSupported(x))||'';
   const op={videoBitsPerSecond:4e6,audioBitsPerSecond:[64e3,128e3,256e3][S.abr]};if(mt)op.mimeType=mt;
-  chunks=[];rec=new MediaRecorder(cs,op);
-  rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
-  rec.onstop=()=>{const b=new Blob(chunks,{type:rec.mimeType||'video/mp4'});addItem('vid',b,(performance.now()-t0)/1000);$('#sh').classList.remove('rec')};
-  rec.start(500);t0=performance.now();$('#sh').classList.add('rec');
+  chunks=[];let r2;try{r2=new MediaRecorder(cs,op)}catch(e){try{r2=new MediaRecorder(cs)}catch(e2){alert('录像启动失败：'+(e2.name||e2));return}}
+  rec=r2;const my={done:false,chunks:[],t0:performance.now(),type:r2.mimeType||mt||'video/mp4'};recJob=my;
+  r2.ondataavailable=e=>{if(e.data&&e.data.size)my.chunks.push(e.data)};
+  r2.onstop=()=>finishRec(my);r2.onerror=()=>{recOn=false;$('#sh').classList.remove('rec');finishRec(my)};
+  try{r2.start(500)}catch(e){alert('录像启动失败：'+(e.name||e));return}
+  recOn=true;t0=my.t0;$('#sh').classList.add('rec');
 };
+/* robust stop: UI ends immediately; if the recorder never fires onstop (iOS sometimes hangs), save what we have after a timeout */
+let recJob=null,recCS=null;
+function finishRec(my,force){if(!my||my.done)return;
+  if(!my.chunks.length&&!force){try{recCS&&recCS.getVideoTracks().forEach(t=>t.stop())}catch(e){}setTimeout(()=>finishRec(my,true),1200);return}
+  my.done=true;
+  if(my.chunks.length){const b=new Blob(my.chunks,{type:my.type});addItem('vid',b,(performance.now()-my.t0)/1000)}
+  try{recCS&&recCS.getVideoTracks().forEach(t=>t.stop())}catch(e){}recCS=null}
+function stopRec(){if(!recOn)return;recOn=false;$('#sh').classList.remove('rec');const my=recJob,r2=rec;
+  try{if(r2&&r2.state!=='inactive'){try{r2.requestData()}catch(e){}r2.stop()}else{finishRec(my);return}}catch(e){finishRec(my);return}
+  setTimeout(()=>finishRec(my),2500)}
 
 /* gallery */
 let gf=0,gi=0;
@@ -1203,12 +1216,12 @@ $('#vn').onclick=()=>{gi++;if(gi>=flt().length)gi=0;showView()};
 $('#gtabs').onclick=e=>{const b=e.target.closest('[data-g]');if(!b)return;setGf(+b.dataset.g);renderGal()};
 /* release the camera whenever the viewfinder isn't on screen (gallery open / app in background) */
 let camPaused=false;
-function pauseCam(){if(!on||!stream||recing())return;try{stream.getTracks().forEach(t=>t.stop())}catch(e){}stream=null;vid.srcObject=null;on=false;camPaused=true;torchOn=false}
+function pauseCam(){if(recing())stopRec();if(!on||!stream)return;try{stream.getTracks().forEach(t=>t.stop())}catch(e){}stream=null;vid.srcObject=null;on=false;camPaused=true;torchOn=false}
 function resumeCam(){if(!camPaused||galOpen()||document.visibilityState!=='visible')return;camPaused=false;start()}
 new MutationObserver(()=>galOpen()?pauseCam():resumeCam()).observe(gal,{attributes:true,attributeFilter:['class']});
 document.addEventListener('visibilitychange',()=>document.visibilityState==='hidden'?pauseCam():resumeCam());
 window.addEventListener('pagehide',pauseCam);window.addEventListener('pageshow',()=>setTimeout(resumeCam,50));
-$('#gb').onclick=()=>{if(recing())return;gal.classList.remove('view','edit');selMode=false;selSet.clear();gal.classList.remove('sel');$('#gsel').textContent='选择';renderGal();gal.classList.add('on');applyMic();applyLight()};
+$('#gb').onclick=()=>{if(recing())stopRec();gal.classList.remove('view','edit');selMode=false;selSet.clear();gal.classList.remove('sel');$('#gsel').textContent='选择';renderGal();gal.classList.add('on');applyMic();applyLight()};
 $('#gc').onclick=()=>{
   if(gal.classList.contains('edit')){gal.classList.remove('edit');gal.classList.add('view')}
   else if(gal.classList.contains('view')){gal.classList.remove('view','imm');renderGal()}
