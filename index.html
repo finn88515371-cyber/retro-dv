@@ -737,6 +737,7 @@ const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
 let stream,track,facing='environment',on=false,mode='photo',rec,chunks=[],t0=0,items=[],last=0,W=640,H=480,cw=0,ch=0,rot=0,szKey='',cr=[1,1];
 let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=2,ev=0,evT=0,o=0,land=false;
 let bmOn=false;const BMP={ct:1.8,cr:.12,nz:2.4,jt:2.2,vg:1.2,sn:.5,sh:1.1,bm:.5};
+const ACC={c:document.createElement('canvas'),fresh:true};ACC.x=ACC.c.getContext('2d');
 let shGain=1,shGainT=1,shotFD=2,sceneY=.45,lensId=null,lenses=[],autoWide=true,curMM=24,hasTorch=false,shotReq=0,flashFx=0,torchOn=false,lightFx=0;
 const FN=['DV','VHS','夜视','黑白','家庭','赛博','胶片','蓝晒','CRT','热成像','海报','负片','青橙','梦幻','富士','Velvia','徕卡','徕卡黑白','Portra','柯达金','800T','HP5'];
 const FO=['DV','VHS','NIGHT','B&W','HOME','CYBER','FILM','CYANO','CRT','THERMAL','POSTER','NEG','TEAL','DREAM','FUJI','VELVIA','LEICA','LEICA MONO','PORTRA','GOLD','800T','HP5'];
@@ -1381,10 +1382,13 @@ function loop(ts){
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
   oc.imageSmoothingEnabled=false;
   {const tt=trailT();
-   if(!tt)oc.drawImage(gc,0,0,W,H);
-   else if(tt<1){oc.globalAlpha=Math.max(.05,Math.min(1,(1/30)/tt*.8));oc.drawImage(gc,0,0,W,H);oc.globalAlpha=1}
-   else{/* long exposure: lights paint trails that fade slowly */oc.globalAlpha=Math.min(.12,.09/tt);oc.fillStyle='#000';oc.fillRect(0,0,W,H);oc.globalAlpha=1;
-     oc.globalCompositeOperation='lighten';oc.drawImage(gc,0,0,W,H);oc.globalCompositeOperation='source-over';oc.globalAlpha=.06;oc.drawImage(gc,0,0,W,H);oc.globalAlpha=1}}
+   if(!tt){oc.drawImage(gc,0,0,W,H);ACC.fresh=true}
+   else{const A=ACC.c,ax=ACC.x;if(A.width!==W||A.height!==H){A.width=W;A.height=H;ACC.fresh=true}ax.imageSmoothingEnabled=false;
+     if(ACC.fresh){ax.drawImage(gc,0,0,W,H);ACC.fresh=false}
+     else if(tt<1){ax.globalAlpha=Math.max(.05,Math.min(1,(1/30)/tt*.8));ax.drawImage(gc,0,0,W,H);ax.globalAlpha=1}
+     else{/* long exposure: lights paint trails that fade slowly */ax.globalAlpha=Math.min(.12,.09/tt);ax.fillStyle='#000';ax.fillRect(0,0,W,H);ax.globalAlpha=1;
+       ax.globalCompositeOperation='lighten';ax.drawImage(gc,0,0,W,H);ax.globalCompositeOperation='source-over';ax.globalAlpha=.06;ax.drawImage(gc,0,0,W,H);ax.globalAlpha=1}
+     oc.drawImage(A,0,0)}}
   ov(T);
   if(S.grid){const g=$('#grid'),bw=out.clientWidth,bh=out.clientHeight,k=Math.min(bw/W,bh/H),iw=W*k,ih=H*k;
     g.style.left=((bw-iw)/2+out.offsetLeft)+'px';g.style.top=((bh-ih)/2+out.offsetTop)+'px';g.style.width=iw+'px';g.style.height=ih+'px'}
@@ -1552,7 +1556,7 @@ $('#bx').onclick=()=>{
 const ec=$('#ec'),ec2=ec.getContext('2d');
 const ADJ0={ex:0,br:0,ct:0,hl:0,sh:0,sat:0,tp:0,tn:0,fd:0,vg:0,gr:0,bw:0};
 const E={src:null,base:document.createElement('canvas'),adj:{...ADJ0},geo:[],cr:{x:0,y:0,w:1,h:1},car:0,cdrag:null,layer:document.createElement('canvas'),strokes:[],stk:[],hist:[],tool:'pen',col:'#ff004d',sz:3,ps:.7,shp:'rect',sfill:false,mst:[],mcur:null,mbs:5,msz:2,snap:null,gs:8,gw:1,gh:1,fr:0,fb:.6,fpx:2,ftx:'',fkey:'',fc:null,t:0,sel:-1,cw:0,ch:0,cur:null,drag:null};
-const ECOL=['#000000','#1d2b53','#7e2553','#008751','#ab5236','#5f574f','#c2c3c7','#fff1e8','#ff004d','#ffa300','#ffec27','#00e436','#29adff','#83769c','#ff77a8','#ffccaa'];
+const ECOL=['#000000','#1d2b53','#7e2553','#008751','#ab5236','#5f574f','#c2c3c7','#ffffff','#fff1e8','#ff004d','#ffa300','#ffec27','#00e436','#29adff','#83769c','#ff77a8','#ffccaa'];
 const PAL={k:'#2b2a33',w:'#fff4e0',r:'#ff6b8b',p:'#ffd3dc',y:'#ffd966',b:'#5b7cff',g:'#8a8fa8',t:'#6fd8c0',o:'#f2a65a',c:'#c9c3d9',l:'#cfe3ff',n:'#f6e7c8',m:'#ffe9a8',R:'#ff6a6a',O:'#ffa64d',Y:'#ffe066',G:'#7ddc7a',B:'#5ab4ff',V:'#a07aff'};
 const SPR={
  rainbow:['.....RRRRRR.....','...RROOOOOORR...','..ROOYYYYYYOOR..','.ROYYGGGGGGYYOR.','.ROYGGBBBBGGYOR.','ROYGBBVVVVBBGYOR','ROYGBV....VBGYOR','ROYGBV....VBGYOR','wwwwww....wwwwww'],
@@ -1633,7 +1637,7 @@ function mkBK(id){const key='b_'+id;if(BM[key])return BM[key];const N=128;
   for(let i=0;i<12;i++){const t=i/12*Math.PI*2;z.drawImage(a,Math.cos(t)*4,Math.sin(t)*4)}z.globalCompositeOperation='source-in';z.fillStyle='#050505';z.fillRect(0,0,N,N);z.globalCompositeOperation='source-over';z.drawImage(a,0,0);
   return BM[key]={c:f,w:N,h:N}}
 const getBM=s=>s.k==='v'?mkVB(s.id):s.k==='b'?mkBK(s.id):mkBM(s.id);
-const GOTH={col:'#f2f2f2'};
+const GOTH={col:'#ffffff'};
 const gothFont=fs2=>fs2+'px "UnifrakturMaguntia","Pirata One",serif';
 
 const TXT=['● REC','▶ PLAY','LOW BATT','SP',"'99",'TAPE 01','AUTO','HI8','~ lofi ~','NOW PLAYING','SIDE A','NO SIGNAL'];
@@ -1666,8 +1670,10 @@ function boxOf(s){
 function drawStk(c,s){
   c.save();c.translate(s.x*E.cw,s.y*E.ch);c.rotate(s.r*Math.PI/180);c.scale(s.sx||1,s.sy||1);
   if(s.k==='g'){const fs2=txtFs(s)*1.2;c.font=gothFont(fs2);c.textAlign='center';c.textBaseline='middle';c.lineJoin='round';
-    const ink=s.col||'#f2f2f2',dark=ink==='#0a0a0a';
-    soft(c,(dx,dy)=>{c.lineWidth=fs2*.12;c.strokeStyle=dark?'#f2f2f2':'#050505';c.strokeText(s.t,dx,dy);c.fillStyle=ink;c.fillText(s.t,dx,dy)},fs2*.02*s.b);
+    let ink=s.col||'#ffffff';if(ink==='#f2f2f2')ink='#ffffff';if(ink==='#0a0a0a')ink='#000000';if(ink==='#b3001b')ink='#e8102e';
+    soft(c,(dx,dy)=>{if(ink==='#ffffff'){c.shadowColor='#fff';c.shadowBlur=fs2*.25;c.fillStyle='#fff';c.fillText(s.t,dx,dy);c.shadowBlur=fs2*.08;c.fillText(s.t,dx,dy)}
+      else if(ink==='#e8102e'){c.shadowColor='rgba(255,30,60,.7)';c.shadowBlur=fs2*.15;c.fillStyle=ink;c.fillText(s.t,dx,dy)}
+      else{c.shadowBlur=0;c.fillStyle=ink;c.fillText(s.t,dx,dy)}c.shadowBlur=0},fs2*.02*s.b);
   }else if(s.k!=='t'){
     const bm=getBM(s),u=unitOf(bm,s.k)*s.s,w=bm.w*u,h=bm.h*u,px=s.k==='s'?u:Math.max(w,h)/14;
     c.imageSmoothingEnabled=true;c.shadowColor='rgba(255,245,230,.35)';c.shadowBlur=px*1.2*s.b;
@@ -1965,7 +1971,7 @@ function renderStk(){const box=$('#stks');box.innerHTML='';
   box.style.flexDirection=scat==='b'?'column':'';box.style.alignItems=scat==='b'?'stretch':'';
   if(scat==='b'){const w=document.createElement('div');w.className='gtw';
     w.innerHTML='<input class="txt" id="gtx" maxlength="28" placeholder="输入文字，生成哥特字体"><button class="btn" id="gta">添加</button>';box.append(w);
-    const cw=document.createElement('div');cw.className='chips';[['#f2f2f2','白'],['#0a0a0a','黑'],['#b3001b','血红']].forEach(([c2,n])=>{const b=document.createElement('button');b.className='btn'+(GOTH.col===c2?' act':'');b.textContent=n;
+    const cw=document.createElement('div');cw.className='chips';[['#ffffff','发光白'],['#000000','纯黑'],['#e8102e','血红']].forEach(([c2,n])=>{const b=document.createElement('button');b.className='btn'+(GOTH.col===c2?' act':'');b.textContent=n;
       b.onclick=()=>{GOTH.col=c2;[...cw.children].forEach(x=>x.classList.toggle('act',x===b));const s2=E.stk[E.sel];if(s2&&s2.k==='g'){s2.col=c2;edRender()}};cw.append(b)});box.append(cw);
     const gi=w.querySelector('#gtx');const sel=E.stk[E.sel];if(sel&&sel.k==='g')gi.value=sel.t;
     gi.oninput=()=>{const s2=E.stk[E.sel];if(s2&&s2.k==='g'&&gi.value.trim()){s2.t=gi.value;edRender()}};
