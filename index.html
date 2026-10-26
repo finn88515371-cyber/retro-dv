@@ -475,6 +475,12 @@ body.rotl .cam{transform:translateY(100dvh) rotate(-90deg) translate(var(--ml,0p
 .pvf{display:flex;justify-content:space-between;margin-top:12px}.pvf .btn{font-size:12px!important}
 
 #gal .gh2 .btn{white-space:nowrap;padding:6px 9px}#gal .gh2 #gtt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;text-align:center}
+
+#pvpk{position:absolute;inset:0;z-index:55;display:none;flex-direction:column;background:var(--menu);color:var(--menuink)}
+.pkh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}.pkh b{font-size:14px}
+.pkg{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 10px 16px;align-content:start}
+.pki{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;background:#000;cursor:pointer}.pki img,.pki video{width:100%;height:100%;object-fit:cover;display:block}
+.pki.on{box-shadow:0 0 0 3px var(--acc)}.pki.on::after{content:'✓';position:absolute;right:5px;top:3px;width:20px;height:20px;border-radius:50%;background:var(--acc);color:#fff;font:700 13px/20px sans-serif;text-align:center}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -1384,11 +1390,26 @@ async function pvEnter(){const all=(await idbAll()).filter(r=>r.pv);const dec=[]
   dec.sort((a,b)=>b.t-a.t);PV.pub=items;items=dec;PV.on=true;gal.classList.add('priv');$('#gtl').textContent='私密相册';selMode=false;selSet.clear();gal.classList.remove('sel','view','edit');$('#gsel').textContent='选择';renderGal();pvBtns()}
 function pvLeave(){if(!PV.on)return;items.forEach(it=>{try{URL.revokeObjectURL(it.url)}catch(e){}});items=PV.pub||[];PV.pub=null;PV.on=false;gal.classList.remove('priv');$('#gtl').textContent='相册';selMode=false;selSet.clear();gal.classList.remove('sel');renderGal();pvBtns()}
 function pvLock(){pvLeave();PV.key=null;pvBtns()}
-function pvBtns(){$('#bpv').style.display=PV.key?'':'none';$('#bpv').textContent=PV.on?'移出私密':'移入私密'}
+function pvBtns(){$('#bpv').style.display=PV.on?'':'none';$('#bpv').textContent='移出私密'}
 pvBtns();
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&(PV.on||PV.key)){gal.classList.remove('view','edit');pvLock()}});
-$('#pvadd').onclick=()=>{pvLeave();setSel(true);pvBtns()};
-$('#bpv').onclick=async()=>{const L=items.filter(x=>selSet.has(x.id));if(!L.length||!PV.key)return;
+/* ＋ 移入: pick photos from the normal album without leaving the private one */
+$('#pvadd').onclick=()=>{if(!PV.on||!PV.key)return;let m=document.getElementById('pvpk');
+  if(!m){m=document.createElement('div');m.id='pvpk';m.innerHTML='<div class="pkh"><button class="btn" id="pkx">取消</button><b>选择要移入的照片</b><button class="btn act" id="pko">移入</button></div><div class="pkg" id="pkg"></div>';gal.append(m)}
+  const g=m.querySelector('#pkg'),pick=new Set(),ok=m.querySelector('#pko');g.innerHTML='';
+  const upd=()=>{ok.textContent=pick.size?'移入 '+pick.size+' 项':'移入'};
+  (PV.pub||[]).forEach(it=>{const d=document.createElement('div');d.className='pki';const el=document.createElement(it.k==='img'?'img':'video');
+    if(it.k==='vid'){el.src=it.url+'#t=0.1';el.muted=true;el.preload='metadata';el.playsInline=true}else{el.src=it.url;el.loading='lazy';el.decoding='async'}
+    d.append(el);d.onclick=()=>{if(pick.has(it.id))pick.delete(it.id);else pick.add(it.id);d.classList.toggle('on',pick.has(it.id));upd()};g.append(d)});
+  if(!(PV.pub||[]).length)g.textContent='普通相册里没有照片';
+  const close=()=>{g.querySelectorAll('video').forEach(v=>{v.removeAttribute('src');v.load()});g.innerHTML='';m.style.display='none'};
+  m.querySelector('#pkx').onclick=close;
+  ok.onclick=async()=>{if(!pick.size){close();return}ok.textContent='加密中…';
+    const L=PV.pub.filter(x=>pick.has(x.id));for(const it of L){const r=recOf(it);r.pv=true;idbPutRaw(await pvEnc(r));try{URL.revokeObjectURL(it.url)}catch(e){}
+      items.push(mkItem({...recOf(it),pv:true}))}
+    PV.pub=PV.pub.filter(x=>!pick.has(x.id));items.sort((a,b)=>b.t-a.t);close();updCount();renderGal()};
+  upd();m.style.display='flex'};
+$('#bpv').onclick=async()=>{const L=items.filter(x=>selSet.has(x.id));if(!L.length||!PV.key||!PV.on)return;
   if(PV.on){for(const it of L){const r=recOf(it);delete r.pv;idbPutRaw(r);(PV.pub||[]).push(mkItem(r));try{URL.revokeObjectURL(it.url)}catch(e){}}if(PV.pub)PV.pub.sort((a,b)=>b.t-a.t)}
   else{for(const it of L){const r=recOf(it);r.pv=true;idbPutRaw(await pvEnc(r));try{URL.revokeObjectURL(it.url)}catch(e){}}}
   items=items.filter(x=>!selSet.has(x.id));selSet.clear();updCount();if(!PV.on){await pvEnter()}else renderGal()};
@@ -1761,7 +1782,7 @@ function renderGal(){
     const d=document.createElement('div');d.className='th'+(selSet.has(it.id)?' picked':'');d.style.animationDelay=Math.min(i,12)*5+'ms';
     const tw=document.createElement('div');tw.className='tw';
     const el=document.createElement(it.k==='img'?'img':'video');
-    if(it.k==='vid'){el.src=it.url+'#t=0.1';el.muted=true;el.preload='metadata';el.playsInline=true}else el.src=it.url;
+    if(it.k==='vid'){el.src=it.url+'#t=0.1';el.muted=true;el.preload='metadata';el.playsInline=true}else{el.loading='lazy';el.decoding='async';el.src=it.url}
     tw.append(el);
     if(it.k==='vid'){const b=document.createElement('i');b.textContent='▶ '+fmt(it.d||0).replace(/^0:/,'');tw.append(b)}
     const fv=document.createElement('button');fv.className='fv'+(it.fav?' on':'');fv.textContent=it.fav?'★':'☆';
@@ -1821,7 +1842,13 @@ $('#gtabs').onclick=e=>{const b=e.target.closest('[data-g]');if(!b)return;setGf(
 let camPaused=false;
 function pauseCam(){if(recing())stopRec();if(!on||!stream)return;try{stream.getTracks().forEach(t=>t.stop())}catch(e){}stream=null;vid.srcObject=null;on=false;camPaused=true;torchOn=false}
 function resumeCam(){if(!camPaused||galOpen()||document.visibilityState!=='visible')return;camPaused=false;start()}
-new MutationObserver(()=>galOpen()?pauseCam():resumeCam()).observe(gal,{attributes:true,attributeFilter:['class']});
+/* free memory when the gallery is closed (big decoded photos, videos, the editor's GL context) so the camera stays smooth */
+let galWas=false;
+function galCleanup(){['#vm','#gl'].forEach(q=>{const e=$(q);e.querySelectorAll('video').forEach(v=>{try{v.pause();v.removeAttribute('src');v.load()}catch(_){}});e.innerHTML=''});
+  try{if(PF.gl){const x=PF.gl.getExtension('WEBGL_lose_context');x&&x.loseContext();PF.gl=null;PF.cv.width=PF.cv.height=1}}catch(e){}
+  try{E.src=null;ec.width=ec.height=1;E.base.width=E.base.height=1;E.layer.width=E.layer.height=1;MO.out.width=MO.out.height=1}catch(e){}}
+new MutationObserver(()=>{const o=galOpen();if(o)pauseCam();else{resumeCam();if(galWas)setTimeout(galCleanup,50)}
+  if(o&&!gal.classList.contains('view'))$('#vm').querySelectorAll('video').forEach(v=>{try{v.pause()}catch(_){}});galWas=o}).observe(gal,{attributes:true,attributeFilter:['class']});
 document.addEventListener('visibilitychange',()=>document.visibilityState==='hidden'?pauseCam():resumeCam());
 window.addEventListener('pagehide',pauseCam);window.addEventListener('pageshow',()=>setTimeout(resumeCam,50));
 $('#gb').onclick=()=>{if(recing())stopRec();gal.classList.remove('view','edit');selMode=false;selSet.clear();gal.classList.remove('sel');$('#gsel').textContent='选择';renderGal();gal.classList.add('on');applyMic();applyLight()};
