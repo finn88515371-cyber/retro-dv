@@ -405,6 +405,33 @@ body.land .lcol .fxb{width:36px;height:36px!important}
 .cam .btn.xclose{width:40px;height:28px;padding:0;color:#d8281a!important;font:800 15px/26px var(--font),sans-serif!important;text-shadow:0 1px 0 rgba(255,255,255,.35)}
 #sflash{position:fixed;inset:0;z-index:10000;background:#fff;opacity:0;pointer-events:none;transition:opacity .12s}
 #sflash.on{opacity:1;transition:none}
+
+/* user layout variables */
+body .cam .top,body .cam .deck{zoom:var(--ui,1)}body.land .lcol{zoom:var(--ui,1)}
+#menu{height:var(--mh,42%)}body.land #menu{width:var(--mw,330px);max-width:70%}
+#ibar{font-size:calc(18px*var(--ibs,1))!important}body.noib #ibar{display:none!important}
+body.vfc:not(.land) .lcd{flex:0 0 var(--vfh)}body.vfc:not(.land) .deck{flex:1 1 auto;justify-content:space-evenly;min-height:0}
+body.land .cam,body.land .cam.menu{grid-template-columns:var(--lw,100px) minmax(0,1fr) var(--rw,140px)}
+html{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+/* editor */
+#led{position:fixed;inset:0;z-index:3000;display:none;flex-direction:column;background:rgba(12,13,16,.96);color:#e8eaee;font:13px/1.4 -apple-system,'PingFang SC',sans-serif;padding:env(safe-area-inset-top,0) 12px env(safe-area-inset-bottom,0)}
+#led .btn{font-size:12px}#led .gh{color:#9aa0a8;display:flex;align-items:center;gap:8px;margin:8px 0 2px}#led .ms{margin:4px 0}#led .ms span{min-width:96px}
+.ledh{display:flex;justify-content:space-between;align-items:center;padding:10px 0}.ledtabs{display:flex;gap:4px}
+.ledst{flex:1;min-height:180px;display:flex;align-items:center;justify-content:center;position:relative}
+.lph{position:relative;background:#000;border-radius:18px;box-shadow:0 0 0 2px #555;overflow:hidden}
+.lsa{position:absolute}.lbz{position:absolute;border:solid #7a808a;border-radius:6px;box-sizing:border-box;pointer-events:none}
+.lcol2,.lgrid{position:absolute;display:flex;flex-direction:column;gap:2px;padding:2px;box-sizing:border-box}
+.lrow2{flex:1;display:flex;gap:2px;min-height:0}
+.lbk{background:#2c3038;border:1px dashed #6a717c;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#cfd3d8;text-align:center;flex:none;position:relative;overflow:hidden;box-sizing:border-box}
+.lbk.lib{background:#163018;color:#bff5a8}.lbk.lvf{background:#1d3550;color:#cfe6ff}
+.lgrip{position:absolute;left:30%;right:30%;bottom:0;height:12px;cursor:ns-resize;background:repeating-linear-gradient(0deg,#9cc8ff 0 2px,transparent 2px 4px);touch-action:none}
+.lmenu{position:absolute;left:4px;right:4px;bottom:4px;border:2px dotted #ffb347;border-radius:6px;color:#ffcf8a;font-size:9px;display:flex;align-items:flex-start;justify-content:center;padding-top:2px;pointer-events:none;opacity:.8}
+.lmenu.lmr{left:auto;top:4px;bottom:4px;right:4px}
+.lmg{position:absolute;background:repeating-linear-gradient(45deg,rgba(255,70,70,.55) 0 4px,rgba(255,70,70,.2) 4px 8px);touch-action:none;min-width:10px;min-height:10px}
+.lmg.z{background:none;border:0 dashed rgba(255,90,90,.7)}.lmg-t.z{border-bottom-width:1px}.lmg-b.z{border-top-width:1px}.lmg-l.z{border-right-width:1px}.lmg-r.z{border-left-width:1px}
+.lmg-t{left:0;right:0;top:0;cursor:ns-resize}.lmg-b{left:0;right:0;bottom:0;cursor:ns-resize}.lmg-l{top:0;bottom:0;left:0;cursor:ew-resize}.lmg-r{top:0;bottom:0;right:0;cursor:ew-resize}
+.ledc{max-height:38vh;overflow-y:auto;padding:0 2px}
+.ledf{display:flex;gap:8px;padding:10px 0}.ledf .btn{flex:1;height:38px}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -727,7 +754,7 @@ gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);gl.uniform1i(gl.getUniformLocatio
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false,srOn:false,srk:1,srt:.96,srl:1,srn:6,sra:0,srs:.6,srh:.8};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,rotMan:false,gyInv:false,fx:0,shi:0,shiM:7,camOK:false};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,rotMan:false,gyInv:false,fx:0,lay:null,shi:0,shiM:7,camOK:false};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -872,7 +899,7 @@ function landB(on){if(LB.on===on)return;LB.on=on;
   if(on){each(L,(el,row)=>{if(row){mv(el,row);if(row.parentNode!==LB.L)LB.L.append(row)}else mv(el,LB.L)});each(Rr,(el,row)=>{if(row){mv(el,row);if(row.parentNode!==LB.ra)LB.ra.append(row)}else mv(el,LB.ra)});each(Rb,el=>mv(el,LB.rb))}
   else{each(L,el=>back(el));each(Rr,el=>back(el));each(Rb,el=>back(el))}
   window.updEVS&&updEVS()}
-function layout(){
+function layout(){setTimeout(()=>window.applyLay&&applyLay(),0);
   const dp=innerHeight>=innerWidth,b=document.body.classList;
   land=mob?(dp?o!==0:true):!dp;
   b.toggle('mob',mob);b.toggle('land',land);b.toggle('natl',mob&&!dp);
@@ -983,7 +1010,8 @@ addChips(pM,['↺ 逆时针（左边朝下）','↻ 顺时针（右边朝下）'
 addToggle(pM,'后置镜头 横屏旋转 180°',S,'lfB');
 addToggle(pM,'前置镜头 横屏旋转 180°',S,'lfF');
 note(pM,'先在这里选好你横拿手机的方向，再点主界面的“横屏”。从竖着拿开始，把手机往左转（左边朝下）就是逆时针，往右转（右边朝下）就是顺时针。前置和后置镜头的横屏方向是分开校正的：哪个镜头横屏时画面是倒的，就打开对应的那个开关，只影响那个镜头的横屏，不会改到竖屏和另一个镜头。建议打开 iPhone 的“竖排方向锁定”，效果最稳定。');
-const pK=mkPane('外观');head(pK,'界面皮肤');addChips(pK,SKN,()=>SK.indexOf(S.skin),i=>{S.skin=SK[i];applySkin()});
+const pK=mkPane('外观');head(pK,'布局与尺寸');{const w=document.createElement('div');w.className='chips';const b=document.createElement('button');b.className='btn';b.textContent='调整安全距离和各部分大小 ▸';b.onclick=()=>openLayEd();w.append(b);pK.append(w)}
+head(pK,'界面皮肤');addChips(pK,SKN,()=>SK.indexOf(S.skin),i=>{S.skin=SK[i];applySkin()});
 /* ---------- sync: settings code + peer-to-peer photo transfer ---------- */
 const pY=mkPane('同步');
 head(pY,'设置码（导出 / 导入全部参数）');
@@ -1153,6 +1181,69 @@ const FXI=['<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M6.
 }
 function syncFX(){$('#xstrip').querySelectorAll('[data-i]').forEach(b=>b.classList.toggle('sel',+b.dataset.i===(S.fx||0)));$('#fxb').classList.toggle('act',!!S.fx||cam.classList.contains('xpick'))}
 $('#fxb').onclick=()=>{cam.classList.remove('fpick');$('#fb').classList.remove('act');cam.classList.toggle('xpick');syncFX()};syncFX();
+
+/* ===== layout & size editor (like a game's button-layout screen): edit a mock-up, nothing changes until 应用 ===== */
+const LAYD={p:{auto:true,t:0,b:0,l:0,r:0,vf:0,ui:1,mh:42,bz:16,ib:1,ibOn:true},l:{auto:true,t:0,b:0,l:0,r:0,ui:1,mw:330,bz:16,ib:1,ibOn:true,sw:1}};
+function layOf(k){const L=S.lay||{};return {...LAYD[k],...(L[k]||{})}}
+function applyLay(){const k=document.body.classList.contains('land')?'l':'p',L=layOf(k),h=document.documentElement.style,b=document.body,bs=b.style;
+  if(L.auto){h.paddingTop='';h.paddingBottom='';h.paddingLeft='';h.paddingRight=''}
+  else{h.paddingTop=L.t+'px';h.paddingBottom=L.b+'px';h.paddingLeft=L.l+'px';h.paddingRight=L.r+'px'}
+  bs.setProperty('--bzw',L.bz+'px');bs.setProperty('--ui',L.ui);bs.setProperty('--ibs',L.ib);b.classList.toggle('noib',!L.ibOn);
+  if(k==='p'){bs.setProperty('--mh',L.mh+'%');b.classList.toggle('vfc',L.vf>0);bs.setProperty('--vfh',L.vf+'%')}
+  else{b.classList.remove('vfc');bs.setProperty('--mw',L.mw+'px');bs.setProperty('--lw',Math.round(100*L.sw)+'px');bs.setProperty('--rw',Math.round(140*L.sw)+'px')}}
+window.applyLay=applyLay;
+function openLayEd(){cam.classList.remove('menu');
+  let ed=document.getElementById('led');
+  if(!ed){ed=document.createElement('div');ed.id='led';document.body.append(ed)}
+  const draft={p:layOf('p'),l:layOf('l')};let tab=document.body.classList.contains('land')?'l':'p';
+  /* current auto safe-area values, so 手动 starts from what you see now */
+  const cs=getComputedStyle(document.documentElement),env={t:parseFloat(cs.paddingTop)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0,r:parseFloat(cs.paddingRight)||0};
+  ed.innerHTML=`<div class="ledh"><b>布局与尺寸</b><span class="ledtabs"><button class="btn" data-t="p">竖屏</button><button class="btn" data-t="l">横屏</button></span></div>
+   <div class="ledst"><div class="lph" id="lph"></div></div><div class="ledc" id="ledc"></div>
+   <div class="ledf"><button class="btn" id="ledx">取消</button><button class="btn" id="ledr">恢复默认</button><button class="btn act" id="leda">应用</button></div>`;
+  ed.style.display='flex';
+  const W0=Math.min(innerWidth,innerHeight),H0=Math.max(innerWidth,innerHeight);
+  function draw(){ctrls();const L=draft[tab],ph=ed.querySelector('#lph'),st=ed.querySelector('.ledst');ph.style.width=ph.style.height='0px';
+    ed.querySelectorAll('.ledtabs .btn').forEach(b=>b.classList.toggle('act',b.dataset.t===tab));
+    const W=tab==='p'?W0:H0,H=tab==='p'?H0:W0,k=Math.min((st.clientWidth-16)/W,(st.clientHeight-16)/H);
+    ph.style.width=W*k+'px';ph.style.height=H*k+'px';
+    const m=L.auto?env:L,px=v=>v*k+'px',bz=L.bz,ib=L.ibOn?Math.round(22*L.ib):0;
+    let inner='';
+    const area=`left:${px(m.l)};top:${px(m.t)};right:${px(m.r)};bottom:${px(m.b)}`;
+    if(tab==='p'){const top=64*L.ui,deck=196*L.ui,ih=H-m.t-m.b-2*bz,vf=L.vf>0?ih*L.vf/100:Math.max(60,ih-ib-top-deck-14);
+      inner=`<div class="lsa" style="${area}"><div class="lbz" style="inset:0;border-width:${px(bz)}"></div><div class="lcol2" style="inset:${px(bz)}">
+        ${ib?`<div class="lbk lib" style="height:${px(ib)}">信息栏</div>`:''}<div class="lbk" style="height:${px(top)}">顶部按键</div>
+        <div class="lbk lvf" style="height:${px(vf)}">取景框${L.vf>0?' '+L.vf+'%':'（自动）'}<i class="lgrip" data-g="vf"></i></div><div class="lbk ldk" style="flex:1">按键区 ×${L.ui.toFixed(2)}</div></div>
+        <div class="lmenu" style="height:${L.mh}%">菜单打开时的高度 ${L.mh}%</div></div>`}
+    else{const lw=100*L.sw*L.ui,rw=140*L.sw*L.ui;
+      inner=`<div class="lsa" style="${area}"><div class="lbz" style="inset:0;border-width:${px(bz)}"></div><div class="lgrid" style="inset:${px(bz)}">
+        ${ib?`<div class="lbk lib" style="height:${px(ib)}">信息栏</div>`:''}<div class="lrow2"><div class="lbk" style="width:${px(lw)}">左侧<br>按键</div><div class="lbk lvf" style="flex:1">取景框</div><div class="lbk" style="width:${px(rw)}">右侧<br>按键</div></div></div>
+        <div class="lmenu lmr" style="width:${Math.min(L.mw*k,W*k*.8)}px">菜单宽度 ${L.mw}px</div></div>`}
+    ph.innerHTML=inner+['t','b','l','r'].map(e=>`<i class="lmg lmg-${e}${m[e]<1?' z':''}" data-g="${e}" style="${e==='t'||e==='b'?'height':'width'}:${px(m[e])}"></i>`).join('');
+    /* drag edges = safe distance, drag the viewfinder grip = its size */
+    ph.querySelectorAll('[data-g]').forEach(g=>g.onpointerdown=e=>{e.preventDefault();const key=g.dataset.g,r=ph.getBoundingClientRect();
+      if(key!=='vf'&&L.auto){L.auto=false;Object.assign(L,{t:Math.round(env.t),b:Math.round(env.b),l:Math.round(env.l),r:Math.round(env.r)})}
+      const mv=ev=>{const x=(ev.clientX-r.left)/k,y=(ev.clientY-r.top)/k;
+        if(key==='t')L.t=Math.round(Math.max(0,Math.min(120,y)));else if(key==='b')L.b=Math.round(Math.max(0,Math.min(120,H-y)));
+        else if(key==='l')L.l=Math.round(Math.max(0,Math.min(120,x)));else if(key==='r')L.r=Math.round(Math.max(0,Math.min(120,W-x)));
+        else{const ih=H-L.t-L.b,top0=(L.auto?env.t:L.t)+bz+ib+64*L.ui;L.vf=Math.round(Math.max(25,Math.min(80,(y-top0)/(H-(L.auto?env.t+env.b:L.t+L.b)-2*bz)*100)))}
+        draw()};
+      const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up)};addEventListener('pointermove',mv);addEventListener('pointerup',up)})}
+  function ctrls(){const L=draft[tab],c=ed.querySelector('#ledc');
+    const rows=[['safe','安全距离'],['t','上',0,120,1],['b','下',0,120,1],['l','左',0,120,1],['r','右',0,120,1],['sz','尺寸']];
+    if(tab==='p')rows.push(['vf','取景框（0=自动）',0,80,1],['ui','按键大小',.75,1.3,.01],['mh','菜单高度 %',25,75,1]);
+    else rows.push(['sw','两侧按键栏宽度',.8,1.4,.01],['ui','按键大小',.75,1.2,.01],['mw','菜单宽度 px',220,480,5]);
+    rows.push(['bz','边框宽度',0,28,1],['ib','信息栏大小',.7,1.4,.01]);
+    c.innerHTML=rows.map(r=>r.length===2?`<div class="gh">${r[1]}${r[0]==='safe'?`<button class="btn ledau${L.auto?' act':''}">${L.auto?'自动':'手动'}</button>`:r[0]==='sz'?`<button class="btn ledib${L.ibOn?' act':''}">信息栏 ${L.ibOn?'开':'关'}</button>`:''}</div>`:
+      `<label class="ms"><span>${r[1]}</span><input type="range" min="${r[2]}" max="${r[3]}" step="${r[4]}" value="${'tblr'.includes(r[0])&&L.auto?Math.round(env[r[0]]):L[r[0]]}" data-k="${r[0]}"><i>${'tblr'.includes(r[0])&&L.auto?Math.round(env[r[0]]):(+L[r[0]]).toFixed(r[4]<1?2:0)}</i></label>`).join('');
+    c.querySelector('.ledau').onclick=()=>{L.auto=!L.auto;if(!L.auto)Object.assign(L,{t:Math.round(env.t),b:Math.round(env.b),l:Math.round(env.l),r:Math.round(env.r)});draw()};
+    c.querySelector('.ledib').onclick=()=>{L.ibOn=!L.ibOn;draw()};
+    c.querySelectorAll('input[data-k]').forEach(i=>i.oninput=()=>{const key=i.dataset.k;if('tblr'.includes(key)&&L.auto){L.auto=false;Object.assign(L,{t:Math.round(env.t),b:Math.round(env.b),l:Math.round(env.l),r:Math.round(env.r)})}L[key]=+i.value;draw()})}
+  ed.querySelectorAll('.ledtabs .btn').forEach(b=>b.onclick=()=>{tab=b.dataset.t;draw()});
+  ed.querySelector('#ledx').onclick=()=>{ed.style.display='none'};
+  ed.querySelector('#ledr').onclick=()=>{draft[tab]={...LAYD[tab]};draw()};
+  ed.querySelector('#leda').onclick=()=>{S.lay={p:draft.p,l:draft.l};save();applyLay();ed.style.display='none';if(typeof fixVH==='function')fixVH()};
+  requestAnimationFrame(draw)}
 /* tap anywhere outside the menu / filter strip / effect strip closes them (that tap does nothing else) */
 {let eat=false;
  document.addEventListener('pointerdown',e=>{if(galOpen())return;const c=cam.classList,open=c.contains('menu')||c.contains('fpick')||c.contains('xpick');if(!open)return;
