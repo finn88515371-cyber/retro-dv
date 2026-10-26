@@ -447,6 +447,8 @@ html{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inse
 body.rotr .cam,body.rotl .cam{width:calc(100dvh - var(--ml,0px) - var(--mr,0px));height:calc(100dvw - var(--mt,0px) - var(--mb,0px))}
 body.rotr .cam{transform:translateX(100dvw) rotate(90deg) translate(var(--ml,0px),var(--mt,0px))}
 body.rotl .cam{transform:translateY(100dvh) rotate(-90deg) translate(var(--ml,0px),var(--mt,0px))}
+
+.mhb{display:flex;gap:6px;align-items:center}.cam .btn.mrl{height:28px;padding:0 10px}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -474,7 +476,7 @@ body.rotl .cam{transform:translateY(100dvh) rotate(-90deg) translate(var(--ml,0p
       </div>
     </div>
     <div id="menu">
-      <div class="mh"><b>MENU</b><button class="btn xclose" id="mc" aria-label="关闭">✕</button></div>
+      <div class="mh"><b>MENU</b><span class="mhb"><button class="btn mrl" id="mrl" aria-label="刷新">⟳ 刷新</button><button class="btn xclose" id="mc" aria-label="关闭">✕</button></span></div>
       <div class="tabs" id="tabs"></div>
       <div id="panes"></div>
     </div>
@@ -927,7 +929,13 @@ const reO=()=>{if(o&&!recing()){o=S.lo;layout()}};
 addEventListener('resize',layout);
 /* iOS sometimes keeps the old height after rotating, leaving a blank strip: pin the page to the real viewport */
 const DVH=window.CSS&&CSS.supports&&CSS.supports('height','100dvh');
-function fixVH(){const h=(window.visualViewport?visualViewport.height:innerHeight);document.documentElement.style.height=DVH?'':h+'px';document.body.style.height='';if(scrollX||scrollY)scrollTo(0,0)}
+/* iOS sometimes reports a too-small height right after launch: take the largest sane reading, capped at the physical screen */
+function fixVH(){const de=document.documentElement,land2=innerWidth>innerHeight,
+  cand=Math.max(innerHeight||0,de.clientHeight||0,window.visualViewport?visualViewport.height:0),
+  cap=land2?Math.min(screen.width,screen.height):Math.max(screen.width,screen.height),h=Math.round(Math.min(cand,cap||cand));
+  de.style.height=h+'px';document.body.style.height='';if(scrollX||scrollY)scrollTo(0,0)}
+[60,200,500,1000,2000,3500].forEach(t=>setTimeout(fixVH,t));
+addEventListener('pageshow',()=>{fixVH();setTimeout(fixVH,300)});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){fixVH();setTimeout(fixVH,300)}});
 ['resize','orientationchange'].forEach(n=>addEventListener(n,()=>{fixVH();setTimeout(fixVH,250);setTimeout(fixVH,700)}));
 try{visualViewport&&visualViewport.addEventListener('resize',fixVH)}catch(e){}fixVH();
 $('#ori').onclick=()=>{if(recing())return;o=o?0:S.lo;layout()};
@@ -1181,6 +1189,7 @@ async function enterBM(){
   applyBM();fxClean();bmBusy=false;
 }
 showPane(pQ);syncChips();updMic();updBar();
+$('#mrl').onclick=()=>{try{save()}catch(e){}location.reload()};
 $('#mb').onclick=()=>{if(!cam.classList.contains('menu')){cam.classList.remove('fpick','xpick');$('#fb').classList.remove('act');syncFX()}cam.classList.toggle('menu')};
 $('#mc').onclick=()=>cam.classList.remove('menu');
 
