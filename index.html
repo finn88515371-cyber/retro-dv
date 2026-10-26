@@ -443,6 +443,10 @@ html{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inse
 .lbk{overflow:visible}.lvf,.ldk{z-index:1}.lmenu{z-index:5}.lmenu .lgr-t{top:-9px}.lmenu .lgr-l{left:-9px}
 .lmg b{position:absolute;font:600 9px/1 sans-serif;color:#fff;left:50%;top:50%;transform:translate(-50%,-50%);text-shadow:0 0 3px #000;pointer-events:none}
 .lmg{min-width:16px;min-height:16px;z-index:4}
+
+body.rotr .cam,body.rotl .cam{width:calc(100dvh - var(--ml,0px) - var(--mr,0px));height:calc(100dvw - var(--mt,0px) - var(--mb,0px))}
+body.rotr .cam{transform:translateX(100dvw) rotate(90deg) translate(var(--ml,0px),var(--mt,0px))}
+body.rotl .cam{transform:translateY(100dvh) rotate(-90deg) translate(var(--ml,0px),var(--mt,0px))}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -1197,7 +1201,9 @@ $('#fxb').onclick=()=>{cam.classList.remove('fpick');$('#fb').classList.remove('
 const LAYD={p:{auto:true,t:0,b:0,l:0,r:0,vf:0,ui:1,mh:42,bz:16,ib:1,ibOn:true},l:{auto:true,t:0,b:0,l:0,r:0,ui:1,mw:330,bz:16,ib:1,ibOn:true,sw:1}};
 function layOf(k){const L=S.lay||{};return {...LAYD[k],...(L[k]||{})}}
 function applyLay(){const k=document.body.classList.contains('land')?'l':'p',L=layOf(k),h=document.documentElement.style,b=document.body,bs=b.style;
-  if(L.auto){h.paddingTop='';h.paddingBottom='';h.paddingLeft='';h.paddingRight=''}
+  const rotd=b.classList.contains('rotr')||b.classList.contains('rotl');
+  ['t','b','l','r'].forEach(e=>bs.setProperty('--m'+e,(rotd&&!L.auto?L[e]:0)+'px'));
+  if(L.auto||rotd){h.paddingTop='';h.paddingBottom='';h.paddingLeft='';h.paddingRight=''}
   else{h.paddingTop=L.t+'px';h.paddingBottom=L.b+'px';h.paddingLeft=L.l+'px';h.paddingRight=L.r+'px'}
   bs.setProperty('--bzw',L.bz+'px');bs.setProperty('--ui',L.ui);bs.setProperty('--ibs',L.ib);b.classList.toggle('noib',!L.ibOn);
   if(k==='p'){bs.setProperty('--mh',L.mh+'%');b.classList.toggle('vfc',L.vf>0);bs.setProperty('--vfh',L.vf+'%')}
@@ -1206,7 +1212,7 @@ window.applyLay=applyLay;
 function openLayEd(){cam.classList.remove('menu');
   let ed=document.getElementById('led');if(!ed){ed=document.createElement('div');ed.id='led';document.body.append(ed)}
   const draft={p:layOf('p'),l:layOf('l')};let tab=document.body.classList.contains('land')?'l':'p';
-  const cs=getComputedStyle(document.documentElement),env={t:parseFloat(cs.paddingTop)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0,r:parseFloat(cs.paddingRight)||0};
+  const cs=getComputedStyle(document.documentElement),env0={t:parseFloat(cs.paddingTop)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0,r:parseFloat(cs.paddingRight)||0},ENVZ={t:0,b:0,l:0,r:0};let env=env0;
   ed.innerHTML=`<div class="ledh"><b>布局与尺寸</b><span class="ledtabs"><button class="btn" data-t="p">竖屏</button><button class="btn" data-t="l">横屏</button></span></div>
    <div class="ledtip">直接用手指拖：红色斜纹边 = 页面边界（安全距离），各块上的 ⇕ ⇔ 把手 = 大小。调好点「应用」。</div>
    <div class="ledst"><div class="lph" id="lph"></div></div>
@@ -1217,7 +1223,7 @@ function openLayEd(){cam.classList.remove('menu');
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const manual=L=>{if(L.auto){L.auto=false;Object.assign(L,{t:Math.round(env.t),b:Math.round(env.b),l:Math.round(env.l),r:Math.round(env.r)})}};
   let G={};
-  function draw(){const L=draft[tab],ph=ed.querySelector('#lph'),st=ed.querySelector('.ledst');
+  function draw(){const L=draft[tab],ph=ed.querySelector('#lph'),st=ed.querySelector('.ledst');env=(tab==='l'&&mob&&innerHeight>innerWidth)?ENVZ:env0;
     ed.querySelectorAll('.ledtabs .btn').forEach(b=>b.classList.toggle('act',b.dataset.t===tab));
     const au=ed.querySelector('.ledau');au.textContent='页面边界：'+(L.auto?'自动':'手动');au.classList.toggle('act',!L.auto);
     const ibb=ed.querySelector('.ledib');ibb.textContent='信息栏 '+(L.ibOn?'开':'关');ibb.classList.toggle('act',L.ibOn);
