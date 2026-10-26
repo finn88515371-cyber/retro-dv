@@ -449,6 +449,20 @@ body.rotr .cam{transform:translateX(100dvw) rotate(90deg) translate(var(--ml,0px
 body.rotl .cam{transform:translateY(100dvh) rotate(-90deg) translate(var(--ml,0px),var(--mt,0px))}
 
 .mhb{display:flex;gap:6px;align-items:center}.cam .btn.mrl{height:28px;padding:0 10px}
+
+#man{position:fixed;inset:0;z-index:3000;display:none;flex-direction:column;background:#f4f5f7;color:#1f2328;font:14px/1.6 -apple-system,'PingFang SC',sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);-webkit-user-select:text;user-select:text}
+.manh{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #dde1e6;background:#fff}
+.manb{flex:1;overflow-y:auto;padding:8px 14px 30px}
+.msec{background:#fff;border:1px solid #e1e4e8;border-radius:12px;margin:8px 0;padding:0 12px}
+.msec summary{font-weight:600;padding:10px 0;cursor:pointer;list-style:none}.msec summary::after{content:'＋';float:right;color:#9aa0a8}.msec[open] summary::after{content:'－'}
+.mdg{width:100%;max-height:340px;display:block;margin:4px auto 6px}
+.mdg .o{fill:none;stroke:#6b7280;stroke-width:1.2}.mdg .f{fill:#0d100d}.mdg .v{fill:#1d3550;stroke:#6b7280}.mdg .h{fill:rgba(255,70,70,.35)}.mdg .g{fill:#4f8cff}
+.mdg .a{fill:none;stroke:#d8281a;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mdg .t{font-size:8px;fill:#6b7280;text-anchor:middle}.mdg .t.big{font-size:20px;fill:#d8281a;font-weight:800}
+.mdg rect.f+text.t{fill:#bff5a8}.mdg .v+text.t{fill:#cfe6ff}
+.mdg .n circle{fill:#d8281a}.mdg .n text{fill:#fff;font-size:7px;font-weight:700;text-anchor:middle}
+.mls{margin:4px 0 10px;padding-left:20px;font-size:13px}.mls li{margin:2px 0}.mtip{font-size:12px;color:#6b7280;margin:0 0 10px}
+#man .btn.xclose{width:40px;height:30px;padding:0;color:#d8281a;font:800 15px/28px sans-serif;background:#fff;border:1px solid #cdd3dc;border-radius:7px}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -1040,6 +1054,66 @@ note(pM,'先在这里选好你横拿手机的方向，再点主界面的“横�
 const pK=mkPane('外观');head(pK,'布局与尺寸');{const w=document.createElement('div');w.className='chips';const b=document.createElement('button');b.className='btn';b.textContent='调整安全距离和各部分大小 ▸';b.onclick=()=>openLayEd();w.append(b);pK.append(w)}
 head(pK,'界面皮肤');addChips(pK,SKN,()=>SK.indexOf(S.skin),i=>{S.skin=SK[i];applySkin()});
 /* ---------- sync: settings code + peer-to-peer photo transfer ---------- */
+
+/* ===== 说明书 (keep updated with every new feature) ===== */
+const MANUAL=`
+<section open><h3>快速认识主界面</h3>
+<svg viewBox="0 0 220 360" class="mdg"><rect x="10" y="4" width="200" height="352" rx="14" class="o"/>
+<rect x="22" y="14" width="176" height="14" rx="3" class="f"/><text x="110" y="24" class="t">EV  1/125  ISO  滤镜</text>
+<rect x="22" y="34" width="22" height="14" rx="3" class="o"/><rect x="47" y="34" width="22" height="14" rx="3" class="o"/><rect x="73" y="34" width="34" height="14" rx="3" class="o"/><rect x="146" y="34" width="20" height="14" rx="3" class="o"/><rect x="169" y="34" width="29" height="14" rx="3" class="o"/>
+<rect x="22" y="54" width="176" height="160" rx="6" class="v"/><text x="110" y="138" class="t">取景框</text>
+<rect x="22" y="220" width="176" height="128" rx="8" class="o"/>
+<rect x="30" y="232" width="40" height="16" rx="8" class="o"/><rect x="88" y="226" width="40" height="30" rx="4" class="o"/><circle cx="148" cy="241" r="9" class="o"/><circle cx="182" cy="241" r="14" class="o"/>
+<rect x="30" y="268" width="160" height="6" rx="3" class="o"/>
+<rect x="30" y="296" width="44" height="18" rx="4" class="o"/><circle cx="110" cy="305" r="15" class="o"/><rect x="140" y="296" width="16" height="18" rx="3" class="o"/><rect x="159" y="296" width="16" height="18" rx="3" class="o"/><rect x="178" y="296" width="16" height="18" rx="3" class="o"/>
+<g class="n"><circle cx="16" cy="21" r="6"/><text x="16" y="24">1</text><circle cx="33" cy="58" r="6"/><text x="33" y="61">2</text><circle cx="90" cy="58" r="6"/><text x="90" y="61">3</text><circle cx="156" cy="58" r="6"/><text x="156" y="61">4</text><circle cx="184" cy="58" r="6"/><text x="184" y="61">5</text>
+<circle cx="50" cy="256" r="6"/><text x="50" y="259">6</text><circle cx="108" cy="264" r="6"/><text x="108" y="267">7</text><circle cx="148" cy="257" r="6"/><text x="148" y="260">8</text><circle cx="200" cy="226" r="6"/><text x="200" y="229">9</text>
+<circle cx="24" cy="271" r="6"/><text x="24" y="274">10</text><circle cx="52" cy="322" r="6"/><text x="52" y="325">11</text><circle cx="110" cy="326" r="6"/><text x="110" y="329">12</text><circle cx="148" cy="322" r="6"/><text x="148" y="325">13</text><circle cx="167" cy="322" r="6"/><text x="167" y="325">14</text><circle cx="186" cy="322" r="6"/><text x="186" y="325">15</text></g></svg>
+<ol class="mls"><li>信息栏：EV、快门、ISO、滤镜（横屏多焦段、分辨率）</li><li>画幅比例 / 分辨率</li><li>镜头：广角 / 主摄（前置时为前置广角 / 主摄）</li><li>闪光灯（录像时为补光灯；前置是白屏闪光）</li><li>菜单（右上角 ⟳ 刷新，红 ✕ 关闭）</li><li>变焦 − / ＋</li><li>滤镜窗：左右滑切换，点一下打开滤镜条</li><li>特效：鱼眼、对称、九宫格等</li><li>快门旋钮（见下）</li><li>EV 曝光补偿</li><li>拍照 / 录像</li><li>快门键</li><li>相册</li><li>手动横竖屏（只在手动模式出现）</li><li>前后摄像头切换</li></ol>
+<p class="mtip">滤镜条、特效条、菜单打开时，点它们以外的地方就会关闭。</p></section>
+
+<section><h3>快门旋钮</h3>
+<svg viewBox="0 0 220 90" class="mdg"><circle cx="60" cy="45" r="32" class="o"/><circle cx="60" cy="45" r="24" class="o"/><text x="60" y="50" class="t big">A</text>
+<path d="M60 4v14M47 8l13-4 13 4" class="a"/><path d="M110 45h46M150 39l8 6-8 6M110 45" class="a"/><text x="160" y="35" class="t">↑ / ← 更快</text><text x="160" y="62" class="t">↓ / → 更慢</text><text x="60" y="88" class="t">轻点：自动 A ⇄ 手动</text></svg>
+<ul class="mls"><li>按住拖动换档：1/4000 … 1/15 … 1" 2" 5"</li><li>1/15 及更慢有拖影，1 秒以上是光绘长曝光</li><li>录像最慢 1/30</li></ul></section>
+
+<section><h3>滤镜 & 特效</h3>
+<svg viewBox="0 0 220 70" class="mdg"><rect x="70" y="8" width="80" height="50" rx="6" class="o"/><rect x="76" y="14" width="68" height="38" rx="3" class="v"/><text x="110" y="37" class="t">DV</text><path d="M60 33h-40M28 27l-8 6 8 6M160 33h40M192 27l8 6-8 6" class="a"/><text x="110" y="68" class="t">左右滑 = 换滤镜　点 = 列表</text></svg>
+<ul class="mls"><li>22+ 种滤镜：VHS、夜视、CRT、胶片、富士、徕卡、Portra、HP5、拍立得…</li><li>特效（⊕ 按钮）：鱼眼、挤压、左右/上下对称、四宫格、九宫格、漩涡、万花筒、光隧道、拉伸、马赛克</li></ul></section>
+
+<section><h3>菜单各页</h3><ul class="mls">
+<li><b>画质</b>：分辨率、画幅、拉伸、清晰度</li><li><b>色彩</b>：白平衡、饱和度等</li>
+<li><b>复古</b>：光源拖影、<b>星芒</b>（CCD 太阳光：只有很亮的小光点触发，可调根数/长度/角度/竖条/光晕）、光斑</li>
+<li><b>水印</b>：显示项、字体、颜色、自定义文字（拍照不显示时间码）</li><li><b>声音</b>：麦克风、降噪、码率</li>
+<li><b>相机</b>：九宫格、横竖屏（自动/手动/反向）、开机、全屏</li><li><b>外观</b>：皮肤、<b>布局与尺寸</b></li><li><b>同步</b>：设置码、照片互传</li></ul></section>
+
+<section><h3>布局与尺寸</h3>
+<svg viewBox="0 0 220 110" class="mdg"><rect x="70" y="6" width="80" height="98" rx="10" class="o"/><rect x="70" y="6" width="80" height="10" class="h"/><rect x="70" y="94" width="80" height="10" class="h"/><rect x="78" y="22" width="64" height="40" rx="3" class="v"/><circle cx="110" cy="62" r="5" class="g"/><text x="110" y="45" class="t">取景框</text>
+<text x="40" y="12" class="t">红边 = 页面边界</text><text x="186" y="66" class="t">蓝把手 = 大小</text></svg>
+<ul class="mls"><li>MENU → 外观 → 布局与尺寸，竖屏 / 横屏分开设置</li><li>用手指拖：红色斜纹边 = 安全距离；蓝/橙把手 = 取景框、按键、菜单、边框、信息栏大小</li><li>只改示意图，点「应用」才生效</li></ul></section>
+
+<section><h3>相册与编辑</h3>
+<ul class="mls"><li>☆ 收藏；「选择」可多选收藏 / 保存 / <b>传输</b> / 删除；7 天内重复保存会提醒</li>
+<li>编辑：调整（含相机同款滤镜、可保存自己的滤镜）、裁剪旋转、相框（含像素风、黑金属、<b>拍立得</b>）、画笔、橡皮、形状、马赛克、贴纸（含黑金属贴纸、哥特文字）</li>
+<li>双指捏合放大画面，单指画画</li></ul></section>
+
+<section><h3>传输与同步</h3>
+<svg viewBox="0 0 220 70" class="mdg"><rect x="20" y="10" width="50" height="50" rx="8" class="o"/><rect x="150" y="10" width="50" height="50" rx="8" class="o"/><text x="45" y="40" class="t">482915</text><path d="M78 35h64M134 29l8 6-8 6" class="a"/><text x="110" y="28" class="t">输入 6 位码</text></svg>
+<ul class="mls"><li>照片：相册里点「传输」出码 → 另一台 MENU → 同步 → 接收 → 输码（两台同时联网开着）</li><li>设置：MENU → 同步 → 复制设置码 → 另一边导入</li></ul></section>
+
+<section><h3>小贴士</h3><ul class="mls">
+<li>添加到主屏幕可全屏；主屏幕版和 Safari 版相册不互通，删除主屏幕图标会清空它的相册</li>
+<li>显示不对时：MENU → ⟳ 刷新</li><li>相机权限：Safari「网站设置 → 相机 → 允许」后自动开机</li><li>联网打开过一次后可离线使用（需要仓库里的 sw.js）</li></ul></section>
+
+<section><h3>更新记录</h3><ul class="mls">
+<li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
+function openManual(){cam.classList.remove('menu');let m=document.getElementById('man');
+  if(!m){m=document.createElement('div');m.id='man';m.innerHTML='<div class="manh"><b>使用说明</b><button class="btn xclose" id="manx">✕</button></div><div class="manb"></div>';document.body.append(m);
+    m.querySelector('#manx').onclick=()=>m.style.display='none';
+    m.querySelector('.manb').innerHTML=MANUAL.replace(/<section( open)?>/g,(a,o)=>'<details class="msec"'+(o?' open':'')+'>').replace(/<\/section>/g,'</details>').replace(/<h3>(.*?)<\/h3>/g,'<summary>$1</summary>')}
+  m.style.display='flex'}
+const pMan=mkPane('说明');head(pMan,'使用说明');{const w=document.createElement('div');w.className='chips';const b=document.createElement('button');b.className='btn';b.textContent='打开说明书 ▸';b.onclick=()=>openManual();w.append(b);pMan.append(w)}
+note(pMan,'主界面每个按钮的作用、手势、菜单各页和常见问题，带图示。每次更新的新功能也会写进去。');
 const pY=mkPane('同步');
 head(pY,'设置码（导出 / 导入全部参数）');
 {const w=document.createElement('div');w.className='vr';w.innerHTML='<button class="btn" id="scx">复制设置码</button><button class="btn" id="sci">导入设置码</button>';pY.append(w);
