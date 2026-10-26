@@ -432,6 +432,17 @@ html{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inse
 .lmg-t{left:0;right:0;top:0;cursor:ns-resize}.lmg-b{left:0;right:0;bottom:0;cursor:ns-resize}.lmg-l{top:0;bottom:0;left:0;cursor:ew-resize}.lmg-r{top:0;bottom:0;right:0;cursor:ew-resize}
 .ledc{max-height:38vh;overflow-y:auto;padding:0 2px}
 .ledf{display:flex;gap:8px;padding:10px 0}.ledf .btn{flex:1;height:38px}
+
+.ledtip{font-size:11px;color:#9aa0a8;margin-bottom:4px}
+.ledo{display:flex;gap:8px;justify-content:center;padding:6px 0}.ledo .btn{height:32px;padding:0 14px}
+.lgr{position:absolute;z-index:3;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:#fff;background:rgba(80,150,255,.85);border-radius:9px;min-width:22px;height:18px;padding:0 4px;touch-action:none;cursor:grab;box-shadow:0 1px 3px rgba(0,0,0,.6)}
+.lgr-b{left:50%;bottom:-9px;transform:translateX(-50%)}.lgr-t{left:50%;top:-9px;transform:translateX(-50%)}
+.lgr-r{right:-9px;top:50%;transform:translateY(-50%)}.lgr-l{left:-9px;top:50%;transform:translateY(-50%)}
+.lgr-tr{right:3px;top:3px}.lgr-c{left:0;top:0;pointer-events:auto;background:rgba(255,170,60,.9)}
+.lbz .lgr{pointer-events:auto}.lmenu .lgr{pointer-events:auto;background:rgba(255,170,60,.9)}
+.lbk{overflow:visible}.lvf,.ldk{z-index:1}.lmenu{z-index:5}.lmenu .lgr-t{top:-9px}.lmenu .lgr-l{left:-9px}
+.lmg b{position:absolute;font:600 9px/1 sans-serif;color:#fff;left:50%;top:50%;transform:translate(-50%,-50%);text-shadow:0 0 3px #000;pointer-events:none}
+.lmg{min-width:16px;min-height:16px;z-index:4}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -910,7 +921,7 @@ if(S.lo!==1&&S.lo!==2)S.lo=1;
 const reO=()=>{if(o&&!recing()){o=S.lo;layout()}};
 addEventListener('resize',layout);
 /* iOS sometimes keeps the old height after rotating, leaving a blank strip: pin the page to the real viewport */
-function fixVH(){const h=(window.visualViewport?visualViewport.height:innerHeight);document.documentElement.style.height=h+'px';document.body.style.height=h+'px';if(scrollX||scrollY)scrollTo(0,0)}
+function fixVH(){const h=(window.visualViewport?visualViewport.height:innerHeight);document.documentElement.style.height=h+'px';document.body.style.height='';if(scrollX||scrollY)scrollTo(0,0)}
 ['resize','orientationchange'].forEach(n=>addEventListener(n,()=>{fixVH();setTimeout(fixVH,250);setTimeout(fixVH,700)}));
 try{visualViewport&&visualViewport.addEventListener('resize',fixVH)}catch(e){}fixVH();
 $('#ori').onclick=()=>{if(recing())return;o=o?0:S.lo;layout()};
@@ -1193,52 +1204,57 @@ function applyLay(){const k=document.body.classList.contains('land')?'l':'p',L=l
   else{b.classList.remove('vfc');bs.setProperty('--mw',L.mw+'px');bs.setProperty('--lw',Math.round(100*L.sw)+'px');bs.setProperty('--rw',Math.round(140*L.sw)+'px')}}
 window.applyLay=applyLay;
 function openLayEd(){cam.classList.remove('menu');
-  let ed=document.getElementById('led');
-  if(!ed){ed=document.createElement('div');ed.id='led';document.body.append(ed)}
+  let ed=document.getElementById('led');if(!ed){ed=document.createElement('div');ed.id='led';document.body.append(ed)}
   const draft={p:layOf('p'),l:layOf('l')};let tab=document.body.classList.contains('land')?'l':'p';
-  /* current auto safe-area values, so 手动 starts from what you see now */
   const cs=getComputedStyle(document.documentElement),env={t:parseFloat(cs.paddingTop)||0,b:parseFloat(cs.paddingBottom)||0,l:parseFloat(cs.paddingLeft)||0,r:parseFloat(cs.paddingRight)||0};
   ed.innerHTML=`<div class="ledh"><b>布局与尺寸</b><span class="ledtabs"><button class="btn" data-t="p">竖屏</button><button class="btn" data-t="l">横屏</button></span></div>
-   <div class="ledst"><div class="lph" id="lph"></div></div><div class="ledc" id="ledc"></div>
+   <div class="ledtip">直接用手指拖：红色斜纹边 = 页面边界（安全距离），各块上的 ⇕ ⇔ 把手 = 大小。调好点「应用」。</div>
+   <div class="ledst"><div class="lph" id="lph"></div></div>
+   <div class="ledo"><button class="btn ledau"></button><button class="btn ledib"></button></div>
    <div class="ledf"><button class="btn" id="ledx">取消</button><button class="btn" id="ledr">恢复默认</button><button class="btn act" id="leda">应用</button></div>`;
   ed.style.display='flex';
   const W0=Math.min(innerWidth,innerHeight),H0=Math.max(innerWidth,innerHeight);
-  function draw(){ctrls();const L=draft[tab],ph=ed.querySelector('#lph'),st=ed.querySelector('.ledst');ph.style.width=ph.style.height='0px';
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const manual=L=>{if(L.auto){L.auto=false;Object.assign(L,{t:Math.round(env.t),b:Math.round(env.b),l:Math.round(env.l),r:Math.round(env.r)})}};
+  let G={};
+  function draw(){const L=draft[tab],ph=ed.querySelector('#lph'),st=ed.querySelector('.ledst');
     ed.querySelectorAll('.ledtabs .btn').forEach(b=>b.classList.toggle('act',b.dataset.t===tab));
+    const au=ed.querySelector('.ledau');au.textContent='页面边界：'+(L.auto?'自动':'手动');au.classList.toggle('act',!L.auto);
+    const ibb=ed.querySelector('.ledib');ibb.textContent='信息栏 '+(L.ibOn?'开':'关');ibb.classList.toggle('act',L.ibOn);
+    ph.style.width=ph.style.height='0px';
     const W=tab==='p'?W0:H0,H=tab==='p'?H0:W0,k=Math.min((st.clientWidth-16)/W,(st.clientHeight-16)/H);
     ph.style.width=W*k+'px';ph.style.height=H*k+'px';
-    const m=L.auto?env:L,px=v=>v*k+'px',bz=L.bz,ib=L.ibOn?Math.round(22*L.ib):0;
-    let inner='';
-    const area=`left:${px(m.l)};top:${px(m.t)};right:${px(m.r)};bottom:${px(m.b)}`;
-    if(tab==='p'){const top=64*L.ui,deck=196*L.ui,ih=H-m.t-m.b-2*bz,vf=L.vf>0?ih*L.vf/100:Math.max(60,ih-ib-top-deck-14);
-      inner=`<div class="lsa" style="${area}"><div class="lbz" style="inset:0;border-width:${px(bz)}"></div><div class="lcol2" style="inset:${px(bz)}">
-        ${ib?`<div class="lbk lib" style="height:${px(ib)}">信息栏</div>`:''}<div class="lbk" style="height:${px(top)}">顶部按键</div>
-        <div class="lbk lvf" style="height:${px(vf)}">取景框${L.vf>0?' '+L.vf+'%':'（自动）'}<i class="lgrip" data-g="vf"></i></div><div class="lbk ldk" style="flex:1">按键区 ×${L.ui.toFixed(2)}</div></div>
-        <div class="lmenu" style="height:${L.mh}%">菜单打开时的高度 ${L.mh}%</div></div>`}
+    const m=L.auto?env:L,px=v=>Math.max(0,v)*k+'px',bz=L.bz,ib=L.ibOn?Math.round(22*L.ib):0,IH=H-m.t-m.b,IW=W-m.l-m.r;
+    G={W,H,k,m,bz,ib,IH,IW};let inner;
+    const area=`left:${px(m.l)};top:${px(m.t)};width:${px(IW)};height:${px(IH)}`;
+    if(tab==='p'){const top=64*L.ui,deck=196*L.ui,ih=IH-2*bz,vf=L.vf>0?ih*L.vf/100:Math.max(60,ih-ib-top-deck-14);G.top=top;G.ih=ih;
+      inner=`<div class="lsa" style="${area}"><div class="lbz" style="inset:0;border-width:${px(bz)}"><i class="lgr lgr-c" data-g="bz">⤡</i></div><div class="lcol2" style="inset:${px(bz)}">
+        ${ib?`<div class="lbk lib" style="height:${px(ib)}">信息栏<i class="lgr lgr-b" data-g="ib">⇕</i></div>`:''}<div class="lbk" style="height:${px(top)}">顶部按键</div>
+        <div class="lbk lvf" style="height:${px(vf)}">取景框 ${L.vf>0?L.vf+'%':'自动'}<i class="lgr lgr-b" data-g="vf">⇕</i></div>
+        <div class="lbk ldk" style="flex:1">按键区 ${Math.round(L.ui*100)}%<i class="lgr lgr-tr" data-g="ui">⇕ 大小</i></div></div>
+        <div class="lmenu" style="height:${L.mh}%"><i class="lgr lgr-t" data-g="mh">⇕</i>菜单 ${L.mh}%</div></div>`}
     else{const lw=100*L.sw*L.ui,rw=140*L.sw*L.ui;
-      inner=`<div class="lsa" style="${area}"><div class="lbz" style="inset:0;border-width:${px(bz)}"></div><div class="lgrid" style="inset:${px(bz)}">
-        ${ib?`<div class="lbk lib" style="height:${px(ib)}">信息栏</div>`:''}<div class="lrow2"><div class="lbk" style="width:${px(lw)}">左侧<br>按键</div><div class="lbk lvf" style="flex:1">取景框</div><div class="lbk" style="width:${px(rw)}">右侧<br>按键</div></div></div>
-        <div class="lmenu lmr" style="width:${Math.min(L.mw*k,W*k*.8)}px">菜单宽度 ${L.mw}px</div></div>`}
-    ph.innerHTML=inner+['t','b','l','r'].map(e=>`<i class="lmg lmg-${e}${m[e]<1?' z':''}" data-g="${e}" style="${e==='t'||e==='b'?'height':'width'}:${px(m[e])}"></i>`).join('');
-    /* drag edges = safe distance, drag the viewfinder grip = its size */
-    ph.querySelectorAll('[data-g]').forEach(g=>g.onpointerdown=e=>{e.preventDefault();const key=g.dataset.g,r=ph.getBoundingClientRect();
-      if(key!=='vf'&&L.auto){L.auto=false;Object.assign(L,{t:Math.round(env.t),b:Math.round(env.b),l:Math.round(env.l),r:Math.round(env.r)})}
-      const mv=ev=>{const x=(ev.clientX-r.left)/k,y=(ev.clientY-r.top)/k;
-        if(key==='t')L.t=Math.round(Math.max(0,Math.min(120,y)));else if(key==='b')L.b=Math.round(Math.max(0,Math.min(120,H-y)));
-        else if(key==='l')L.l=Math.round(Math.max(0,Math.min(120,x)));else if(key==='r')L.r=Math.round(Math.max(0,Math.min(120,W-x)));
-        else{const ih=H-L.t-L.b,top0=(L.auto?env.t:L.t)+bz+ib+64*L.ui;L.vf=Math.round(Math.max(25,Math.min(80,(y-top0)/(H-(L.auto?env.t+env.b:L.t+L.b)-2*bz)*100)))}
+      inner=`<div class="lsa" style="${area}"><div class="lbz" style="inset:0;border-width:${px(bz)}"><i class="lgr lgr-c" data-g="bz">⤡</i></div><div class="lgrid" style="inset:${px(bz)}">
+        ${ib?`<div class="lbk lib" style="height:${px(ib)}">信息栏<i class="lgr lgr-b" data-g="ib">⇕</i></div>`:''}<div class="lrow2"><div class="lbk" style="width:${px(lw)}">左侧<i class="lgr lgr-r" data-g="sw">⇔</i></div><div class="lbk lvf" style="flex:1">取景框</div><div class="lbk" style="width:${px(rw)}">右侧<i class="lgr lgr-tr" data-g="ui">⇕ 大小</i></div></div></div>
+        <div class="lmenu lmr" style="width:${Math.min(L.mw,IW*.8)*k}px"><i class="lgr lgr-l" data-g="mw">⇔</i>菜单 ${L.mw}px</div></div>`}
+    ph.innerHTML=inner+['t','b','l','r'].map(e=>`<i class="lmg lmg-${e}${m[e]<1?' z':''}" data-g="${e}" style="${e==='t'||e==='b'?'height':'width'}:${px(m[e])}"><b>${Math.round(m[e])}</b></i>`).join('');
+    ph.querySelectorAll('[data-g]').forEach(g=>g.onpointerdown=e=>{e.preventDefault();e.stopPropagation();const key=g.dataset.g,x0=e.clientX,y0=e.clientY,s0={...L,...(L.auto?{t:env.t,b:env.b,l:env.l,r:env.r}:{})};
+      if('tblr'.includes(key))manual(L);
+      const mv=ev=>{const dx=(ev.clientX-x0)/G.k,dy=(ev.clientY-y0)/G.k;
+        if(key==='t')L.t=Math.round(clamp(s0.t+dy,0,160));else if(key==='b')L.b=Math.round(clamp(s0.b-dy,0,160));
+        else if(key==='l')L.l=Math.round(clamp(s0.l+dx,0,120));else if(key==='r')L.r=Math.round(clamp(s0.r-dx,0,120));
+        else if(key==='vf'){const cur=s0.vf>0?s0.vf:Math.round(100*Math.max(60,G.ih-G.ib-G.top-196*L.ui-14)/G.ih);L.vf=Math.round(clamp(cur+dy/G.ih*100,25,85))}
+        else if(key==='ui')L.ui=+clamp(s0.ui-dy/(tab==='p'?250:180),.7,1.35).toFixed(2);
+        else if(key==='mh')L.mh=Math.round(clamp(s0.mh-dy/G.IH*100,25,80));
+        else if(key==='mw')L.mw=Math.round(clamp(s0.mw-dx,200,520));
+        else if(key==='bz')L.bz=Math.round(clamp(s0.bz+(dx+dy)/2,0,30));
+        else if(key==='ib')L.ib=+clamp(s0.ib+dy/22,.6,1.6).toFixed(2);
+        else if(key==='sw')L.sw=+clamp(s0.sw+dx/(100*L.ui),.75,1.5).toFixed(2);
         draw()};
-      const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up)};addEventListener('pointermove',mv);addEventListener('pointerup',up)})}
-  function ctrls(){const L=draft[tab],c=ed.querySelector('#ledc');
-    const rows=[['safe','安全距离'],['t','上',0,120,1],['b','下',0,120,1],['l','左',0,120,1],['r','右',0,120,1],['sz','尺寸']];
-    if(tab==='p')rows.push(['vf','取景框（0=自动）',0,80,1],['ui','按键大小',.75,1.3,.01],['mh','菜单高度 %',25,75,1]);
-    else rows.push(['sw','两侧按键栏宽度',.8,1.4,.01],['ui','按键大小',.75,1.2,.01],['mw','菜单宽度 px',220,480,5]);
-    rows.push(['bz','边框宽度',0,28,1],['ib','信息栏大小',.7,1.4,.01]);
-    c.innerHTML=rows.map(r=>r.length===2?`<div class="gh">${r[1]}${r[0]==='safe'?`<button class="btn ledau${L.auto?' act':''}">${L.auto?'自动':'手动'}</button>`:r[0]==='sz'?`<button class="btn ledib${L.ibOn?' act':''}">信息栏 ${L.ibOn?'开':'关'}</button>`:''}</div>`:
-      `<label class="ms"><span>${r[1]}</span><input type="range" min="${r[2]}" max="${r[3]}" step="${r[4]}" value="${'tblr'.includes(r[0])&&L.auto?Math.round(env[r[0]]):L[r[0]]}" data-k="${r[0]}"><i>${'tblr'.includes(r[0])&&L.auto?Math.round(env[r[0]]):(+L[r[0]]).toFixed(r[4]<1?2:0)}</i></label>`).join('');
-    c.querySelector('.ledau').onclick=()=>{L.auto=!L.auto;if(!L.auto)Object.assign(L,{t:Math.round(env.t),b:Math.round(env.b),l:Math.round(env.l),r:Math.round(env.r)});draw()};
-    c.querySelector('.ledib').onclick=()=>{L.ibOn=!L.ibOn;draw()};
-    c.querySelectorAll('input[data-k]').forEach(i=>i.oninput=()=>{const key=i.dataset.k;if('tblr'.includes(key)&&L.auto){L.auto=false;Object.assign(L,{t:Math.round(env.t),b:Math.round(env.b),l:Math.round(env.l),r:Math.round(env.r)})}L[key]=+i.value;draw()})}
+      const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up)};
+      addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up)})}
+  ed.querySelector('.ledau').onclick=()=>{const L=draft[tab];if(L.auto)manual(L);else L.auto=true;draw()};
+  ed.querySelector('.ledib').onclick=()=>{const L=draft[tab];L.ibOn=!L.ibOn;draw()};
   ed.querySelectorAll('.ledtabs .btn').forEach(b=>b.onclick=()=>{tab=b.dataset.t;draw()});
   ed.querySelector('#ledx').onclick=()=>{ed.style.display='none'};
   ed.querySelector('#ledr').onclick=()=>{draft[tab]={...LAYD[tab]};draw()};
