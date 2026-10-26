@@ -633,6 +633,7 @@ void main(){
  else if(F==19.){col=mix(vec3(Y),col,1.15);col*=vec3(1.08,1.02,.86);col=(col-.5)*1.05+.52;nk=1.3;}
  else if(F==20.){col*=vec3(.88,.97,1.12);col+=b*vec3(.9,.15,.08)*.25;col=mix(vec3(Y),col,1.05);nk=1.5;}
  else if(F==21.){float v=(Y*1.05-.5)*1.12+.5;col=vec3(v);nk=2.2;}
+ else if(F==22.){col=mix(vec3(Y),col,.78);col=(col-.5)*.8+.55;col+=vec3(-.03,.035,.06)*(1.-smoothstep(.1,.55,Y));col+=vec3(.07,.035,-.05)*smoothstep(.45,1.,Y);col=mix(col,vec3(1.,.96,.86),.14*smoothstep(.6,1.,Y));col*=1.-.35*dot(c,c);nk=1.2;}
  col=(col-.5)*kc+.5;col=max(col-kb,0.)/(1.-kb);
  if(fd<1.5){col=max(col,0.);col=(1.-exp(-col*1.8))/(1.-exp(-1.8));}
  if(lf>.5){float fl=max(1.-1.6*dot(c,c),0.);col=col*(1.+fl*.55)+vec3(.03,.03,.04)*fl;}
@@ -794,9 +795,9 @@ let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=2,ev=0,evT=0,o=0,land=false;
 let bmOn=false;const BMP={ct:1.8,cr:.12,nz:2.4,jt:2.2,vg:1.2,sn:.5,sh:1.1,bm:.5};
 const ACC={c:document.createElement('canvas'),fresh:true};ACC.x=ACC.c.getContext('2d');
 let shGain=1,shGainT=1,shotFD=2,sceneY=.45,lensId=null,lenses=[],autoWide=true,curMM=24,hasTorch=false,shotReq=0,flashFx=0,torchOn=false,lightFx=0;
-const FN=['DV','VHS','夜视','黑白','家庭','赛博','胶片','蓝晒','CRT','热成像','海报','负片','青橙','梦幻','富士','Velvia','徕卡','徕卡黑白','Portra','柯达金','800T','HP5'];
-const FO=['DV','VHS','NIGHT','B&W','HOME','CYBER','FILM','CYANO','CRT','THERMAL','POSTER','NEG','TEAL','DREAM','FUJI','VELVIA','LEICA','LEICA MONO','PORTRA','GOLD','800T','HP5'];
-const SW=['linear-gradient(135deg,#9db3c9,#e6edf3)','repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px),linear-gradient(135deg,#b58be0,#f08ac0)','radial-gradient(circle,#4dff6a,#0a3d12)','linear-gradient(135deg,#fff,#222)','linear-gradient(135deg,#ffd49a,#b8722a)','linear-gradient(135deg,#00c8d8,#ff5fb0)','linear-gradient(135deg,#e8d8b8,#7d9a96)','linear-gradient(135deg,#c8ecff,#0d4f8c)','repeating-linear-gradient(90deg,rgba(255,60,60,.85) 0 1px,rgba(60,255,60,.85) 1px 2px,rgba(80,80,255,.85) 2px 3px),#222','linear-gradient(135deg,#1a0066,#a0007a,#f23c10,#ffe040,#fff)','linear-gradient(135deg,#2a5db0 25%,#7ac0e8 25% 50%,#f2c14e 50% 75%,#e8503a 75%)','linear-gradient(135deg,#1a1a1a,#e8e8e8)','linear-gradient(135deg,#1a8a9a 50%,#f09a4a 50%)','radial-gradient(circle at 50% 40%,#fff,#f6c8e8 55%,#b9a2f0)','linear-gradient(135deg,#2f7d6a,#cfe6c8)','linear-gradient(135deg,#1d4fbf,#29a35a,#f2c230)','radial-gradient(circle at 50% 45%,#e8dccb,#5a4632 75%,#1a120c)','linear-gradient(135deg,#f2efe8,#1a1a1a)','linear-gradient(135deg,#f3d1b8,#c9a98e,#8fa7a0)','linear-gradient(135deg,#ffd36b,#e8892a)','radial-gradient(circle at 60% 40%,#ff7a5a,#1b3b6f 60%)','repeating-radial-gradient(circle,#777 0 1px,#bbb 1px 2px)'];
+const FN=['DV','VHS','夜视','黑白','家庭','赛博','胶片','蓝晒','CRT','热成像','海报','负片','青橙','梦幻','富士','Velvia','徕卡','徕卡黑白','Portra','柯达金','800T','HP5','拍立得'];
+const FO=['DV','VHS','NIGHT','B&W','HOME','CYBER','FILM','CYANO','CRT','THERMAL','POSTER','NEG','TEAL','DREAM','FUJI','VELVIA','LEICA','LEICA MONO','PORTRA','GOLD','800T','HP5','POLAROID'];
+const SW=['linear-gradient(135deg,#9db3c9,#e6edf3)','repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px),linear-gradient(135deg,#b58be0,#f08ac0)','radial-gradient(circle,#4dff6a,#0a3d12)','linear-gradient(135deg,#fff,#222)','linear-gradient(135deg,#ffd49a,#b8722a)','linear-gradient(135deg,#00c8d8,#ff5fb0)','linear-gradient(135deg,#e8d8b8,#7d9a96)','linear-gradient(135deg,#c8ecff,#0d4f8c)','repeating-linear-gradient(90deg,rgba(255,60,60,.85) 0 1px,rgba(60,255,60,.85) 1px 2px,rgba(80,80,255,.85) 2px 3px),#222','linear-gradient(135deg,#1a0066,#a0007a,#f23c10,#ffe040,#fff)','linear-gradient(135deg,#2a5db0 25%,#7ac0e8 25% 50%,#f2c14e 50% 75%,#e8503a 75%)','linear-gradient(135deg,#1a1a1a,#e8e8e8)','linear-gradient(135deg,#1a8a9a 50%,#f09a4a 50%)','radial-gradient(circle at 50% 40%,#fff,#f6c8e8 55%,#b9a2f0)','linear-gradient(135deg,#2f7d6a,#cfe6c8)','linear-gradient(135deg,#1d4fbf,#29a35a,#f2c230)','radial-gradient(circle at 50% 45%,#e8dccb,#5a4632 75%,#1a120c)','linear-gradient(135deg,#f2efe8,#1a1a1a)','linear-gradient(135deg,#f3d1b8,#c9a98e,#8fa7a0)','linear-gradient(135deg,#ffd36b,#e8892a)','radial-gradient(circle at 60% 40%,#ff7a5a,#1b3b6f 60%)','repeating-radial-gradient(circle,#777 0 1px,#bbb 1px 2px)','linear-gradient(160deg,#f3ead8,#d9c9a8 45%,#9fb2ad)'];
 const RATIOS=[['4:3',4/3],['16:9',16/9],['1:1',1],['2.35:1',2.35],['自定义',-1],['原始',0]];
 const RES=[240,360,480,720];
 const WMF=[['VT323',1.3,'VT323 像素'],['Press Start 2P',.62,'Press Start'],['Silkscreen',.85,'Silkscreen'],['Pixelify Sans',1,'Pixelify'],['Special Elite',.95,'打字机'],['monospace',1,'系统等宽']];
@@ -2023,12 +2024,17 @@ const FR=[
    x.strokeStyle='#e8e8e8';x.lineWidth=.8*u;x.strokeRect(10.5*u,14.5*u,W-21*u,H-35*u);
    x.fillStyle='#e8e8e8';x.beginPath();x.arc(W/2-2*u,9*u,5*u,0,7);x.fill();x.globalCompositeOperation='destination-out';x.beginPath();x.arc(W/2+.5*u,7.5*u,4.2*u,0,7);x.fill();x.globalCompositeOperation='source-over';
    x.fillStyle='#e8e8e8';[[5,3],[W/u-6.3,3],[5,H/u-16],[W/u-6.3,H/u-16]].forEach(([a,b])=>{x.fillRect(a*u,b*u,1.3*u,9*u);x.fillRect((a-2.4)*u,(b+5)*u,6*u,1.3*u)});
-   if(tx)fTxt(x,tx,W/2,H-6*u,12*u,'UnifrakturMaguntia,serif','#e8e8e8','center')}}
+   if(tx)fTxt(x,tx,W/2,H-6*u,12*u,'UnifrakturMaguntia,serif','#e8e8e8','center')}},
+ {n:'拍立得',hd:true,t:t=>fDate(t),d:(x,W,H,u,tx)=>{const g=ring(x,W,H,u,{bg:'#f7f4ec',t:11,l:11,r:11,b:40,or:0,ir:0,lw:0});
+   const pg=x.createLinearGradient(0,0,W,H);pg.addColorStop(0,'rgba(255,255,255,.35)');pg.addColorStop(1,'rgba(0,0,0,.05)');x.save();x.beginPath();x.rect(0,0,W,H);x.rect(g.l,g.t,W-g.l-g.r,H-g.t-g.b);x.fillStyle=pg;x.fill('evenodd');
+   for(let i=0;i<W*H/900;i++){x.fillStyle=`rgba(120,100,70,${Math.random()*.05})`;x.fillRect(Math.random()*W,Math.random()*H,1.5,1.5)}x.restore();
+   x.strokeStyle='rgba(0,0,0,.18)';x.lineWidth=Math.max(1,u*.5);x.strokeRect(g.l,g.t,W-g.l-g.r,H-g.t-g.b);
+   if(tx)fTxt(x,tx,W-g.r-u*2,H-g.b*.38,11*u,'"Marker Felt","Noteworthy","Bradley Hand","Segoe Print",cursive','#3a3a46','right')}}
 ];
 function frText(){const f=FR[E.fr];return f.t?(E.ftx||f.t(E.t)):''}
 function frameCanvas(){const key=[E.fr,E.cw,E.ch,frText(),E.fb,E.fpx].join('|');if(E.fkey===key)return E.fc;E.fkey=key;
-  const cells=320/E.fpx,cs=Math.min(E.cw,E.ch)/cells,W=Math.max(8,Math.round(E.cw/cs)),H=Math.max(8,Math.round(E.ch/cs)),c=mkC(W,H),x=c.getContext('2d');
-  FI=null;FR[E.fr].d(x,W,H,Math.min(W,H)/124*E.fb,frText());pixelize(x,W,H);
+  const hd=!!FR[E.fr].hd,cells=hd?Math.min(E.cw,E.ch):320/E.fpx,cs=Math.min(E.cw,E.ch)/cells,W=Math.max(8,Math.round(E.cw/cs)),H=Math.max(8,Math.round(E.ch/cs)),c=mkC(W,H),x=c.getContext('2d');
+  FI=null;FR[E.fr].d(x,W,H,Math.min(W,H)/124*E.fb,frText());if(!hd)pixelize(x,W,H);
   return E.fc={c,W,H,fi:FI}}
 /* turn the drawing into crisp pixel art: hard alpha, 1-cell dark outline, top highlight, bottom shadow */
 function pixelize(x,W,H){const id=x.getImageData(0,0,W,H),d=id.data,n=W*H,A=new Uint8Array(n);
