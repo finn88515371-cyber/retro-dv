@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -804,12 +805,13 @@ gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);gl.uniform1i(gl.getUniformLocatio
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false,srOn:false,srk:1,srt:.96,srl:1,srn:6,sra:0,srs:.6,srh:.8};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,rotMan:false,gyInv:false,fx:0,lay:null,shi:0,shiM:7,camOK:false};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,rotMan:true,gyInv:false,fx:0,lay:null,shi:0,shiM:7,camOK:false};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
 try{Object.assign(P,JSON.parse(localStorage.getItem('dvP3')||'{}'))}catch(e){}
 try{Object.assign(S,JSON.parse(localStorage.getItem('dvS')||'{}'))}catch(e){}
+if(!S.rotV2){S.rotMan=true;S.rotV2=true;try{localStorage.setItem('dvS',JSON.stringify(S))}catch(e){}}/* manual landscape button is the default again (no sensor prompt every launch) */
 try{const w=JSON.parse(localStorage.getItem('dvW')||'{}');Object.assign(WM,w,{items:{...DWI,...(w.items||{})}})}catch(e){}
 const DEF=new Map([[P,D],[S,DS],[WM,DW],[WM.items,DWI]]);
 const save=()=>{try{localStorage.setItem('dvP3',JSON.stringify(P));localStorage.setItem('dvS',JSON.stringify(S));localStorage.setItem('dvW',JSON.stringify(WM))}catch(e){}};
@@ -1065,7 +1067,7 @@ head(pM,'全屏');
  document.addEventListener('fullscreenchange',sync);document.addEventListener('webkitfullscreenchange',sync);sync()}
 head(pM,'画面方向');
 head(pM,'横竖屏');addToggle(pM,'改用手动横竖屏',S,'rotMan',()=>{gyroSetup();if(!S.rotMan&&o){}});addToggle(pM,'自动旋转方向反向（转反了就打开）',S,'gyInv');
-note(pM,'默认自动旋转：手机横过来自动切横屏。关掉手机的「竖排方向锁定」时直接用系统旋转，不需要任何权限；开着方向锁定时用陀螺仪，iPhone 每次打开页面后第一次点屏幕会询问「动作与方向」权限（Safari 不允许网页长期保存这个权限）。万一用不了，打开「改用手动横竖屏」，主界面会出现手动切换按钮。');
+note(pM,'默认用主界面的旋转按钮手动切换横竖屏，不需要任何权限。关掉「改用手动横竖屏」就是自动旋转：关掉手机的「竖排方向锁定」时直接用系统旋转，不需要权限；开着方向锁定时用陀螺仪，iPhone 每次打开页面后第一次点屏幕会询问「动作与方向」权限（Safari 不允许网页长期保存）。转反了就打开「反向」。');
 head(pM,'横屏时手机往哪边转');
 addChips(pM,['↺ 逆时针（左边朝下）','↻ 顺时针（右边朝下）'],()=>S.lo-1,i=>{S.lo=i+1;save();reO()});
 addToggle(pM,'后置镜头 横屏旋转 180°',S,'lfB');
@@ -1089,7 +1091,7 @@ const MANUAL=`
 <g class="n"><circle cx="16" cy="21" r="6"/><text x="16" y="24">1</text><circle cx="33" cy="58" r="6"/><text x="33" y="61">2</text><circle cx="90" cy="58" r="6"/><text x="90" y="61">3</text><circle cx="156" cy="58" r="6"/><text x="156" y="61">4</text><circle cx="184" cy="58" r="6"/><text x="184" y="61">5</text>
 <circle cx="50" cy="256" r="6"/><text x="50" y="259">6</text><circle cx="108" cy="264" r="6"/><text x="108" y="267">7</text><circle cx="148" cy="257" r="6"/><text x="148" y="260">8</text><circle cx="200" cy="226" r="6"/><text x="200" y="229">9</text>
 <circle cx="24" cy="271" r="6"/><text x="24" y="274">10</text><circle cx="52" cy="322" r="6"/><text x="52" y="325">11</text><circle cx="110" cy="326" r="6"/><text x="110" y="329">12</text><circle cx="148" cy="322" r="6"/><text x="148" y="325">13</text><circle cx="167" cy="322" r="6"/><text x="167" y="325">14</text><circle cx="186" cy="322" r="6"/><text x="186" y="325">15</text></g></svg>
-<ol class="mls"><li>信息栏：EV、快门、ISO、滤镜（横屏多焦段、分辨率）</li><li>画幅比例 / 分辨率</li><li>镜头：广角 / 主摄（前置时为前置广角 / 主摄）</li><li>闪光灯（录像时为补光灯；前置是白屏闪光）</li><li>菜单（右上角 ⟳ 刷新，红 ✕ 关闭）</li><li>变焦 − / ＋</li><li>滤镜窗：左右滑切换，点一下打开滤镜条</li><li>特效：鱼眼、对称、九宫格等</li><li>快门旋钮（见下）</li><li>EV 曝光补偿</li><li>拍照 / 录像</li><li>快门键</li><li>相册</li><li>手动横竖屏（只在手动模式出现）</li><li>前后摄像头切换</li></ol>
+<ol class="mls"><li>信息栏：EV、快门、ISO、滤镜（横屏多焦段、分辨率）</li><li>画幅比例 / 分辨率</li><li>镜头：广角 / 主摄（前置时为前置广角 / 主摄）</li><li>闪光灯（录像时为补光灯；前置是白屏闪光）</li><li>菜单（右上角 ⟳ 刷新，红 ✕ 关闭）</li><li>变焦 − / ＋</li><li>滤镜窗：左右滑切换，点一下打开滤镜条</li><li>特效：鱼眼、对称、九宫格等</li><li>快门旋钮（见下）</li><li>EV 曝光补偿</li><li>拍照 / 录像</li><li>快门键</li><li>相册</li><li>横竖屏切换（设置里可改成自动旋转）</li><li>前后摄像头切换</li></ol>
 <p class="mtip">滤镜条、特效条、菜单打开时，点它们以外的地方就会关闭。</p></section>
 
 <section><h3>快门旋钮</h3>
@@ -1105,7 +1107,7 @@ const MANUAL=`
 <li><b>画质</b>：分辨率、画幅、拉伸、清晰度</li><li><b>色彩</b>：白平衡、饱和度等</li>
 <li><b>复古</b>：光源拖影、<b>星芒</b>（CCD 太阳光：只有很亮的小光点触发，可调根数/长度/角度/竖条/光晕）、光斑</li>
 <li><b>水印</b>：显示项、字体、颜色、自定义文字（拍照不显示时间码）</li><li><b>声音</b>：麦克风、降噪、码率</li>
-<li><b>相机</b>：九宫格、横竖屏（自动/手动/反向）、开机、全屏</li><li><b>外观</b>：皮肤、<b>布局与尺寸</b></li><li><b>同步</b>：设置码、照片互传</li></ul></section>
+<li><b>相机</b>：九宫格、横竖屏（默认手动按钮，可改自动旋转/反向）、开机、全屏</li><li><b>外观</b>：皮肤、<b>布局与尺寸</b></li><li><b>同步</b>：设置码、照片互传</li></ul></section>
 
 <section><h3>布局与尺寸</h3>
 <svg viewBox="0 0 220 110" class="mdg"><rect x="70" y="6" width="80" height="98" rx="10" class="o"/><rect x="70" y="6" width="80" height="10" class="h"/><rect x="70" y="94" width="80" height="10" class="h"/><rect x="78" y="22" width="64" height="40" rx="3" class="v"/><circle cx="110" cy="62" r="5" class="g"/><text x="110" y="45" class="t">取景框</text>
@@ -1126,7 +1128,7 @@ const MANUAL=`
 <li>显示不对时：MENU → ⟳ 刷新</li><li>相机权限：Safari「网站设置 → 相机 → 允许」后自动开机</li><li>联网打开过一次后可离线使用（需要仓库里的 sw.js）</li><li class="megg"><i>寻找一个十字架在菜单的角落</i></li></ul></section>
 
 <section><h3>更新记录</h3><ul class="mls">
-<li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
+<li>10/27：横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
 function openManual(){cam.classList.remove('menu');let m=document.getElementById('man');
   if(!m){m=document.createElement('div');m.id='man';m.innerHTML='<div class="manh"><b>使用说明</b><button class="btn xclose" id="manx">✕</button></div><div class="manb"></div>';document.body.append(m);
     m.querySelector('#manx').onclick=()=>m.style.display='none';
