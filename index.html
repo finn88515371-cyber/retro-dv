@@ -478,8 +478,8 @@ body.rotl .cam{transform:translateY(100dvh) rotate(-90deg) translate(var(--ml,0p
 
 #pvpk{position:absolute;inset:0;z-index:55;display:none;flex-direction:column;background:var(--menu);color:var(--menuink)}
 .pkh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}.pkh b{font-size:14px}
-.pkg{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 10px 16px;align-content:start}
-.pki{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;background:#000;cursor:pointer}.pki::before{content:'';display:block;padding-top:100%}.pki img,.pki video,.pki canvas{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;display:block}
+.pkg{flex:1 1 0;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:block;padding:6px 7px 16px;font-size:0;line-height:0}
+.pki{position:relative;display:inline-block;vertical-align:top;width:calc(33.333% - 6px);height:0;padding-top:calc(33.333% - 6px);margin:3px;border-radius:6px;overflow:hidden;background:#000;cursor:pointer}.pki img,.pki video,.pki canvas{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;display:block}
 .pki.on{box-shadow:0 0 0 3px var(--acc)}.pki.on::after{content:'✓';position:absolute;right:5px;top:3px;width:20px;height:20px;border-radius:50%;background:var(--acc);color:#fff;font:700 13px/20px sans-serif;text-align:center}
 
 body.land.bm #bmt{grid-column:1/4;grid-row:2;font-size:17px;line-height:1.1;margin:0}
@@ -490,8 +490,8 @@ body.bm #ibar{background:#000;color:#fff;font-family:'UnifrakturMaguntia','Pirat
 /* FX button: a real raised key with a sparkle + label */
 .cam .btn.fxb{width:46px;height:46px!important;border-radius:50%!important;padding:0!important;min-width:0;display:flex;align-items:center;justify-content:center;line-height:1!important;margin-bottom:2px}
 .cam .btn.fxb b{font:900 15px/1 'Arial Black','Helvetica Neue',Arial,sans-serif;letter-spacing:.02em;color:#d42a14;text-shadow:0 1px 0 rgba(255,255,255,.55),0 -1px 0 rgba(0,0,0,.25);font-style:italic}
-body.skin-ccdd .cam .btn.fxb b,body.skin-dark .cam .btn.fxb b,body.skin-dv .cam .btn.fxb b,body.skin-wood .cam .btn.fxb b{color:#ff3b26;text-shadow:0 0 4px rgba(255,40,20,.45),0 -1px 0 rgba(0,0,0,.6)}
-.cam .btn.fxb.act{background-position:center}.cam .btn.fxb.act b{color:#ff2a10;text-shadow:0 0 6px rgba(255,40,20,.8)}
+body.skin-ccdd .cam .btn.fxb b,body.skin-dark .cam .btn.fxb b,body.skin-dv .cam .btn.fxb b,body.skin-wood .cam .btn.fxb b{color:#ff3b26;text-shadow:0 -1px 0 rgba(0,0,0,.6)}
+.cam .btn.fxb.act{background-position:center}
 body.land .lcol .btn.fxb{width:42px;height:42px!important}
 body.skin-ccd .cam .btn.fxb.act{background:radial-gradient(circle at 50% 7px,#8dff6a 0 2px,rgba(141,255,106,.45) 3px,transparent 4.5px),var(--brs),linear-gradient(#a3a9b0,#c3c8ce 60%,#d2d6db)!important}body.skin-ccdd .cam .btn.fxb.act{background:radial-gradient(circle at 50% 7px,#9dff7a 0 2px,rgba(110,255,80,.55) 3px,transparent 5px),var(--brs),linear-gradient(#1a1c20,#2a2d32 60%,#3a3e44)!important}
 /* double exposure UI on the viewfinder */
@@ -1150,7 +1150,7 @@ const MANUAL=`
 <li>显示不对时：MENU → ⟳ 刷新</li><li>相机权限：Safari「网站设置 → 相机 → 允许」后自动开机</li><li>联网打开过一次后可离线使用（需要仓库里的 sw.js）</li><li class="megg"><i>寻找一个十字架在菜单的角落</i></li></ul></section>
 
 <section><h3>更新记录</h3><ul class="mls">
-<li>10/29：多重曝光，最多 5 张（MENU → 相机里选张数）；FX 键改成红字圆形实体键；修复编辑里叠图选第二张照片时闪退 / 照片挤在一起</li><li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
+<li>10/29：修复叠图 / 私密相册选择照片时缩略图挤成一条条；FX 键按下不再发光</li><li>10/29：多重曝光，最多 5 张（MENU → 相机里选张数）；FX 键改成红字圆形实体键；修复编辑里叠图选第二张照片时闪退 / 照片挤在一起</li><li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
 function openManual(){cam.classList.remove('menu');let m=document.getElementById('man');
   if(!m){m=document.createElement('div');m.id='man';m.innerHTML='<div class="manh"><b>使用说明</b><button class="btn xclose" id="manx">✕</button></div><div class="manb"></div>';document.body.append(m);
     m.querySelector('#manx').onclick=()=>m.style.display='none';
@@ -1430,7 +1430,7 @@ $('#pvadd').onclick=()=>{if(!PV.on||!PV.key)return;let m=document.getElementById
   (PV.pub||[]).forEach(it=>{const d=document.createElement('div');d.className='pki';const el=document.createElement(it.k==='img'?'img':'video');
     if(it.k==='vid'){el.src=it.url+'#t=0.1';el.muted=true;el.preload='metadata';el.playsInline=true;d.append(el)}else{thumbOf(it).then(c=>{if(c&&d.isConnected){const v=new Image();v.src=c;d.append(v)}})}
     d.onclick=()=>{if(pick.has(it.id))pick.delete(it.id);else pick.add(it.id);d.classList.toggle('on',pick.has(it.id));upd()};g.append(d)});
-  if(!(PV.pub||[]).length)g.textContent='普通相册里没有照片';
+  if(!(PV.pub||[]).length)g.innerHTML='<p style="font-size:13px;line-height:1.6;padding:10px">普通相册里没有照片</p>';
   const close=()=>{g.querySelectorAll('video').forEach(v=>{v.removeAttribute('src');v.load()});g.innerHTML='';m.style.display='none'};
   m.querySelector('#pkx').onclick=close;
   ok.onclick=async()=>{if(!pick.size){close();return}ok.textContent='加密中…';
@@ -1497,7 +1497,7 @@ $('#dpk').onclick=()=>{let m=document.getElementById('dpkm');
     if(src&&w){const k=Math.min(1,1280/Math.max(w,h)),c=mkC(Math.round(w*k),Math.round(h*k));c.getContext('2d').drawImage(src,0,0,c.width,c.height);if(src.close)src.close();
       E.ov={c,x:.5,y:.5,s:+$('#dsz').value,a:+$('#dop').value,m:E.dm|0};syncDbl();edRender()}
     busy=false;close()});
-  if(!L.length)g.textContent='相册里没有照片';
+  if(!L.length)g.innerHTML='<p style="font-size:13px;line-height:1.6;padding:10px">相册里没有照片</p>';
   m.style.display='flex'};
 setTimeout(syncDbl,0);
 /* tap anywhere outside the menu / filter strip / effect strip closes them (that tap does nothing else) */
