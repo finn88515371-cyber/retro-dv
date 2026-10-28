@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1128,7 +1127,7 @@ const MANUAL=`
 <li>显示不对时：MENU → ⟳ 刷新</li><li>相机权限：Safari「网站设置 → 相机 → 允许」后自动开机</li><li>联网打开过一次后可离线使用（需要仓库里的 sw.js）</li><li class="megg"><i>寻找一个十字架在菜单的角落</i></li></ul></section>
 
 <section><h3>更新记录</h3><ul class="mls">
-<li>10/27：横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
+<li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
 function openManual(){cam.classList.remove('menu');let m=document.getElementById('man');
   if(!m){m=document.createElement('div');m.id='man';m.innerHTML='<div class="manh"><b>使用说明</b><button class="btn xclose" id="manx">✕</button></div><div class="manb"></div>';document.body.append(m);
     m.querySelector('#manx').onclick=()=>m.style.display='none';
@@ -1564,7 +1563,7 @@ addEventListener('resize',()=>{if(mob&&innerWidth>innerHeight){nativeRot=true;if
    iso=Math.max(50,Math.min(3200,iso));let shTxt='1/'+near(TS,1/t);
    const si2=dialIdx();if(si2>0){const tm=1/SHV[si2],T0=t*iso,iso2=Math.max(50,Math.min(3200,T0/tm));shGainT=Math.max(1/8,Math.min(tm>=.5?2:4,tm*iso2/T0));iso=iso2;shTxt=SHV[si2]>=1?'1/'+SHV[si2]:(1/SHV[si2])+'"'}else shGainT=1;
    tx('iev','EV '+(e>0?'+':e<0?'−':'±')+Math.abs(e).toFixed(1));tx('ish',shTxt);tx('iiso','ISO '+near(IS,iso));
-   tx('ifl',(typeof FN!=='undefined'&&FN[fi])||'');tx('imm',Math.round(curMM*zc*lensK)+'mm');tx('irs',RES[si]+'p')},250)}
+   tx('ifl',bmOn?'BLACK METAL':((typeof FO!=='undefined'&&FO[fi])||''));tx('imm',Math.round(curMM*zc*lensK)+'mm');tx('irs',RES[si]+'p')},250)}
 $('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';lensId=null;start()};
 
 /* zoom + exposure + flash / light */
@@ -1616,13 +1615,19 @@ function ov(T){
   const blink=Math.floor(T*1.5)%2===0;
   if(it.rec){if(mode==='photo')tx2('PHOTO',m,m);else tx2(isRec?(blink?'● REC':'  REC'):'STBY',m,m)}
   if(it.flt&&(fi||bmOn))tx2(bmOn?'Black Metal':FO[fi],m,m+(it.rec?ls:0));
-  if(it.bat)tx2('SP [###-]',W-m,m,'right');
-  if(it.zm&&(zdir||Math.abs(zt-zc)>.005||performance.now()-zT<1500)){
+  if(it.bat){/* tape speed + battery icon (3 of 4 bars), drawn in the watermark colour with the same glow */
+    const bh=f*.62,bw=bh*2.1,nub=bh*.18,bx=W-m-bw-nub,by=m+(f-bh)*.45,lw=Math.max(1,f*.09),gap=lw*1.2,cw2=(bw-lw*2-gap*5)/4;
+    oc.save();oc.shadowColor=wcol;oc.shadowBlur=f*.35*(bmOn?.6:WM.gl);oc.strokeStyle=oc.fillStyle=wcol;oc.lineWidth=lw;
+    oc.strokeRect(bx+lw/2,by+lw/2,bw-lw,bh-lw);oc.fillRect(bx+bw,by+bh*.3,nub,bh*.4);
+    for(let i=0;i<3;i++)oc.fillRect(bx+lw+gap+i*(cw2+gap),by+lw+gap,cw2,bh-lw*2-gap*2);oc.restore();
+    tx2('SP',bx-f*.45,m,'right')}
+  const live=!shotReq;/* zoom bar & EV readout only in the viewfinder, never baked into photos */
+  if(live&&it.zm&&(zdir||Math.abs(zt-zc)>.005||performance.now()-zT<1500)){
     const n=Math.max(0,Math.min(8,Math.round(Math.log(zc)/Math.log(6)*8)));
     tx2('W ['+'#'.repeat(n)+'-'.repeat(8-n)+'] T',W/2,H-m-ls*2.4,'center');
     tx2(Math.round(curMM*zc*lensK)+'mm',W/2,H-m-ls*3.5,'center');
   }
-  if(performance.now()-evT<1500)tx2('EV '+(ev>0?'+':'')+ev.toFixed(1),W/2,m,'center');
+  if(live&&performance.now()-evT<1500)tx2('EV '+(ev>0?'+':'')+ev.toFixed(1),W/2,m,'center');
   const d=new Date();
   if(it.date)tx2(d.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).toUpperCase(),m,H-m-f-ls);
   if(it.time)tx2(d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),m,H-m-f);
