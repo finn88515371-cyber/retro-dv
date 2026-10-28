@@ -236,7 +236,7 @@ body.bm .shut.rec::after{background:#7a0000}
 body.bm #bar,body.bm #bre,body.bm #fb,body.bm #fstrip,body.bm .tbar{display:none!important}
 #bmfx{position:fixed;inset:0;z-index:999;pointer-events:none}
 #bmfx>*{position:absolute;inset:0;width:100%;height:100%;opacity:0}
-#fxw{background:#fff}#fxb{background:#000}
+#bmfx #fxw{background:#fff}#bmfx #fxb{background:#000}
 #fxc{display:flex;align-items:center;justify-content:center;font:300px/1 Georgia,serif;color:#000}
 #egg{width:28px;margin:30px 0 4px auto;text-align:center;font-size:16px;opacity:.42;transform:rotate(180deg);cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 .cam{--bzw:16px;padding:calc(var(--pv) + var(--bzw)) calc(var(--ph) + var(--bzw))}
@@ -479,7 +479,7 @@ body.rotl .cam{transform:translateY(100dvh) rotate(-90deg) translate(var(--ml,0p
 #pvpk{position:absolute;inset:0;z-index:55;display:none;flex-direction:column;background:var(--menu);color:var(--menuink)}
 .pkh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}.pkh b{font-size:14px}
 .pkg{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 10px 16px;align-content:start}
-.pki{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;background:#000;cursor:pointer}.pki img,.pki video{width:100%;height:100%;object-fit:cover;display:block}
+.pki{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;background:#000;cursor:pointer}.pki::before{content:'';display:block;padding-top:100%}.pki img,.pki video,.pki canvas{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;display:block}
 .pki.on{box-shadow:0 0 0 3px var(--acc)}.pki.on::after{content:'✓';position:absolute;right:5px;top:3px;width:20px;height:20px;border-radius:50%;background:var(--acc);color:#fff;font:700 13px/20px sans-serif;text-align:center}
 
 body.land.bm #bmt{grid-column:1/4;grid-row:2;font-size:17px;line-height:1.1;margin:0}
@@ -488,9 +488,12 @@ body.land.bm .lcol .btn{font-size:11px!important}
 body.bm #ibar{background:#000;color:#fff;font-family:'UnifrakturMaguntia','Pirata One',serif!important;font-size:calc(17px*var(--ibs,1))!important;letter-spacing:.02em;text-shadow:0 0 2px #fff,0 0 8px rgba(255,255,255,.75),0 0 16px rgba(255,255,255,.35);box-shadow:inset 0 0 0 1px #2a2a2a}
 
 /* FX button: a real raised key with a sparkle + label */
-.cam .btn.fxb{width:46px;height:46px!important;border-radius:var(--rad)!important;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1!important}
-.fxb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}.fxb span{font-size:9px;font-weight:800;letter-spacing:.08em}
-body.land .lcol .btn.fxb{width:44px;height:40px!important}
+.cam .btn.fxb{width:46px;height:46px!important;border-radius:50%!important;padding:0!important;min-width:0;display:flex;align-items:center;justify-content:center;line-height:1!important;margin-bottom:2px}
+.cam .btn.fxb b{font:900 15px/1 'Arial Black','Helvetica Neue',Arial,sans-serif;letter-spacing:.02em;color:#d42a14;text-shadow:0 1px 0 rgba(255,255,255,.55),0 -1px 0 rgba(0,0,0,.25);font-style:italic}
+body.skin-ccdd .cam .btn.fxb b,body.skin-dark .cam .btn.fxb b,body.skin-dv .cam .btn.fxb b,body.skin-wood .cam .btn.fxb b{color:#ff3b26;text-shadow:0 0 4px rgba(255,40,20,.45),0 -1px 0 rgba(0,0,0,.6)}
+.cam .btn.fxb.act{background-position:center}.cam .btn.fxb.act b{color:#ff2a10;text-shadow:0 0 6px rgba(255,40,20,.8)}
+body.land .lcol .btn.fxb{width:42px;height:42px!important}
+body.skin-ccd .cam .btn.fxb.act{background:radial-gradient(circle at 50% 7px,#8dff6a 0 2px,rgba(141,255,106,.45) 3px,transparent 4.5px),var(--brs),linear-gradient(#a3a9b0,#c3c8ce 60%,#d2d6db)!important}body.skin-ccdd .cam .btn.fxb.act{background:radial-gradient(circle at 50% 7px,#9dff7a 0 2px,rgba(110,255,80,.55) 3px,transparent 5px),var(--brs),linear-gradient(#1a1c20,#2a2d32 60%,#3a3e44)!important}
 /* double exposure UI on the viewfinder */
 #dxo{position:absolute;left:8px;right:8px;bottom:8px;z-index:4;display:none;align-items:center;gap:8px;padding:6px 8px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;font-size:11px}
 #dxo input{flex:1;min-width:0}#dxo i{font-style:normal;min-width:30px;text-align:right}#dxo .btn{height:26px;padding:0 8px;font-size:11px!important}
@@ -513,7 +516,7 @@ body.land .lcol .btn.fxb{width:44px;height:40px!important}
       <div class="ctl ctl1">
         <div class="zgrp"><div class="zpill"><button class="btn zb" id="zo" aria-label="缩小">－</button><button class="btn zb" id="zi" aria-label="放大">＋</button></div><span class="zr" id="zr">1.0×</span></div>
         <div class="fsq" id="fb" aria-label="滤镜"><div class="fwin"><div class="ftrk"><div class="fcard"><i></i><b></b></div><div class="fcard"><i></i><b></b></div><div class="fcard"><i></i><b></b></div></div><span class="fgl"></span></div></div>
-        <button class="btn fxb" id="fxb" aria-label="特效"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 2.5l1.9 5 5 1.9-5 1.9-1.9 5-1.9-5-5-1.9 5-1.9z"/><path d="M18.5 14.5l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9z"/></svg><span>FX</span></button><div class="dial" id="dial" aria-label="快门速度"><div class="dk"></div><div class="df" id="dface"></div><b class="dv" id="dval">A</b><i class="dp"></i></div>
+        <button class="btn fxb" id="fxb" aria-label="特效"><b>FX</b></button><div class="dial" id="dial" aria-label="快门速度"><div class="dk"></div><div class="df" id="dface"></div><b class="dv" id="dval">A</b><i class="dp"></i></div>
       </div>
       <div class="evr"><button class="btn" id="evr">EV</button><input type="range" id="ev" min="-2" max="2" step=".1" value="0"><i id="evv">0.0</i></div>
       <div class="ctl">
@@ -820,7 +823,7 @@ gl.uniform1i(gl.getUniformLocation(pg,'tb'),1);gl.uniform1i(gl.getUniformLocatio
 
 /* settings */
 const D={wb:-.1,sh:.6,pf:.45,ca:.4,bl:0,bd:.45,bm:.35,nz:.4,sn:.3,vg:.4,jt:.3,sat:1,skk:.6,ska:90,skt:.88,skw:.5,bkk:1,bks:1,bkr:0,bkn:16,bkt:.78,bksh:1,skOn:true,bkOn:false,srOn:false,srk:1,srt:.96,srl:1,srn:6,sra:0,srs:.6,srh:.8};
-const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,rotMan:true,gyInv:false,fx:0,dx:false,dxa:.5,dxm:0,lay:null,shi:0,shiM:7,camOK:false};
+const DS={mic:false,gain:1,ns:true,agc:true,ec:false,lofi:false,abr:1,skin:'ccd',stretch:false,car:1.78,flip:false,flash:false,light:false,lo:1,lfF:false,lfB:false,stx:1,sty:1,autoOn:true,rotMan:true,gyInv:false,fx:0,dx:false,dxa:.5,dxm:0,dxn:2,lay:null,shi:0,shiM:7,camOK:false};
 const DW={color:'#f4f4ee',font:0,size:1,fr:.45,gl:.5,txt:''};
 const DWI={rec:true,flt:true,bat:true,date:true,time:true,tc:true,zm:true};
 let P={...D},S={...DS},WM={...DW,items:{...DWI}};
@@ -843,7 +846,7 @@ const mob=matchMedia('(pointer:coarse)').matches;
 const vid=document.createElement('video');vid.muted=true;vid.playsInline=true;
 let stream,track,facing='environment',on=false,mode='photo',rec,chunks=[],t0=0,items=[],last=0,W=640,H=480,cw=0,ch=0,rot=0,szKey='',cr=[1,1];
 let zt=1,zc=1,zT=0,zdir=0,fi=0,ri=0,si=2,ev=0,evT=0,o=0,land=false;
-const DX={first:null};const DXM=[['screen','叠加'],['source-over','平均'],['lighten','变亮'],['darken','变暗']];
+const DX={first:null,n:0};const DXM=[['screen','叠加'],['source-over','平均'],['lighten','变亮'],['darken','变暗']];
 let bmOn=false;const BMP={ct:1.8,cr:.12,nz:2.4,jt:2.2,vg:1.2,sn:.5,sh:1.1,bm:.5};
 const ACC={c:document.createElement('canvas'),fresh:true};ACC.x=ACC.c.getContext('2d');
 let shGain=1,shGainT=1,shotFD=2,sceneY=.45,lensId=null,lenses=[],autoWide=true,curMM=24,hasTorch=false,shotReq=0,flashFx=0,torchOn=false,lightFx=0;
@@ -1063,8 +1066,9 @@ addToggle(pS,'复古音质（窄频）',S,'lofi',nodes);
 head(pS,'录音码率');addChips(pS,['64k 低','128k 标准','256k 高'],()=>S.abr,i=>{S.abr=i;save()});
 addReset(pS);
 const pM=mkPane('相机');
-head(pM,'双重曝光');addChips(pM,DXM.map(x=>x[1]),()=>S.dxm|0,i=>{S.dxm=i;save()});
-note(pM,'在特效条里打开「双重曝光」：拍完第一张会半透明留在取景框上，取景框下方出现透明度滑块，再按一次快门合成保存。混合方式在这里改，拍完第一张后改也会立刻生效。叠加：两张都变亮，最像胶片；平均：各占一半；变亮 / 变暗：每处保留更亮 / 更暗的那张。水印只会出现一次。');
+head(pM,'多重曝光 · 张数');addChips(pM,['2 张','3 张','4 张','5 张'],()=>Math.min(3,Math.max(0,(S.dxn||2)-2)),i=>{S.dxn=i+2;save();typeof dxUI==='function'&&dxUI()});
+head(pM,'多重曝光 · 混合方式');addChips(pM,DXM.map(x=>x[1]),()=>S.dxm|0,i=>{S.dxm=i;save()});
+note(pM,'在特效条里打开「多重曝光」，张数在上面选（2～5 张）。每拍一张都会半透明留在取景框上，取景框下方有透明度滑块，拍满张数后自动合成保存，中途按「✕ 重拍」从头来。混合方式拍到一半改也会立刻生效。叠加：越叠越亮，最像胶片；平均：各占一份；变亮 / 变暗：每处保留更亮 / 更暗的那张。水印只会出现一次。');
 head(pM,'取景辅助');addToggle(pM,'九宫格',S,'grid',()=>updGrid());
 head(pM,'开机');addToggle(pM,'打开页面自动开机',S,'autoOn');
 note(pM,'允许过一次相机后，之后打开页面会自动开机，不再停在 POWER。如果 Safari 仍然每次都问，请在「设置 → App → Safari → 相机」或网页地址栏「ᴀA → 网站设置 → 相机」里改成「允许」。');
@@ -1119,7 +1123,7 @@ const MANUAL=`
 
 <section><h3>滤镜 & 特效</h3>
 <svg viewBox="0 0 220 70" class="mdg"><rect x="70" y="8" width="80" height="50" rx="6" class="o"/><rect x="76" y="14" width="68" height="38" rx="3" class="v"/><text x="110" y="37" class="t">DV</text><path d="M60 33h-40M28 27l-8 6 8 6M160 33h40M192 27l8 6-8 6" class="a"/><text x="110" y="68" class="t">左右滑 = 换滤镜　点 = 列表</text></svg>
-<ul class="mls"><li>22+ 种滤镜：VHS、夜视、CRT、胶片、富士、徕卡、Portra、HP5、拍立得…</li><li>双重曝光：特效条第一个「双重曝光」→ 拍第一张 → 取景框出现残影和透明度滑块 → 拍第二张合成；混合方式在 MENU → 相机 → 双重曝光（✕ 重拍可重来）</li><li>特效（✦ FX 按钮）：鱼眼、挤压、左右/上下对称、四宫格、九宫格、漩涡、万花筒、光隧道、拉伸、马赛克</li></ul></section>
+<ul class="mls"><li>22+ 种滤镜：VHS、夜视、CRT、胶片、富士、徕卡、Portra、HP5、拍立得…</li><li>多重曝光：特效条第一个「多重曝光」→ 每拍一张都留下残影，取景框下方有透明度滑块 → 拍满张数自动合成保存；张数（2～5）和混合方式在 MENU → 相机 → 多重曝光（✕ 重拍可重来）</li><li>特效（红字 FX 圆键）：鱼眼、挤压、左右/上下对称、四宫格、九宫格、漩涡、万花筒、光隧道、拉伸、马赛克</li></ul></section>
 
 <section><h3>菜单各页</h3><ul class="mls">
 <li><b>画质</b>：分辨率、画幅、拉伸、清晰度</li><li><b>色彩</b>：白平衡、饱和度等</li>
@@ -1146,7 +1150,7 @@ const MANUAL=`
 <li>显示不对时：MENU → ⟳ 刷新</li><li>相机权限：Safari「网站设置 → 相机 → 允许」后自动开机</li><li>联网打开过一次后可离线使用（需要仓库里的 sw.js）</li><li class="megg"><i>寻找一个十字架在菜单的角落</i></li></ul></section>
 
 <section><h3>更新记录</h3><ul class="mls">
-<li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
+<li>10/29：多重曝光，最多 5 张（MENU → 相机里选张数）；FX 键改成红字圆形实体键；修复编辑里叠图选第二张照片时闪退 / 照片挤在一起</li><li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
 function openManual(){cam.classList.remove('menu');let m=document.getElementById('man');
   if(!m){m=document.createElement('div');m.id='man';m.innerHTML='<div class="manh"><b>使用说明</b><button class="btn xclose" id="manx">✕</button></div><div class="manb"></div>';document.body.append(m);
     m.querySelector('#manx').onclick=()=>m.style.display='none';
@@ -1319,14 +1323,14 @@ syncTiles();
 /* camera effects (Photo Booth style lens warps) */
 const FXN=['无','鱼眼','挤压','左右对称','上下对称','四宫格','九宫格','漩涡','万花筒','光隧道','拉伸','马赛克'];
 const FXI=['<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M6.5 17.5l11-11"/></svg>','<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3c-4 3-4 15 0 18M12 3c4 3 4 15 0 18M3 12c3-3 15-3 18 0M3 12c3 3 15 3 18 0"/></svg>','<svg viewBox="0 0 24 24"><path d="M4 4l5 5M20 4l-5 5M4 20l5-5M20 20l-5-5"/><path d="M9 6v3H6M15 6v3h3M9 18v-3H6M15 18v-3h3"/></svg>','<svg viewBox="0 0 24 24"><path d="M12 3v18" stroke-dasharray="2 2"/><path d="M10 7l-6 5 6 5zM14 7l6 5-6 5z"/></svg>','<svg viewBox="0 0 24 24"><path d="M3 12h18" stroke-dasharray="2 2"/><path d="M7 10l5-6 5 6zM7 14l5 6 5-6z"/></svg>','<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>','<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17"/></svg>','<svg viewBox="0 0 24 24"><path d="M12 12c0-1.5 2-1.8 2.6-.5.8 1.8-1 3.6-3 3.4-2.8-.3-4-3.4-2.6-5.8C10.6 6.4 15 6 17.2 8.6c2.6 3 1.4 8-2.4 9.6-4.4 1.8-9.6-.8-10.6-5.4"/></svg>','<svg viewBox="0 0 24 24"><path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z"/><path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9"/></svg>','<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="2.2"/></svg>','<svg viewBox="0 0 24 24"><path d="M3 12h18M6 9l-3 3 3 3M18 9l3 3-3 3"/><rect x="8" y="7" width="8" height="10" rx="2"/></svg>','<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/><path d="M4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16"/><path d="M4 4h5.3v5.3H4zM14.6 4H20v5.3h-5.6zM9.3 9.3h5.3v5.3H9.3zM4 14.6h5.3V20H4zM14.6 14.6H20V20h-5.4z" fill="currentColor" stroke="none" opacity=".35"/></svg>'];
-{const xs=$('#xstrip');{const b=document.createElement('button');b.className='tile dxt';b.innerHTML='<span class="sw xi"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span><span class="nm">双重曝光</span>';b.onclick=()=>{S.dx=!S.dx;if(!S.dx)DX.first=null;save();syncFX();dxUI()};xs.append(b)}
+{const xs=$('#xstrip');{const b=document.createElement('button');b.className='tile dxt';b.innerHTML='<span class="sw xi"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span><span class="nm">多重曝光</span>';b.onclick=()=>{S.dx=!S.dx;if(!S.dx){DX.first=null;DX.n=0}save();syncFX();dxUI()};xs.append(b)}
  FXN.forEach((n,i)=>{const b=document.createElement('button');b.className='tile';b.dataset.i=i;b.innerHTML='<span class="sw xi">'+FXI[i]+'</span><span class="nm">'+n+'</span>';b.onclick=()=>{S.fx=i;save();syncFX()};xs.append(b)});
 }
 function syncFX(){$('#xstrip').querySelectorAll('[data-i]').forEach(b=>b.classList.toggle('sel',+b.dataset.i===(S.fx||0)));const dt=$('#xstrip .dxt');dt&&dt.classList.toggle('sel',!!S.dx);$('#fxb').classList.toggle('act',!!S.fx||!!S.dx||cam.classList.contains('xpick'))}
 function dxUI(){let o=document.getElementById('dxo');if(!o){o=document.createElement('div');o.id='dxo';o.innerHTML='<button class="btn" id="dxr">✕ 重拍</button><span>透明度</span><input type="range" id="dxa" min=".15" max=".85" step=".01"><i id="dxv"></i>';$('.lcd').append(o);
-  o.querySelector('#dxr').onclick=()=>{DX.first=null;dxUI()};o.querySelector('#dxa').oninput=e=>{S.dxa=+e.target.value;o.querySelector('#dxv').textContent=Math.round(S.dxa*100)+'%';save()}}
+  o.querySelector('#dxr').onclick=()=>{DX.first=null;DX.n=0;dxUI()};o.querySelector('#dxa').oninput=e=>{S.dxa=+e.target.value;o.querySelector('#dxv').textContent=Math.round(S.dxa*100)+'%';save()}}
   o.querySelector('#dxa').value=S.dxa||.5;o.querySelector('#dxv').textContent=Math.round((S.dxa||.5)*100)+'%';o.style.display=DX.first?'flex':'none';
-  let t=document.getElementById('dxt');if(!t){t=document.createElement('div');t.id='dxt';$('.lcd').append(t)}t.style.display=S.dx&&mode==='photo'?'':'none';t.textContent=DX.first?'双重曝光 · 拍第二张':'双重曝光 · 拍第一张'}
+  let t=document.getElementById('dxt');if(!t){t=document.createElement('div');t.id='dxt';$('.lcd').append(t)}t.style.display=S.dx&&mode==='photo'?'':'none';{const N=Math.min(5,Math.max(2,S.dxn||2));t.textContent='多重曝光 · 第 '+Math.min(N,(DX.n|0)+1)+' / '+N+' 张'}}
 $('#fxb').onclick=()=>{cam.classList.remove('fpick');$('#fb').classList.remove('act');cam.classList.toggle('xpick');syncFX()};syncFX();setTimeout(dxUI,0);
 
 /* ===== layout & size editor (like a game's button-layout screen): edit a mock-up, nothing changes until 应用 ===== */
@@ -1424,8 +1428,8 @@ $('#pvadd').onclick=()=>{if(!PV.on||!PV.key)return;let m=document.getElementById
   const g=m.querySelector('#pkg'),pick=new Set(),ok=m.querySelector('#pko');g.innerHTML='';
   const upd=()=>{ok.textContent=pick.size?'移入 '+pick.size+' 项':'移入'};
   (PV.pub||[]).forEach(it=>{const d=document.createElement('div');d.className='pki';const el=document.createElement(it.k==='img'?'img':'video');
-    if(it.k==='vid'){el.src=it.url+'#t=0.1';el.muted=true;el.preload='metadata';el.playsInline=true}else{el.src=it.url;el.loading='lazy';el.decoding='async'}
-    d.append(el);d.onclick=()=>{if(pick.has(it.id))pick.delete(it.id);else pick.add(it.id);d.classList.toggle('on',pick.has(it.id));upd()};g.append(d)});
+    if(it.k==='vid'){el.src=it.url+'#t=0.1';el.muted=true;el.preload='metadata';el.playsInline=true;d.append(el)}else{thumbOf(it).then(c=>{if(c&&d.isConnected){const v=new Image();v.src=c;d.append(v)}})}
+    d.onclick=()=>{if(pick.has(it.id))pick.delete(it.id);else pick.add(it.id);d.classList.toggle('on',pick.has(it.id));upd()};g.append(d)});
   if(!(PV.pub||[]).length)g.textContent='普通相册里没有照片';
   const close=()=>{g.querySelectorAll('video').forEach(v=>{v.removeAttribute('src');v.load()});g.innerHTML='';m.style.display='none'};
   m.querySelector('#pkx').onclick=close;
@@ -1475,12 +1479,25 @@ function syncDbl(){const m=E.ov?E.ov.m:(E.dm|0);[...$('#dmd').children].forEach(
 $('#dop').oninput=e=>{const v=+e.target.value;$('#dopv').textContent=Math.round(v*100)+'%';if(E.ov){E.ov.a=v;edRender()}};
 $('#dsz').oninput=e=>{const v=+e.target.value;$('#dszv').textContent=Math.round(v*100)+'%';if(E.ov){E.ov.s=v;edRender()}};
 $('#drm').onclick=()=>{E.ov=null;syncDbl();edRender()};
+/* small square thumbnails, decoded one at a time (full-size photos in a grid crash iPhone Safari) */
+const THC=new Map();
+async function thumbOf(it,sz=160){if(THC.has(it.id))return THC.get(it.id);let src=null,w=0,h=0,bm=null;
+  try{bm=await createImageBitmap(it.blob);src=bm;w=bm.width;h=bm.height}catch(e){
+    src=await new Promise(r=>{const I=new Image();I.decoding='async';I.onload=()=>r(I);I.onerror=()=>r(null);I.src=it.url});if(src){w=src.naturalWidth;h=src.naturalHeight}}
+  if(!src||!w)return null;const c=mkC(sz,sz),m=Math.min(w,h);c.getContext('2d').drawImage(src,(w-m)/2,(h-m)/2,m,m,0,0,sz,sz);
+  if(bm&&bm.close)bm.close();if(src.src)src.src='';const u=await new Promise(r=>c.toBlob(b=>r(b?URL.createObjectURL(b):null),'image/jpeg',.8));c.width=c.height=1;if(u)THC.set(it.id,u);return u}
+function thumbGrid(g,list,onTap){let tok=g._tok=(g._tok||0)+1;g.innerHTML='';const cells=list.map(it=>{const d=document.createElement('div');d.className='pki';d.onclick=()=>onTap(it,d);g.append(d);return d});
+  (async()=>{for(let i=0;i<list.length;i++){if(g._tok!==tok)return;const c=await thumbOf(list[i]);if(g._tok!==tok)return;if(c){const v=new Image();v.src=c;cells[i].append(v)}await new Promise(r=>setTimeout(r,0))}})()}
 $('#dpk').onclick=()=>{let m=document.getElementById('dpkm');
   if(!m){m=document.createElement('div');m.id='dpkm';m.className='pvpk2';m.innerHTML='<div class="pkh"><button class="btn" id="dkx">取消</button><b>选择要叠上去的照片</b><span></span></div><div class="pkg" id="dkg"></div>';gal.append(m)}
-  const g=m.querySelector('#dkg');g.innerHTML='';const close=()=>{g.innerHTML='';m.style.display='none'};m.querySelector('#dkx').onclick=close;
-  items.filter(it=>it.k==='img').forEach(it=>{const d=document.createElement('div');d.className='pki';const im=document.createElement('img');im.loading='lazy';im.decoding='async';im.src=it.url;d.append(im);
-    d.onclick=()=>{const I=new Image();I.onload=()=>{const k=Math.min(1,1280/Math.max(I.naturalWidth,I.naturalHeight)),c=mkC(Math.round(I.naturalWidth*k),Math.round(I.naturalHeight*k));c.getContext('2d').drawImage(I,0,0,c.width,c.height);
-      E.ov={c,x:.5,y:.5,s:+$('#dsz').value,a:+$('#dop').value,m:E.dm|0};syncDbl();edRender();close()};I.src=it.url};g.append(d)});
+  const g=m.querySelector('#dkg');let busy=false;const close=()=>{g._tok=(g._tok||0)+1;g.innerHTML='';m.style.display='none'};m.querySelector('#dkx').onclick=close;
+  const L=items.filter(it=>it.k==='img');
+  thumbGrid(g,L,async(it,d)=>{if(busy)return;busy=true;d.classList.add('on');g._tok++;/* stop thumbnail work first */
+    let src=null,w=0,h=0;try{src=await createImageBitmap(it.blob);w=src.width;h=src.height}catch(e){src=await new Promise(r=>{const I=new Image();I.onload=()=>r(I);I.onerror=()=>r(null);I.src=it.url});if(src){w=src.naturalWidth;h=src.naturalHeight}}
+    if(src&&w){const k=Math.min(1,1280/Math.max(w,h)),c=mkC(Math.round(w*k),Math.round(h*k));c.getContext('2d').drawImage(src,0,0,c.width,c.height);if(src.close)src.close();
+      E.ov={c,x:.5,y:.5,s:+$('#dsz').value,a:+$('#dop').value,m:E.dm|0};syncDbl();edRender()}
+    busy=false;close()});
+  if(!L.length)g.textContent='相册里没有照片';
   m.style.display='flex'};
 setTimeout(syncDbl,0);
 /* tap anywhere outside the menu / filter strip / effect strip closes them (that tap does nothing else) */
@@ -1747,21 +1764,21 @@ function loop(ts){
        ax.globalCompositeOperation='lighten';ax.drawImage(gc,0,0,W,H);ax.globalCompositeOperation='source-over';ax.globalAlpha=.06;ax.drawImage(gc,0,0,W,H);ax.globalAlpha=1}
      oc.drawImage(A,0,0)}}
   if(DX.first&&mode==='photo'){oc.save();oc.globalAlpha=S.dxa||.5;oc.globalCompositeOperation=(DXM[S.dxm|0]||DXM[0])[0];oc.drawImage(DX.first,0,0,W,H);oc.restore()}/* ghost of shot #1 (watermark is drawn after, only once) */
+  if(shotReq&&S.dx&&mode==='photo'&&(DX.n|0)+1<Math.min(5,Math.max(2,S.dxn||2))){shotReq=0;flashFx=0;shotFD=2;/* multiple exposure: keep the merged frame so far (no watermark), don't save yet */
+    const c=document.createElement('canvas');c.width=out.width;c.height=out.height;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(out,0,0);DX.first=c;DX.n=(DX.n|0)+1;dxUI();
+    if(torchOn){torchOn=false;try{track.applyConstraints({advanced:[{torch:false}]}).catch(()=>{})}catch(e){}}}
   ov(T);
   if(S.grid){const g=$('#grid'),bw=out.clientWidth,bh=out.clientHeight,k=Math.min(bw/W,bh/H),iw=W*k,ih=H*k;
     g.style.left=((bw-iw)/2+out.offsetLeft)+'px';g.style.top=((bh-ih)/2+out.offsetTop)+'px';g.style.width=iw+'px';g.style.height=ih+'px'}
-  if(shotReq&&S.dx&&mode==='photo'&&!DX.first){shotReq=0;flashFx=0;shotFD=2;/* double exposure: keep the clean first frame, don't save yet */
-    const c=DX.first=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(ACC.fresh===false&&trailT()?ACC.c:gc,0,0,W,H);dxUI();
-    if(torchOn){torchOn=false;try{track.applyConstraints({advanced:[{torch:false}]}).catch(()=>{})}catch(e){}}}
   if(shotReq){shotReq=0;flashFx=0;shotFD=2;const wasDX=!!DX.first;
     out.toBlob(b=>{if(b)addItem('img',b);
-      if(torchOn){torchOn=false;try{track.applyConstraints({advanced:[{torch:false}]}).catch(()=>{})}catch(e){}}},'image/jpeg',.92);if(wasDX){DX.first=null;dxUI()}}
+      if(torchOn){torchOn=false;try{track.applyConstraints({advanced:[{torch:false}]}).catch(()=>{})}catch(e){}}},'image/jpeg',.92);if(wasDX){DX.first=null;DX.n=0;dxUI()}}
 }
 oc.fillStyle='#000';oc.fillRect(0,0,640,480);requestAnimationFrame(loop);
 
 function setMode(m){
   if(recing()){if(m==='video')return;stopRec()}
-  mode=m;if(m==='video')DX.first=null;setTimeout(()=>typeof dxUI==='function'&&dxUI(),0);$('#mV').classList.toggle('act',m==='video');$('#mP').classList.toggle('act',m==='photo');window.updDial&&updDial();
+  mode=m;if(m==='video'){DX.first=null;DX.n=0}setTimeout(()=>typeof dxUI==='function'&&dxUI(),0);$('#mV').classList.toggle('act',m==='video');$('#mP').classList.toggle('act',m==='photo');window.updDial&&updDial();
   $('#sh').className='shut'+(m==='photo'?' photo':'');
   applyMic();applyLight();
 }
@@ -1894,7 +1911,7 @@ function pauseCam(){if(recing())stopRec();if(!on||!stream)return;try{stream.getT
 function resumeCam(){if(!camPaused||galOpen()||document.visibilityState!=='visible')return;camPaused=false;start()}
 /* free memory when the gallery is closed (big decoded photos, videos, the editor's GL context) so the camera stays smooth */
 let galWas=false;
-function galCleanup(){['#vm','#gl'].forEach(q=>{const e=$(q);e.querySelectorAll('video').forEach(v=>{try{v.pause();v.removeAttribute('src');v.load()}catch(_){}});e.innerHTML=''});
+function galCleanup(){{const m=document.getElementById('dpkm');if(m){const g=m.querySelector('#dkg');g._tok=(g._tok||0)+1;g.innerHTML='';m.style.display='none'}}['#vm','#gl'].forEach(q=>{const e=$(q);e.querySelectorAll('video').forEach(v=>{try{v.pause();v.removeAttribute('src');v.load()}catch(_){}});e.innerHTML=''});
   try{if(PF.gl){const x=PF.gl.getExtension('WEBGL_lose_context');x&&x.loseContext();PF.gl=null;PF.cv.width=PF.cv.height=1}}catch(e){}
   try{E.src=null;ec.width=ec.height=1;E.base.width=E.base.height=1;E.layer.width=E.layer.height=1;MO.out.width=MO.out.height=1}catch(e){}}
 new MutationObserver(()=>{const o=galOpen();if(o)pauseCam();else{resumeCam();if(galWas)setTimeout(galCleanup,50)}
