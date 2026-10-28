@@ -481,6 +481,11 @@ body.rotl .cam{transform:translateY(100dvh) rotate(-90deg) translate(var(--ml,0p
 .pkg{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 10px 16px;align-content:start}
 .pki{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;background:#000;cursor:pointer}.pki img,.pki video{width:100%;height:100%;object-fit:cover;display:block}
 .pki.on{box-shadow:0 0 0 3px var(--acc)}.pki.on::after{content:'✓';position:absolute;right:5px;top:3px;width:20px;height:20px;border-radius:50%;background:var(--acc);color:#fff;font:700 13px/20px sans-serif;text-align:center}
+
+body.land.bm #bmt{grid-column:1/4;grid-row:2;font-size:17px;line-height:1.1;margin:0}
+body.land.bm .lcol .btn{font-size:11px!important}
+
+body.bm #ibar{background:#000;color:#fff;font-family:'UnifrakturMaguntia','Pirata One',serif!important;font-size:calc(17px*var(--ibs,1))!important;letter-spacing:.02em;text-shadow:0 0 2px #fff,0 0 8px rgba(255,255,255,.75),0 0 16px rgba(255,255,255,.35);box-shadow:inset 0 0 0 1px #2a2a2a}
 </style></head>
 <body class="skin-light">
 <div class="cam">
@@ -1127,7 +1132,7 @@ const MANUAL=`
 <li>显示不对时：MENU → ⟳ 刷新</li><li>相机权限：Safari「网站设置 → 相机 → 允许」后自动开机</li><li>联网打开过一次后可离线使用（需要仓库里的 sw.js）</li><li class="megg"><i>寻找一个十字架在菜单的角落</i></li></ul></section>
 
 <section><h3>更新记录</h3><ul class="mls">
-<li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
+<li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
 function openManual(){cam.classList.remove('menu');let m=document.getElementById('man');
   if(!m){m=document.createElement('div');m.id='man';m.innerHTML='<div class="manh"><b>使用说明</b><button class="btn xclose" id="manx">✕</button></div><div class="manb"></div>';document.body.append(m);
     m.querySelector('#manx').onclick=()=>m.style.display='none';
@@ -1563,7 +1568,7 @@ addEventListener('resize',()=>{if(mob&&innerWidth>innerHeight){nativeRot=true;if
    iso=Math.max(50,Math.min(3200,iso));let shTxt='1/'+near(TS,1/t);
    const si2=dialIdx();if(si2>0){const tm=1/SHV[si2],T0=t*iso,iso2=Math.max(50,Math.min(3200,T0/tm));shGainT=Math.max(1/8,Math.min(tm>=.5?2:4,tm*iso2/T0));iso=iso2;shTxt=SHV[si2]>=1?'1/'+SHV[si2]:(1/SHV[si2])+'"'}else shGainT=1;
    tx('iev','EV '+(e>0?'+':e<0?'−':'±')+Math.abs(e).toFixed(1));tx('ish',shTxt);tx('iiso','ISO '+near(IS,iso));
-   tx('ifl',bmOn?'BLACK METAL':((typeof FO!=='undefined'&&FO[fi])||''));tx('imm',Math.round(curMM*zc*lensK)+'mm');tx('irs',RES[si]+'p')},250)}
+   tx('ifl',bmOn?'Black Metal':((typeof FO!=='undefined'&&FO[fi])||''));tx('imm',Math.round(curMM*zc*lensK)+'mm');tx('irs',RES[si]+'p')},250)}
 $('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';lensId=null;start()};
 
 /* zoom + exposure + flash / light */
