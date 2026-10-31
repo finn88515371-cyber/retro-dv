@@ -118,6 +118,11 @@ body.skin-w7 .tabs .btn.act{background:linear-gradient(#fff,#eaf3fc);border-top:
 .txt{width:100%;box-sizing:border-box;padding:7px 9px;border-radius:var(--rad);border:1px solid var(--btnb);background:#fff;color:#111;font:inherit;font-size:13px}
 #lvl{height:8px;background:rgba(128,128,128,.3);border-radius:4px;overflow:hidden;margin:6px 0}
 #lvl b{display:block;height:100%;width:0;background:#3fae6a}
+.ttw{display:flex;gap:6px;align-items:stretch}.ttw .txt{flex:1;resize:none;min-height:40px;font-size:15px}.ttw .btn{flex:none;padding:6px 14px}
+.tfs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.tfs .btn{padding:6px 2px;font-size:15px!important;text-transform:none!important;letter-spacing:0!important;line-height:1.15;white-space:nowrap;overflow:hidden;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.tfs .btn small{font:10px/1 -apple-system,'PingFang SC',sans-serif;opacity:.6;letter-spacing:0}
+.tfs .btn canvas{height:20px;width:auto;display:block}
+.tcs label{position:relative;width:28px;height:28px;border-radius:50%;border:2px solid var(--btnb);background:conic-gradient(red,#ff0,lime,cyan,blue,#f0f,red);overflow:hidden;box-sizing:border-box}.tcs label input{position:absolute;inset:-6px;opacity:0;width:44px;height:44px}.tcs label.sel{outline:3px solid var(--acc);outline-offset:1px}
+.eb .tfs .btn{min-height:38px;font-size:14px!important}.eb .ttw .txt{padding:5px 8px}
 .gtw{display:flex;gap:6px;width:100%}.gtw .txt{flex:1}.stks .btn.bk{background:#2a2a2e}.stks .btn.bk img{filter:none}
 #efl .btn i{font-style:normal;margin-left:6px;opacity:.6}.efs{display:flex;gap:6px;margin:4px 0 6px}.efs .txt{flex:1}
 #ptm{position:absolute;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5)}#ptm .askb{text-align:center;min-width:230px}#ptm #ptc{font:bold 40px/1.2 VT323,monospace;letter-spacing:.22em;margin:10px 0 2px}#ptm p{margin:10px 0 12px;font-size:13px}#ptm .vr .btn{flex:1}
@@ -498,6 +503,11 @@ body.skin-ccd .cam .btn.fxb.act{background:radial-gradient(circle at 50% 7px,#8d
 #dxo{position:absolute;left:8px;right:8px;bottom:8px;z-index:4;display:none;align-items:center;gap:8px;padding:6px 8px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;font-size:11px}
 #dxo input{flex:1;min-width:0}#dxo i{font-style:normal;min-width:30px;text-align:right}#dxo .btn{height:26px;padding:0 8px;font-size:11px!important}
 #dxt{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:4;padding:3px 10px;border-radius:10px;background:rgba(0,0,0,.55);color:#ffd27a;font-size:11px;white-space:nowrap;pointer-events:none}
+ #clg{position:absolute;inset:0;z-index:56;display:none;flex-direction:column;background:var(--menu);color:var(--menuink)}
+#clg .clb{flex:1;min-height:0;display:flex;flex-direction:column}#clg .clv{flex:1;min-height:120px;display:flex;align-items:center;justify-content:center;padding:8px;background:repeating-conic-gradient(rgba(128,128,128,.13) 0 25%,transparent 0 50%) 0 0/16px 16px}
+#clc{display:block;box-shadow:0 2px 12px rgba(0,0,0,.35);touch-action:none}#clg .clp{flex:none;max-height:44%;overflow-y:auto;padding:2px 12px 14px;-webkit-overflow-scrolling:touch}
+#clg .clp .chips .btn{padding:6px 9px;font-size:12px}#cln{gap:10px}#clg .hint{margin-top:10px}#cln b{min-width:44px;text-align:center;font-size:13px}#clg .clp .ms{margin:6px 0}
+body.land #clg .clb{flex-direction:row}body.land #clg .clp{max-height:none;width:42%;border-left:1px solid var(--menub)}
 .pvpk2{position:absolute;inset:0;z-index:55;display:none;flex-direction:column;background:var(--menu);color:var(--menuink)}
 </style></head>
 <body class="skin-light">
@@ -541,7 +551,7 @@ body.skin-ccd .cam .btn.fxb.act{background:radial-gradient(circle at 50% 7px,#8d
     <div class="gh2"><button class="btn" id="gc">‹ 返回</button><b id="gtt"><span id="gtl">相册</span> <small id="gn"></small></b><span class="gh2r"><button class="btn pvo" id="pvadd">＋ 移入</button><button class="btn pvo" id="pvpin">改密码</button><button class="btn" id="gsel">选择</button></span></div>
     <div class="gtabs" id="gtabs"><button class="btn act" data-g="0">全部</button><button class="btn" data-g="1">照片</button><button class="btn" data-g="2">视频</button><button class="btn" data-g="3">★ 收藏</button></div>
     <div id="gl"></div>
-    <div id="gbar"><div id="gcount"></div><button class="btn" id="ba">全选</button><button class="btn" id="bf">★ 收藏</button><button class="btn" id="bs">下载/保存</button><button class="btn" id="bt">传输</button><button class="btn" id="bpv">移入私密</button><button class="btn warn" id="bx">删除</button></div>
+    <div id="gbar"><div id="gcount"></div><button class="btn" id="ba">全选</button><button class="btn" id="bf">★ 收藏</button><button class="btn" id="bs">下载/保存</button><button class="btn" id="bt">传输</button><button class="btn" id="bcl">拼图</button><button class="btn" id="bpv">移入私密</button><button class="btn warn" id="bx">删除</button></div>
     <div id="gv">
       <div id="vm"></div>
       <div class="vb">
@@ -559,7 +569,7 @@ body.skin-ccd .cam .btn.fxb.act{background:radial-gradient(circle at 50% 7px,#8d
       <div class="etop"><button class="btn" id="eca">取消</button><button class="btn" id="eu">撤销</button><button class="btn" id="ecl">清空</button><span id="ezr"></span><button class="btn act" id="eok">保存</button></div>
       <div id="ew"><canvas id="ec"></canvas></div>
       <div class="eb">
-        <div class="chips" id="etabs"><button class="btn act" data-t="adj">调整</button><button class="btn" data-t="crop">裁剪</button><button class="btn" data-t="frame">相框</button><button class="btn" data-t="pen">画笔</button><button class="btn" data-t="er">橡皮</button><button class="btn" data-t="shape">形状</button><button class="btn" data-t="mos">马赛克</button><button class="btn" data-t="dbl">叠图</button><button class="btn" data-t="stk">贴纸</button></div>
+        <div class="chips" id="etabs"><button class="btn act" data-t="adj">调整</button><button class="btn" data-t="crop">裁剪</button><button class="btn" data-t="frame">相框</button><button class="btn" data-t="pen">画笔</button><button class="btn" data-t="er">橡皮</button><button class="btn" data-t="shape">形状</button><button class="btn" data-t="mos">马赛克</button><button class="btn" data-t="dbl">叠图</button><button class="btn" data-t="txt">文字</button><button class="btn" data-t="stk">贴纸</button></div>
         <div id="pa" style="display:none"><div class="gh">滤镜</div><div class="chips" id="efl"></div><div class="efs"><input class="txt" id="efn" maxlength="12" placeholder="给当前调色起个名字"><button class="btn" id="efsv">保存为滤镜</button></div><div class="gh">调整</div><div id="adjs"></div><button class="btn" id="adr">重置调整</button></div>
         <div id="pc" style="display:none">
           <div class="chips" id="crat"><button class="btn act" data-r="0">自由</button><button class="btn" data-r="1">1:1</button><button class="btn" data-r="1.3333">4:3</button><button class="btn" data-r="0.75">3:4</button><button class="btn" data-r="1.7778">16:9</button><button class="btn" data-r="0.5625">9:16</button></div>
@@ -591,6 +601,25 @@ body.skin-ccd .cam .btn.fxb.act{background:radial-gradient(circle at 50% 7px,#8d
             <div class="vr"><button class="btn" id="sxr">恢复比例</button><button class="btn warn" id="sd">删除所选贴纸</button></div>
           </div>
           <div class="hint">点贴纸加到画面里，拖动可以移动位置</div>
+        </div>
+        <div id="pt" style="display:none">
+          <div class="ttw"><textarea class="txt" id="ttx" rows="2" maxlength="300" placeholder="输入文字，可以换行"></textarea><button class="btn act" id="tta">添加</button></div>
+          <div class="gh">字体</div><div class="tfs" id="tfs"></div>
+          <div class="gh">颜色</div><div class="sws tcs" id="tcs"></div>
+          <div class="gh">效果</div><div class="chips" id="tst"></div>
+          <div id="tc2w"><div class="gh" id="tc2h">描边颜色</div><div class="sws tcs" id="tc2"></div></div>
+          <div class="gh">排版</div><div class="chips" id="tal"></div>
+          <div id="tsc" style="display:none">
+            <label class="ms"><span>大小</span><input type="range" id="tsz" min=".2" max="6" step=".02" value="1"><i id="tszv"></i></label>
+            <label class="ms"><span>旋转</span><input type="range" id="trt" min="-180" max="180" step="1" value="0"><i id="trtv"></i></label>
+            <label class="ms"><span>横向拉伸</span><input type="range" id="tsx" min=".3" max="3" step=".02" value="1"><i id="tsxv"></i></label>
+            <label class="ms"><span>纵向拉伸</span><input type="range" id="tsy" min=".3" max="3" step=".02" value="1"><i id="tsyv"></i></label>
+            <label class="ms"><span>字间距</span><input type="range" id="tls" min="-.2" max="1.5" step=".01" value="0"><i id="tlsv"></i></label>
+            <label class="ms"><span>行距</span><input type="range" id="tlh" min=".8" max="3" step=".02" value="1.25"><i id="tlhv"></i></label>
+            <label class="ms"><span>透明度</span><input type="range" id="top" min=".1" max="1" step=".01" value="1"><i id="topv"></i></label>
+            <div class="vr"><button class="btn" id="txr">恢复比例</button><button class="btn" id="txd">复制一份</button><button class="btn warn" id="txx">删除</button></div>
+          </div>
+          <div class="hint">先输入文字点「添加」；点画面上的文字选中它，拖动移动，下面的设置只改选中的那段</div>
         </div>
       </div>
     </div>
@@ -1137,8 +1166,10 @@ const MANUAL=`
 <ul class="mls"><li>MENU → 外观 → 布局与尺寸，竖屏 / 横屏分开设置</li><li>用手指拖：红色斜纹边 = 安全距离；蓝/橙把手 = 取景框、按键、菜单、边框、信息栏大小</li><li>只改示意图，点「应用」才生效</li></ul></section>
 
 <section><h3>相册与编辑</h3>
-<ul class="mls"><li>☆ 收藏；「选择」可多选收藏 / 保存 / <b>传输</b> / 删除；7 天内重复保存会提醒</li>
-<li>编辑：调整（含相机同款滤镜、可保存自己的滤镜）、裁剪旋转、相框（含像素风、黑金属、<b>拍立得</b>）、画笔、橡皮、形状、马赛克、<b>叠图</b>（选第二张照片叠上去，拖动位置、调透明度/大小/混合方式）、贴纸（含黑金属贴纸、哥特文字）</li>
+<ul class="mls"><li>☆ 收藏；「选择」可多选收藏 / 保存 / <b>传输</b> / <b>拼图</b> / 删除；7 天内重复保存会提醒</li>
+<li><b>拼图</b>：相册点「选择」→ 勾几张照片 → 底部「拼图」。布局有横着拼、竖着拼、四宫格、六宫格、八宫格（竖 / 横）、九宫格；可改每格比例、边框粗细、圆角、边框颜色。点一格再点另一格 = 互换；拖动格子里的照片调整取景；空格点「＋」补照片；选中一格可以放大或换一张。保存后是一张新照片</li>
+<li>编辑：调整（含相机同款滤镜、可保存自己的滤镜）、裁剪旋转、相框（含像素风、黑金属、<b>拍立得</b>）、画笔、橡皮、形状、马赛克、<b>叠图</b>（选第二张照片叠上去，拖动位置、调透明度/大小/混合方式）、<b>文字</b>、贴纸（含黑金属贴纸、哥特文字）</li>
+<li><b>文字</b>：输入文字（可换行）→「添加」。字体有宋体、粗宋、黑体、针式打印、热敏小票、打字机、哥特、海盗哥特、像素、毛笔、草书、手写、快乐体、黄油体、小薇体、录像带；13 种颜色加自定义色；效果：描边 / 阴影 / 发光 / 底色（可另选颜色）；靠左 / 居中 / 靠右，横排 / 竖排。点画面上的文字选中后可调大小、旋转、横向 / 纵向拉伸、字间距、行距、透明度，还能复制一份。第一次用某个字体需要联网下载，用过一次之后离线也能用</li>
 <li>双指捏合放大画面，单指画画</li></ul></section>
 
 <section><h3>传输与同步</h3>
@@ -1150,7 +1181,7 @@ const MANUAL=`
 <li>显示不对时：MENU → ⟳ 刷新</li><li>相机权限：Safari「网站设置 → 相机 → 允许」后自动开机</li><li>联网打开过一次后可离线使用（需要仓库里的 sw.js）</li><li class="megg"><i>寻找一个十字架在菜单的角落</i></li></ul></section>
 
 <section><h3>更新记录</h3><ul class="mls">
-<li>10/29：修复叠图 / 私密相册选择照片时缩略图挤成一条条；FX 键按下不再发光</li><li>10/29：多重曝光，最多 5 张（MENU → 相机里选张数）；FX 键改成红字圆形实体键；修复编辑里叠图选第二张照片时闪退 / 照片挤在一起</li><li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
+<li>10/31：编辑里新增「文字」（16 种字体，含中文打印机字体、哥特、宋体）；相册新增「拼图」（横拼 / 竖拼 / 四、六、八、九宫格）</li><li>10/29：修复叠图 / 私密相册选择照片时缩略图挤成一条条；FX 键按下不再发光</li><li>10/29：多重曝光，最多 5 张（MENU → 相机里选张数）；FX 键改成红字圆形实体键；修复编辑里叠图选第二张照片时闪退 / 照片挤在一起</li><li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
 function openManual(){cam.classList.remove('menu');let m=document.getElementById('man');
   if(!m){m=document.createElement('div');m.id='man';m.innerHTML='<div class="manh"><b>使用说明</b><button class="btn xclose" id="manx">✕</button></div><div class="manb"></div>';document.body.append(m);
     m.querySelector('#manx').onclick=()=>m.style.display='none';
@@ -1911,7 +1942,7 @@ function pauseCam(){if(recing())stopRec();if(!on||!stream)return;try{stream.getT
 function resumeCam(){if(!camPaused||galOpen()||document.visibilityState!=='visible')return;camPaused=false;start()}
 /* free memory when the gallery is closed (big decoded photos, videos, the editor's GL context) so the camera stays smooth */
 let galWas=false;
-function galCleanup(){{const m=document.getElementById('dpkm');if(m){const g=m.querySelector('#dkg');g._tok=(g._tok||0)+1;g.innerHTML='';m.style.display='none'}}['#vm','#gl'].forEach(q=>{const e=$(q);e.querySelectorAll('video').forEach(v=>{try{v.pause();v.removeAttribute('src');v.load()}catch(_){}});e.innerHTML=''});
+function galCleanup(){if(CL.on)clClose();{const m=document.getElementById('dpkm');if(m){const g=m.querySelector('#dkg');g._tok=(g._tok||0)+1;g.innerHTML='';m.style.display='none'}}['#vm','#gl'].forEach(q=>{const e=$(q);e.querySelectorAll('video').forEach(v=>{try{v.pause();v.removeAttribute('src');v.load()}catch(_){}});e.innerHTML=''});
   try{if(PF.gl){const x=PF.gl.getExtension('WEBGL_lose_context');x&&x.loseContext();PF.gl=null;PF.cv.width=PF.cv.height=1}}catch(e){}
   try{E.src=null;ec.width=ec.height=1;E.base.width=E.base.height=1;E.layer.width=E.layer.height=1;MO.out.width=MO.out.height=1}catch(e){}}
 new MutationObserver(()=>{const o=galOpen();if(o)pauseCam();else{resumeCam();if(galWas)setTimeout(galCleanup,50)}
@@ -2051,6 +2082,7 @@ function soft(c,fn,b){
 }
 function boxOf(s){
   const X=s.sx||1,Y=s.sy||1;
+  if(s.k==='x'){const r=txRender(s);return [r.w*X,r.h*Y]}
   if(s.k==='g'){const fs2=txtFs(s)*1.2;ec2.save();ec2.font=gothFont(fs2);const w=ec2.measureText(s.t).width+fs2*.4;ec2.restore();return [w*X,fs2*1.3*Y]}
   if(s.k!=='t'){const bm=getBM(s),u=unitOf(bm,s.k)*s.s;return [bm.w*u*X,bm.h*u*Y]}
   const fs2=txtFs(s);ec2.save();ec2.font=fs2+'px "VT323",monospace';const w=ec2.measureText(s.t).width+fs2*.4;ec2.restore();
@@ -2058,7 +2090,8 @@ function boxOf(s){
 }
 function drawStk(c,s){
   c.save();c.translate(s.x*E.cw,s.y*E.ch);c.rotate(s.r*Math.PI/180);c.scale(s.sx||1,s.sy||1);
-  if(s.k==='g'){const fs2=txtFs(s)*1.2;c.font=gothFont(fs2);c.textAlign='center';c.textBaseline='middle';c.lineJoin='round';
+  if(s.k==='x'){const r=txRender(s);c.globalAlpha=s.a??1;c.drawImage(r.c,-r.w/2,-r.h/2)}
+  else if(s.k==='g'){const fs2=txtFs(s)*1.2;c.font=gothFont(fs2);c.textAlign='center';c.textBaseline='middle';c.lineJoin='round';
     let ink=s.col||'#ffffff';if(ink==='#f2f2f2')ink='#ffffff';if(ink==='#0a0a0a')ink='#000000';if(ink==='#b3001b')ink='#e8102e';
     soft(c,(dx,dy)=>{if(ink==='#ffffff'){c.shadowColor='#fff';c.shadowBlur=fs2*.25;c.fillStyle='#fff';c.fillText(s.t,dx,dy);c.shadowBlur=fs2*.08;c.fillText(s.t,dx,dy)}
       else if(ink==='#e8102e'){c.shadowColor='rgba(255,30,60,.7)';c.shadowBlur=fs2*.15;c.fillStyle=ink;c.fillText(s.t,dx,dy)}
@@ -2206,9 +2239,9 @@ $('#gfv').onclick=()=>bakeGeo(comp=>{const c=mkC(comp.width,comp.height),x=c.get
 function rebuild(){const c=E.layer.getContext('2d');c.clearRect(0,0,E.gw,E.gh);E.strokes.forEach(st=>{st.m=new Map();if(st.sh)rasterShape(st);else st.pts.forEach((_,i)=>rasterSeg(st,i))})}
 function stkUI(){const s=E.stk[E.sel];$('#sc').style.display=s?'':'none';if(s){$('#ss').value=s.s;$('#sr').value=s.r;$('#sb').value=s.b;$('#sxw').value=s.sx||1;$('#syh').value=s.sy||1}}
 function setTool(t){
-  E.tool=t;if(t!=='stk'){E.sel=-1;stkUI()}
+  E.tool=t;E.sel=-1;stkUI();if(t==='txt'){tfLink();txUI()}
   [...$('#etabs').children].forEach(b=>b.classList.toggle('act',b.dataset.t===t));
-  $('#pp').style.display=(t==='pen'||t==='er'||t==='shape')?'':'none';$('#psh').style.display=t==='shape'?'':'none';$('#pm').style.display=t==='mos'?'':'none';$('#pd').style.display=t==='dbl'?'':'none';$('#pk').style.display=t==='stk'?'':'none';
+  $('#pp').style.display=(t==='pen'||t==='er'||t==='shape')?'':'none';$('#psh').style.display=t==='shape'?'':'none';$('#pm').style.display=t==='mos'?'':'none';$('#pd').style.display=t==='dbl'?'':'none';$('#pk').style.display=t==='stk'?'':'none';$('#pt').style.display=t==='txt'?'':'none';
   $('#pa').style.display=t==='adj'?'':'none';$('#pc').style.display=t==='crop'?'':'none';$('#pf').style.display=t==='frame'?'':'none';
   $('#sws').style.display=(t==='pen'||t==='shape')?'':'none';edRender();
 }
@@ -2379,6 +2412,110 @@ function renderStk(){const box=$('#stks');box.innerHTML='';
     im.src=(scat==='v'?mkVB(id):mkBM(id)).c.toDataURL();b.append(im);b.onclick=()=>addStk({k:scat,id});box.append(b)});
 }
 $('#scat').onclick=e=>{const b=e.target.closest('[data-c]');if(b){scat=b.dataset.c;renderStk()}};
+/* ---------- text tool: fonts, colours, effects, layout ---------- */
+const TFL=[/* id, label, css family, weight, mode, preview */
+ ['song','宋体','"Noto Serif SC","Songti SC","STSong",serif',600,'','宋体'],
+ ['songb','粗宋','"Noto Serif SC","Songti SC","STSong",serif',900,'','粗宋'],
+ ['hei','黑体','"Noto Sans SC","PingFang SC","Heiti SC",sans-serif',700,'','黑体'],
+ ['dot','针式打印','"Noto Sans SC","PingFang SC",sans-serif',700,'dot','针式打印'],
+ ['rcpt','热敏小票','"Noto Sans SC","PingFang SC",sans-serif',500,'rcpt','热敏小票'],
+ ['type','打字机','"Special Elite","Noto Serif SC","Songti SC",serif',500,'ink','Type 打字机'],
+ ['goth','哥特','"UnifrakturMaguntia","Noto Serif SC","Songti SC",serif',900,'','Gothic'],
+ ['pirate','海盗哥特','"Pirata One","Noto Serif SC","Songti SC",serif',900,'','Pirate'],
+ ['pix','像素','"DotGothic16","VT323",monospace',400,'','像素 Pixel'],
+ ['brush','毛笔','"Ma Shan Zheng","Kaiti SC","STKaiti",cursive',400,'','毛笔'],
+ ['cao','草书','"Zhi Mang Xing","Kaiti SC",cursive',400,'','草书'],
+ ['hand','手写','"Long Cang","Kaiti SC",cursive',400,'','手写'],
+ ['kl','快乐体','"ZCOOL KuaiLe","PingFang SC",sans-serif',400,'','快乐体'],
+ ['hy','黄油体','"ZCOOL QingKe HuangYou","PingFang SC",sans-serif',400,'','黄油体'],
+ ['xw','小薇','"ZCOOL XiaoWei","Songti SC",serif',400,'','小薇体'],
+ ['vhs','录像带','"VT323","DotGothic16",monospace',400,'vhs','VHS 录像']];
+const TF={};TFL.forEach(([id,n,fam,w,mode,pv])=>TF[id]={id,n,fam,w,mode,pv});
+const TCOL=['#ffffff','#000000','#e8102e','#ff6a00','#ffd400','#3ad16b','#22b8ff','#2f5bff','#a855f7','#ff5fa2','#f3e5c0','#8b5a2b','#7a7f87'];
+const TSTY=[['无',0],['描边',1],['阴影',2],['发光',3],['底色',4]];
+const TS={f:'song',col:'#ffffff',st:0,c2:'#000000',al:1,v:0,ls:0,lh:1.25,a:1};
+let TXG=0,tfLinked=false;const TXC=new Map();
+function tfLink(){if(tfLinked)return;tfLinked=true;const l=document.createElement('link');l.rel='stylesheet';
+  l.href='https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@500;700&family=DotGothic16&family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Long+Cang&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&family=ZCOOL+XiaoWei&display=swap';
+  l.onload=()=>{TXG++;TFL.forEach(([id])=>tfLoad(id,TF[id].pv));setTimeout(()=>{TXG++;if(gal.classList.contains('edit'))edRender()},1500)};document.head.append(l)}
+function tfLoad(f,t){const F=TF[f]||TF.song;try{return document.fonts.load(F.w+' 40px '+F.fam,t||'字').then(()=>{TXG++;TXC.clear();if(gal.classList.contains('edit'))edRender()}).catch(()=>{})}catch(e){}}
+const txSel=()=>{const s=E.stk[E.sel];return s&&s.k==='x'?s:null};
+const txFS=s=>Math.max(4,Math.min(E.cw,E.ch)*.08*s.s);
+function seedR(str){let h=2166136261;for(const ch of str)h=Math.imul(h^ch.charCodeAt(0),16777619);return()=>((h=Math.imul(h^(h>>>15),2246822507)^Math.imul(h^(h>>>13),3266489909))>>>0)/4294967296}
+function tint(L,col){const c=mkC(L.width,L.height),x=c.getContext('2d');x.drawImage(L,0,0);x.globalCompositeOperation='source-in';x.fillStyle=col;x.fillRect(0,0,c.width,c.height);return c}
+function txRender(s){
+  const F=TF[s.f]||TF.song,fs=txFS(s),key=[s.t,s.f,Math.round(fs*2),s.col,s.st,s.c2,s.al,s.v,s.ls,s.lh,TXG].join('|');
+  let r=TXC.get(key);if(r)return r;if(TXC.size>40)TXC.clear();
+  const font=F.w+' '+fs+'px '+F.fam,lines=String(s.t||' ').split('\n'),ls=(s.ls||0)*fs,lh=(s.lh||1.25)*fs;
+  const m=mkC(2,2).getContext('2d');m.font=font;const mw=t=>m.measureText(t).width;const G=[];let W,H;
+  if(!s.v){const lw=lines.map(L=>{if(!ls)return mw(L);let w=0;for(const ch of L)w+=mw(ch)+ls;return Math.max(0,w-ls)});
+    W=Math.max(fs*.5,...lw);H=lines.length*lh;
+    lines.forEach((L,i)=>{const x0=s.al===0?0:s.al===2?W-lw[i]:(W-lw[i])/2,y=i*lh+lh/2;
+      if(!ls)G.push({t:L,x:x0,y});else{let x=x0;for(const ch of L){G.push({t:ch,x,y});x+=mw(ch)+ls}}})}
+  else{const cs=fs*1.05+ls,cols=lines.map(L=>[...L]),n=Math.max(1,...cols.map(c=>c.length));W=lines.length*lh;H=n*cs-ls;
+    cols.forEach((C,i)=>{const cx=W-(i+.5)*lh,h0=C.length*cs-ls,y0=s.al===0?0:s.al===2?H-h0:(H-h0)/2;C.forEach((ch,j)=>G.push({t:ch,x:cx,y:y0+j*cs+fs*.525,c:1}))})}
+  const pad=Math.ceil(fs*(s.st===3?.7:s.st===4?.45:.3)),cw=Math.ceil(W+pad*2),ch=Math.ceil(H+pad*2);
+  /* ink layer: the glyphs in the text colour */
+  let L=mkC(cw,ch);{const x=L.getContext('2d');x.font=font;x.textBaseline='middle';x.fillStyle=s.col;
+    G.forEach(g=>{x.textAlign=g.c?'center':'left';x.fillText(g.t,pad+g.x,pad+g.y)});
+    if(F.mode==='ink'){/* typewriter: slight double strike + worn ribbon speckles */
+      const rnd=seedR(key),b=mkC(cw,ch),bx=b.getContext('2d');bx.drawImage(L,0,0);x.globalAlpha=.35;x.drawImage(b,fs*.018,fs*.01);x.globalAlpha=1;
+      x.globalCompositeOperation='destination-out';const n=Math.round(cw*ch/(fs*fs)*90);
+      for(let i=0;i<n;i++){x.globalAlpha=.25+rnd()*.7;x.beginPath();x.arc(rnd()*cw,rnd()*ch,fs*(.006+rnd()*.022),0,7);x.fill()}
+      for(let i=0;i<lines.length*3;i++){x.globalAlpha=.12+rnd()*.2;x.fillRect(0,pad+rnd()*H,cw,fs*(.01+rnd()*.03))}
+      x.globalAlpha=1;x.globalCompositeOperation='source-over'}
+    if(F.mode==='dot'||F.mode==='rcpt'){/* re-draw the glyphs as a printer dot grid */
+      const per=F.mode==='dot'?15:19,cell=fs/per,gw=Math.ceil(cw/cell),gh=Math.ceil(ch/cell),sm=mkC(gw,gh),sx=sm.getContext('2d');
+      sx.imageSmoothingEnabled=true;sx.imageSmoothingQuality='high';sx.drawImage(L,0,0,gw,gh);const d=sx.getImageData(0,0,gw,gh).data,rnd=seedR(key);
+      const D=mkC(cw,ch),dx=D.getContext('2d');dx.fillStyle=s.col;
+      for(let y=0;y<gh;y++){const band=F.mode==='rcpt'?(.72+.28*Math.sin(y*.9+rnd()*6)*.5+.14):1;
+        for(let xx=0;xx<gw;xx++){const a=d[(y*gw+xx)*4+3];if(a<88)continue;
+          if(F.mode==='dot'){dx.globalAlpha=.78+rnd()*.22;dx.beginPath();dx.arc((xx+.5)*cell,(y+.5)*cell,cell*.43,0,7);dx.fill()}
+          else{dx.globalAlpha=Math.min(1,band*(.8+rnd()*.25));dx.fillRect(xx*cell+cell*.06,y*cell+cell*.06,cell*.9,cell*.9)}}}
+      dx.globalAlpha=1;L=D}
+    if(F.mode==='vhs'){const c=mkC(cw,ch),x2=c.getContext('2d'),d2=fs*.05;x2.globalCompositeOperation='lighter';x2.drawImage(tint(L,'rgba(255,40,60,.8)'),-d2,0);x2.drawImage(tint(L,'rgba(40,200,255,.8)'),d2,0);x2.globalCompositeOperation='source-over';x2.drawImage(L,0,0);L=c}}
+  /* effects around the ink layer */
+  const c=mkC(cw,ch),x=c.getContext('2d');
+  if(s.st===4){const p2=fs*.22,rr=fs*.18,x0=pad-p2,y0=pad-p2,w=W+p2*2,h=H+p2*2;x.fillStyle=s.c2;x.beginPath();
+    x.moveTo(x0+rr,y0);x.arcTo(x0+w,y0,x0+w,y0+h,rr);x.arcTo(x0+w,y0+h,x0,y0+h,rr);x.arcTo(x0,y0+h,x0,y0,rr);x.arcTo(x0,y0,x0+w,y0,rr);x.closePath();x.fill()}
+  if(s.st===1){const T=tint(L,s.c2),o=Math.max(1,fs*.07);for(let i=0;i<16;i++){const a=i/16*Math.PI*2;x.drawImage(T,Math.cos(a)*o,Math.sin(a)*o)}}
+  if(s.st===2){x.save();x.shadowColor=s.c2;x.shadowOffsetX=x.shadowOffsetY=fs*.07;x.shadowBlur=fs*.12;x.drawImage(L,0,0);x.restore()}
+  if(s.st===3){x.save();x.shadowColor=s.col;x.shadowBlur=fs*.45;x.drawImage(L,0,0);x.shadowBlur=fs*.15;x.drawImage(L,0,0);x.restore()}
+  x.drawImage(L,0,0);
+  r={c,w:cw,h:ch};TXC.set(key,r);return r}
+function hitTx(p){for(let i=E.stk.length-1;i>=0;i--){const s=E.stk[i];if(s.k!=='x')continue;const [w,h]=boxOf(s);
+  const dx=(p.x-s.x)*E.cw,dy=(p.y-s.y)*E.ch,a=-s.r*Math.PI/180,rx=dx*Math.cos(a)-dy*Math.sin(a),ry=dx*Math.sin(a)+dy*Math.cos(a);
+  if(Math.abs(rx)<=w/2&&Math.abs(ry)<=h/2)return i}return -1}
+/* panel */
+TFL.forEach(([id])=>{const F=TF[id],b=document.createElement('button');b.className='btn';b.dataset.f=id;
+  if(F.mode==='dot'||F.mode==='rcpt'){b.innerHTML='<span style="font:'+(F.mode==='dot'?'700 14px':'500 14px')+' DotGothic16,monospace;letter-spacing:.05em">'+F.n+'</span>'}
+  else b.innerHTML='<span style="font-family:'+F.fam.replace(/"/g,"'")+';font-weight:'+F.w+'">'+F.pv+'</span>'+(F.pv!==F.n?'<small>'+F.n+'</small>':'');
+  b.onclick=()=>txSet({f:id});$('#tfs').append(b)});
+function mkSw(box,key){TCOL.forEach(c=>{const b=document.createElement('button');b.style.background=c;b.dataset.c=c;b.onclick=()=>txSet({[key]:c});box.append(b)});
+  const l=document.createElement('label');l.innerHTML='<input type="color" value="#ff3366">';l.title='自定义颜色';l.querySelector('input').oninput=e=>txSet({[key]:e.target.value});box.append(l)}
+mkSw($('#tcs'),'col');mkSw($('#tc2'),'c2');
+TSTY.forEach(([n,v])=>{const b=document.createElement('button');b.className='btn';b.textContent=n;b.dataset.v=v;b.onclick=()=>txSet({st:v});$('#tst').append(b)});
+[['靠左','al',0],['居中','al',1],['靠右','al',2],['横排','v',0],['竖排','v',1]].forEach(([n,k,v])=>{const b=document.createElement('button');b.className='btn';b.textContent=n;b.dataset.k=k;b.dataset.v=v;b.onclick=()=>txSet({[k]:v});$('#tal').append(b)});
+function txSet(o){const s=txSel();Object.assign(TS,o);if(s){Object.assign(s,o);if(o.f)tfLoad(s.f,s.t)}else if(o.f)tfLoad(o.f);txUI();edRender()}
+const TSL=[['tsz','s',v=>Math.round(v*100)+'%'],['trt','r',v=>Math.round(v)+'°'],['tsx','sx',v=>v.toFixed(2)],['tsy','sy',v=>v.toFixed(2)],['tls','ls',v=>v.toFixed(2)],['tlh','lh',v=>v.toFixed(2)],['top','a',v=>Math.round(v*100)+'%']];
+TSL.forEach(([id,k,f])=>{$('#'+id).oninput=e=>{const s=txSel();if(!s)return;const v=+e.target.value;s[k]=v;if(k==='ls'||k==='lh')TS[k]=v;$('#'+id+'v').textContent=f(v);edRender()}});
+function txUI(){const s=txSel(),o=s||TS;
+  [...$('#tfs').children].forEach(b=>b.classList.toggle('act',b.dataset.f===o.f));
+  [...$('#tcs').children].forEach(b=>b.classList.toggle('sel',b.dataset.c===o.col||(b.tagName==='LABEL'&&!TCOL.includes(o.col))));
+  [...$('#tc2').children].forEach(b=>b.classList.toggle('sel',b.dataset.c===o.c2||(b.tagName==='LABEL'&&!TCOL.includes(o.c2))));
+  [...$('#tst').children].forEach(b=>b.classList.toggle('act',+b.dataset.v===(o.st|0)));
+  [...$('#tal').children].forEach(b=>b.classList.toggle('act',+b.dataset.v===(o[b.dataset.k]|0)));
+  $('#tc2w').style.display=[1,2,4].includes(o.st|0)?'':'none';$('#tc2h').textContent=['','描边颜色','阴影颜色','','底色颜色'][o.st|0]||'';
+  $('#tsc').style.display=s?'':'none';$('#tta').textContent=s?'新增':'添加';
+  if(s)TSL.forEach(([id,k,f])=>{const v=s[k]??(k==='a'?1:k==='lh'?1.25:k==='sx'||k==='sy'?1:0);$('#'+id).value=v;$('#'+id+'v').textContent=f(+v)})}
+$('#tta').onclick=()=>{const t=$('#ttx').value.replace(/\s+$/,'');if(!t.trim()){$('#ttx').placeholder='先在这里输入文字';$('#ttx').focus();return}
+  E.stk.push({k:'x',t,f:TS.f,col:TS.col,st:TS.st,c2:TS.c2,al:TS.al,v:TS.v,ls:TS.ls,lh:TS.lh,a:1,x:.5,y:.5,s:1,r:0,b:0,sx:1,sy:1});E.sel=E.stk.length-1;E.hist.push('k');tfLoad(TS.f,t);txUI();edRender()};
+$('#ttx').oninput=e=>{const s=txSel();if(s&&e.target.value.trim()){s.t=e.target.value;tfLoad(s.f,s.t);edRender()}};
+$('#txr').onclick=()=>{const s=txSel();if(s){s.sx=1;s.sy=1;txUI();edRender()}};
+$('#txd').onclick=()=>{const s=txSel();if(!s)return;E.stk.push({...s,x:Math.min(.95,s.x+.04),y:Math.min(.95,s.y+.04)});E.sel=E.stk.length-1;E.hist.push('k');txUI();edRender()};
+$('#txx').onclick=()=>{if(!txSel())return;E.stk.splice(E.sel,1);E.sel=-1;txUI();edRender()};
+txUI();
+
 renderStk();
 $('#etabs').onclick=e=>{const b=e.target.closest('[data-t]');if(b)setTool(b.dataset.t)};
 $('#es').oninput=e=>{E.sz=+e.target.value;$('#esn').textContent=E.sz};
@@ -2407,6 +2544,7 @@ ec.addEventListener('pointerdown',e=>{
   const p=loc(e);
   if(E.tool==='adj'||E.tool==='frame')return;
   if(E.tool==='crop'){cropDown(p);return}
+  if(E.tool==='txt'){const i=hitTx(p);E.sel=i;if(i>=0){E.drag={i,ox:p.x-E.stk[i].x,oy:p.y-E.stk[i].y};$('#ttx').value=E.stk[i].t}txUI();edRender();return}
   if(E.tool==='stk'){const i=hitStk(p);E.sel=i;if(i>=0)E.drag={i,ox:p.x-E.stk[i].x,oy:p.y-E.stk[i].y};stkUI();edRender();return}
   if(E.tool==='dbl'){if(E.ov)E.odrag={x:p.x-E.ov.x,y:p.y-E.ov.y};return}
   if(E.tool==='mos'){E.mcur={pts:[p],w:E.msz};edRender();return}
@@ -2433,12 +2571,93 @@ ec.addEventListener('pointermove',e=>{
   if(E.mcur){E.mst.push(E.mcur);E.hist.push('m');E.mcur=null;edRender()}
   if(E.cur){E.strokes.push(E.cur);E.hist.push('s');E.cur=null;E.snap=null}E.drag=null;E.cdrag=null;E.odrag=null}));
 $('#ezr').onclick=evReset;
-$('#eu').onclick=()=>{const h=E.hist.pop();if(h==='s'){E.strokes.pop();rebuild()}else if(h==='k'){E.stk.pop();E.sel=-1;stkUI()}else if(h==='m'){E.mst.pop()}else if(h==='g'){restoreGeo(E.geo.pop())}edRender()};
+$('#eu').onclick=()=>{const h=E.hist.pop();if(h==='s'){E.strokes.pop();rebuild()}else if(h==='k'){E.stk.pop();E.sel=-1;stkUI();txUI()}else if(h==='m'){E.mst.pop()}else if(h==='g'){restoreGeo(E.geo.pop())}edRender()};
 $('#ecl').onclick=()=>{E.strokes=[];E.stk=[];E.mst=[];E.hist=E.hist.filter(h=>h==='g');E.sel=-1;rebuild();stkUI();edRender()};
 $('#eca').onclick=()=>{evReset();gal.classList.remove('edit');gal.classList.add('view')};
 $('#eok').onclick=()=>{E.sel=-1;evReset();edRender(false);
   ec.toBlob(b=>{if(!b)return;addItem('img',b);setGf(0);gi=0;gal.classList.remove('edit');gal.classList.add('view');showView()},'image/jpeg',.92)};
 $('#ve').onclick=()=>{const it=cur();if(it&&it.k==='img')openEd(it)};
+/* ---------- collage (拼图) ---------- */
+const CLL=[['h','横着拼',0,0],['v','竖着拼',0,0],['g4','四宫格',2,2],['g6','六宫格 竖',2,3],['g6h','六宫格 横',3,2],['g8','八宫格 竖',2,4],['g8h','八宫格 横',4,2],['g9','九宫格',3,3]];
+const CLA=[['o','原图比例'],['1','1:1'],['0.75','3:4'],['1.3333','4:3'],['0.5625','9:16']];
+const CLBG=['#ffffff','#000000','#f3ead8','#c8a27a','#1d2a44','#e8102e','#ffd6e0'];
+const CL={lay:'g4',ar:'1',n:2,gap:.03,rad:0,bg:'#ffffff',ph:[],sel:-1,on:false};
+function clDef(n){return n<=3?(n===2?'v':'v'):n===4?'g4':n<=6?'g6':n<=8?'g8':'g9'}
+function clCount(){const L=CLL.find(l=>l[0]===CL.lay);return L[2]?L[2]*L[3]:CL.n}
+async function clLoad(it){let src=null,w=0,h=0;try{src=await createImageBitmap(it.blob);w=src.width;h=src.height}catch(e){src=await new Promise(r=>{const I=new Image();I.onload=()=>r(I);I.onerror=()=>r(null);I.src=it.url});if(src){w=src.naturalWidth;h=src.naturalHeight}}
+  if(!src||!w)return null;const k=Math.min(1,1400/Math.max(w,h)),c=mkC(Math.round(w*k),Math.round(h*k));c.getContext('2d').drawImage(src,0,0,c.width,c.height);if(src.close)src.close();return {it,c,ox:0,oy:0,z:1}}
+function clGeom(){const L=CLL.find(l=>l[0]===CL.lay),n=clCount(),P=i=>CL.ph[i],far=i=>{if(CL.ar!=='o')return +CL.ar;const p=P(i)||CL.ph.find(Boolean);return p?p.c.width/p.c.height:1};
+  const U=1000,g=CL.gap*U,R=[];let W,H;
+  if(L[2]){const a=CL.ar==='o'?far(0):+CL.ar,cw=a>=1?U:U*a,ch=a>=1?U/a:U;W=L[2]*cw+(L[2]+1)*g;H=L[3]*ch+(L[3]+1)*g;
+    for(let r=0;r<L[3];r++)for(let c=0;c<L[2];c++)R.push({x:g+c*(cw+g),y:g+r*(ch+g),w:cw,h:ch})}
+  else if(CL.lay==='h'){let x=g;for(let i=0;i<n;i++){const w=U*far(i);R.push({x,y:g,w,h:U});x+=w+g}W=x;H=U+2*g}
+  else{let y=g;for(let i=0;i<n;i++){const h=U/far(i);R.push({x:g,y,w:U,h});y+=h+g}W=U+2*g;H=y}
+  return {W,H,R}}
+function clDraw(x,G,k,prev){x.save();x.scale(k,k);x.fillStyle=CL.bg;x.fillRect(0,0,G.W,G.H);
+  G.R.forEach((r,i)=>{const p=CL.ph[i],rr=CL.rad*Math.min(r.w,r.h)*.5;x.save();x.beginPath();
+    if(rr>0){x.moveTo(r.x+rr,r.y);x.arcTo(r.x+r.w,r.y,r.x+r.w,r.y+r.h,rr);x.arcTo(r.x+r.w,r.y+r.h,r.x,r.y+r.h,rr);x.arcTo(r.x,r.y+r.h,r.x,r.y,rr);x.arcTo(r.x,r.y,r.x+r.w,r.y,rr);x.closePath()}else x.rect(r.x,r.y,r.w,r.h);x.clip();
+    if(p){const iw=p.c.width,ih=p.c.height,s=Math.max(r.w/iw,r.h/ih)*p.z,dw=iw*s,dh=ih*s,sx=dw-r.w,sy=dh-r.h;x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';
+      x.drawImage(p.c,r.x-sx/2-p.ox*sx/2,r.y-sy/2-p.oy*sy/2,dw,dh)}
+    else if(prev){x.fillStyle='rgba(128,128,128,.28)';x.fillRect(r.x,r.y,r.w,r.h);x.fillStyle='rgba(255,255,255,.85)';x.font='bold '+Math.min(r.w,r.h)*.25+'px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('+',r.x+r.w/2,r.y+r.h/2)}
+    x.restore();
+    if(prev&&i===CL.sel){x.save();x.lineWidth=Math.max(6,Math.min(r.w,r.h)*.02);x.strokeStyle='#ffcc00';x.setLineDash([x.lineWidth*3,x.lineWidth*2]);x.strokeRect(r.x+x.lineWidth/2,r.y+x.lineWidth/2,r.w-x.lineWidth,r.h-x.lineWidth);x.restore()}});
+  x.restore()}
+function clRender(){if(!CL.on)return;const G=clGeom(),v=$('#clg .clv'),c=$('#clc'),aw=Math.max(50,v.clientWidth-16),ah=Math.max(50,v.clientHeight-16),k=Math.min(aw/G.W,ah/G.H),dpr=Math.min(2.5,window.devicePixelRatio||1);
+  c.style.width=Math.round(G.W*k)+'px';c.style.height=Math.round(G.H*k)+'px';const pw=Math.round(G.W*k*dpr),ph=Math.round(G.H*k*dpr);if(c.width!==pw||c.height!==ph){c.width=pw;c.height=ph}
+  const x=c.getContext('2d');x.clearRect(0,0,pw,ph);clDraw(x,G,pw/G.W,true);CL.G=G}
+function clUI(){const L=CLL.find(l=>l[0]===CL.lay);
+  [...$('#cll').children].forEach(b=>b.classList.toggle('act',b.dataset.l===CL.lay));[...$('#cla').children].forEach(b=>b.classList.toggle('act',b.dataset.a===CL.ar));
+  [...$('#clbg').children].forEach(b=>b.classList.toggle('sel',b.dataset.c===CL.bg||(b.tagName==='LABEL'&&!CLBG.includes(CL.bg))));
+  $('#cln').style.display=L[2]?'none':'';$('#clnv').textContent=CL.n+' 张';
+  const p=CL.ph[CL.sel];$('#clsel').style.display=CL.sel>=0?'':'none';$('#clz').value=p?p.z:1;$('#clzv').textContent=p?Math.round(p.z*100)+'%':'';$('#clrm').style.display=p?'':'none';
+  $('#clrep').textContent=p?'换一张':'选照片';
+  const n=clCount(),f=CL.ph.slice(0,n).filter(Boolean).length;$('#clt').textContent='拼图 · '+f+'/'+n;clRender()}
+function clPick(i){let m=document.getElementById('clpk');
+  if(!m){m=document.createElement('div');m.id='clpk';m.className='pvpk2';m.style.zIndex=58;m.innerHTML='<div class="pkh"><button class="btn" id="clpx">取消</button><b>选一张照片放进这格</b><span></span></div><div class="pkg" id="clpg"></div>';gal.append(m)}
+  const g=m.querySelector('#clpg');let busy=false;const close=()=>{g._tok=(g._tok||0)+1;g.innerHTML='';m.style.display='none'};m.querySelector('#clpx').onclick=close;
+  thumbGrid(g,items.filter(it=>it.k==='img'),async(it,d)=>{if(busy)return;busy=true;d.classList.add('on');g._tok++;const p=await clLoad(it);if(p){while(CL.ph.length<i)CL.ph.push(null);CL.ph[i]=p}busy=false;close();clUI()});
+  m.style.display='flex'}
+function clClose(){CL.on=false;CL.ph.forEach(p=>{if(p&&p.c){p.c.width=p.c.height=1}});CL.ph=[];CL.sel=-1;const m=document.getElementById('clg');if(m)m.style.display='none';const c=document.getElementById('clc');if(c){c.width=c.height=1}}
+function clBuild(){let m=document.getElementById('clg');if(m)return m;m=document.createElement('div');m.id='clg';
+  m.innerHTML=`<div class="pkh"><button class="btn" id="clx">取消</button><b id="clt">拼图</b><button class="btn act" id="clok">保存</button></div>
+  <div class="clb"><div class="clv"><canvas id="clc"></canvas></div><div class="clp">
+   <div class="gh">布局</div><div class="chips" id="cll"></div>
+   <div class="chips" id="cln"><button class="btn" id="clnm">－</button><b id="clnv"></b><button class="btn" id="clnp">＋</button></div>
+   <div class="gh">每格比例</div><div class="chips" id="cla"></div>
+   <label class="ms"><span>边框</span><input type="range" id="clgp" min="0" max=".12" step=".002"><i id="clgpv"></i></label>
+   <label class="ms"><span>圆角</span><input type="range" id="clrd" min="0" max="1" step=".01"><i id="clrdv"></i></label>
+   <div class="gh">边框颜色</div><div class="sws tcs" id="clbg"></div>
+   <div id="clsel"><div class="gh">选中的格子</div><label class="ms"><span>放大</span><input type="range" id="clz" min="1" max="3" step=".01"><i id="clzv"></i></label>
+    <div class="vr"><button class="btn" id="clrep">换一张</button><button class="btn warn" id="clrm">清空这格</button></div></div>
+   <div class="hint">点一格选中它，再点另一格两张互换位置；拖动格子里的照片调整取景；空格子点「＋」放照片</div></div></div>`;gal.append(m);
+  CLL.forEach(([id,n])=>{const b=document.createElement('button');b.className='btn';b.textContent=n;b.dataset.l=id;b.onclick=()=>{CL.lay=id;if(!CLL.find(l=>l[0]===id)[2])CL.n=Math.max(2,Math.min(9,CL.ph.filter(Boolean).length||CL.n));CL.sel=-1;clUI()};$('#cll').append(b)});
+  CLA.forEach(([a,n])=>{const b=document.createElement('button');b.className='btn';b.textContent=n;b.dataset.a=a;b.onclick=()=>{CL.ar=a;clUI()};$('#cla').append(b)});
+  CLBG.forEach(c=>{const b=document.createElement('button');b.style.background=c;b.dataset.c=c;b.onclick=()=>{CL.bg=c;clUI()};$('#clbg').append(b)});
+  {const l=document.createElement('label');l.innerHTML='<input type="color" value="#88aacc">';l.querySelector('input').oninput=e=>{CL.bg=e.target.value;clUI()};$('#clbg').append(l)}
+  $('#clnm').onclick=()=>{CL.n=Math.max(2,CL.n-1);CL.sel=-1;clUI()};$('#clnp').onclick=()=>{CL.n=Math.min(9,CL.n+1);clUI()};
+  $('#clgp').oninput=e=>{CL.gap=+e.target.value;$('#clgpv').textContent=Math.round(CL.gap*1000)/10+'%';clRender()};
+  $('#clrd').oninput=e=>{CL.rad=+e.target.value;$('#clrdv').textContent=Math.round(CL.rad*100)+'%';clRender()};
+  $('#clz').oninput=e=>{const p=CL.ph[CL.sel];if(p){p.z=+e.target.value;$('#clzv').textContent=Math.round(p.z*100)+'%';clRender()}};
+  $('#clrep').onclick=()=>{if(CL.sel>=0)clPick(CL.sel)};$('#clrm').onclick=()=>{if(CL.sel>=0&&CL.ph[CL.sel]){CL.ph[CL.sel].c.width=1;CL.ph[CL.sel]=null;clUI()}};
+  $('#clx').onclick=clClose;
+  $('#clok').onclick=()=>{const G=clGeom(),L=CLL.find(l=>l[0]===CL.lay),long=L[2]?2400:Math.min(4000,1500*clCount()),k=long/Math.max(G.W,G.H),c=mkC(Math.round(G.W*k),Math.round(G.H*k));
+    clDraw(c.getContext('2d'),G,k,false);$('#clok').textContent='保存中…';c.toBlob(b=>{c.width=c.height=1;$('#clok').textContent='保存';if(!b)return;clClose();if(selMode)setSel(false);addItem('img',b);renderGal()},'image/jpeg',.92)};
+  const cv=$('#clc');let D=null;
+  const cxy=e=>{const r=cv.getBoundingClientRect(),b=document.body.classList;let x,y;
+    if(b.contains('rotr')){x=(e.clientY-r.top)/r.height;y=(r.right-e.clientX)/r.width}else if(b.contains('rotl')){x=(r.bottom-e.clientY)/r.height;y=(e.clientX-r.left)/r.width}else{x=(e.clientX-r.left)/r.width;y=(e.clientY-r.top)/r.height}
+    return {x:x*CL.G.W,y:y*CL.G.H}};
+  cv.addEventListener('pointerdown',e=>{e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}const p=cxy(e),i=CL.G.R.findIndex(r=>p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h);D={i,p,m:false}});
+  cv.addEventListener('pointermove',e=>{if(!D||D.i<0)return;const p=cxy(e),ph=CL.ph[D.i],r=CL.G.R[D.i];if(!D.m&&Math.hypot(p.x-D.p.x,p.y-D.p.y)<r.w*.03)return;D.m=true;if(!ph)return;
+    const s=Math.max(r.w/ph.c.width,r.h/ph.c.height)*ph.z,sx=ph.c.width*s-r.w,sy=ph.c.height*s-r.h;
+    if(sx>1)ph.ox=Math.max(-1,Math.min(1,ph.ox-(p.x-D.p.x)/(sx/2)));if(sy>1)ph.oy=Math.max(-1,Math.min(1,ph.oy-(p.y-D.p.y)/(sy/2)));D.p=p;clRender()});
+  ['pointerup','pointercancel'].forEach(n=>cv.addEventListener(n,e=>{if(!D)return;const d=D;D=null;if(d.m||d.i<0||n==='pointercancel')return;const i=d.i;
+    if(CL.sel<0){if(!CL.ph[i]){clPick(i);return}CL.sel=i}else if(CL.sel===i)CL.sel=-1;else{while(CL.ph.length<=Math.max(i,CL.sel))CL.ph.push(null);const t=CL.ph[i];CL.ph[i]=CL.ph[CL.sel];CL.ph[CL.sel]=t;CL.sel=-1}clUI()}));
+  window.addEventListener('resize',()=>CL.on&&setTimeout(clRender,60));return m}
+async function clOpen(L){const m=clBuild();CL.on=true;CL.sel=-1;CL.ph=[];CL.lay=clDef(L.length);CL.n=Math.max(2,Math.min(9,L.length));CL.ar=CL.lay==='v'||CL.lay==='h'?'o':'1';
+  $('#clgp').value=CL.gap;$('#clgpv').textContent=Math.round(CL.gap*1000)/10+'%';$('#clrd').value=CL.rad;$('#clrdv').textContent=Math.round(CL.rad*100)+'%';
+  m.style.display='flex';$('#clt').textContent='载入中…';for(const it of L.slice(0,9)){const p=await clLoad(it);if(!CL.on)return;if(p)CL.ph.push(p)}clUI()}
+$('#bcl').onclick=()=>{const L=[...selSet].map(id=>items.find(x=>x.id===id)).filter(x=>x&&x.k==='img');clOpen(L)};
+
 
 /* block double-tap / pinch zoom (iOS Safari) */
 {let lt=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lt<350&&!e.target.closest('input,textarea'))e.preventDefault();lt=n},{passive:false});
