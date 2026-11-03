@@ -517,7 +517,7 @@ body.land #clg .clb{flex-direction:row}body.land #clg .clp{max-height:none;width
   <div class="side">
     <div id="bmt">† Handycam †</div>
     <div class="top">
-      <div class="tb"><button class="btn" id="bar">4:3</button><button class="btn" id="bre">480p</button><span class="lseg rseg"><button class="btn ib" id="lw" aria-label="广角"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19L3.5 8.5a13 13 0 0 1 17 0z"/><circle cx="12" cy="12.5" r="1.4"/></svg></button><button class="btn ib" id="lm" aria-label="主摄"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3.2"/></svg></button></span></div>
+      <div class="tb"><button class="btn" id="bar">4:3</button><button class="btn" id="bre">480p</button></div>
       <div class="tb"><button class="btn" id="mic">MIC</button><button class="btn ib" id="fls" aria-label="闪光灯"></button><button class="btn" id="mb">MENU</button></div>
     </div>
     <div id="fstrip"></div>
@@ -994,7 +994,7 @@ const LB={L:null,R:null,marks:new Map(),on:false};
 function landB(on){if(LB.on===on)return;LB.on=on;
   if(!LB.L){LB.L=document.createElement('div');LB.L.className='lcol lcL';LB.R=document.createElement('div');LB.R.className='lcol lcR';cam.append(LB.L,LB.R);
     LB.l1=document.createElement('div');LB.l1.className='lrow';LB.r1=document.createElement('div');LB.r1.className='lrow lrow3';LB.r2=document.createElement('div');LB.r2.className='lrow lrow3';LB.ra=document.createElement('div');LB.ra.className='lsub';LB.rb=document.createElement('div');LB.rb.className='lsub lthin';LB.R.append(LB.ra,LB.rb)}
-  const L=[[LB.l1,['#bar','#bre']],['.lseg'],['#fb'],['#fxb'],['.mseg']],Rr=[[LB.r1,['#mic','#fls']],['#dial'],['#sh'],['.rseg2']],Rb=[['#mb'],['.zgrp'],['.evr']];
+  const L=[[LB.l1,['#bar','#bre']],['#fb'],['#fxb'],['.mseg']],Rr=[[LB.r1,['#mic','#fls']],['#dial'],['#sh'],['.rseg2']],Rb=[['#mb'],['.zgrp'],['.evr']];
   const mv=(el,to)=>{if(!LB.marks.has(el)){const m=document.createComment('m');el.parentNode.insertBefore(m,el);LB.marks.set(el,m)}to.append(el)};
   const back=el=>{const m=LB.marks.get(el);if(m)m.parentNode.insertBefore(el,m.nextSibling)};
   const each=(spec,fn)=>spec.forEach(x=>{if(x.length===2&&x[0] instanceof Element){x[1].forEach(q=>fn($(q),x[0]))}else fn(document.querySelector(x[0]),null)});
@@ -1133,16 +1133,16 @@ const MANUAL=`
 <section open><h3>快速认识主界面</h3>
 <svg viewBox="0 0 220 360" class="mdg"><rect x="10" y="4" width="200" height="352" rx="14" class="o"/>
 <rect x="22" y="14" width="176" height="14" rx="3" class="f"/><text x="110" y="24" class="t">EV  1/125  ISO  滤镜</text>
-<rect x="22" y="34" width="22" height="14" rx="3" class="o"/><rect x="47" y="34" width="22" height="14" rx="3" class="o"/><rect x="73" y="34" width="34" height="14" rx="3" class="o"/><rect x="146" y="34" width="20" height="14" rx="3" class="o"/><rect x="169" y="34" width="29" height="14" rx="3" class="o"/>
+<rect x="22" y="34" width="22" height="14" rx="3" class="o"/><rect x="47" y="34" width="22" height="14" rx="3" class="o"/><rect x="146" y="34" width="20" height="14" rx="3" class="o"/><rect x="169" y="34" width="29" height="14" rx="3" class="o"/>
 <rect x="22" y="54" width="176" height="160" rx="6" class="v"/><text x="110" y="138" class="t">取景框</text>
 <rect x="22" y="220" width="176" height="128" rx="8" class="o"/>
 <rect x="30" y="232" width="40" height="16" rx="8" class="o"/><rect x="88" y="226" width="40" height="30" rx="4" class="o"/><circle cx="148" cy="241" r="9" class="o"/><circle cx="182" cy="241" r="14" class="o"/>
 <rect x="30" y="268" width="160" height="6" rx="3" class="o"/>
 <rect x="30" y="296" width="44" height="18" rx="4" class="o"/><circle cx="110" cy="305" r="15" class="o"/><rect x="140" y="296" width="16" height="18" rx="3" class="o"/><rect x="159" y="296" width="16" height="18" rx="3" class="o"/><rect x="178" y="296" width="16" height="18" rx="3" class="o"/>
-<g class="n"><circle cx="16" cy="21" r="6"/><text x="16" y="24">1</text><circle cx="33" cy="58" r="6"/><text x="33" y="61">2</text><circle cx="90" cy="58" r="6"/><text x="90" y="61">3</text><circle cx="156" cy="58" r="6"/><text x="156" y="61">4</text><circle cx="184" cy="58" r="6"/><text x="184" y="61">5</text>
-<circle cx="50" cy="256" r="6"/><text x="50" y="259">6</text><circle cx="108" cy="264" r="6"/><text x="108" y="267">7</text><circle cx="148" cy="257" r="6"/><text x="148" y="260">8</text><circle cx="200" cy="226" r="6"/><text x="200" y="229">9</text>
-<circle cx="24" cy="271" r="6"/><text x="24" y="274">10</text><circle cx="52" cy="322" r="6"/><text x="52" y="325">11</text><circle cx="110" cy="326" r="6"/><text x="110" y="329">12</text><circle cx="148" cy="322" r="6"/><text x="148" y="325">13</text><circle cx="167" cy="322" r="6"/><text x="167" y="325">14</text><circle cx="186" cy="322" r="6"/><text x="186" y="325">15</text></g></svg>
-<ol class="mls"><li>信息栏：EV、快门、ISO、滤镜（横屏多焦段、分辨率）</li><li>画幅比例 / 分辨率</li><li>镜头：广角 / 主摄（前置时为前置广角 / 主摄）</li><li>闪光灯（录像时为补光灯；前置是白屏闪光）</li><li>菜单（右上角 ⟳ 刷新，红 ✕ 关闭）</li><li>变焦 − / ＋</li><li>滤镜窗：左右滑切换，点一下打开滤镜条</li><li>特效：鱼眼、对称、九宫格等</li><li>快门旋钮（见下）</li><li>EV 曝光补偿</li><li>拍照 / 录像</li><li>快门键</li><li>相册</li><li>横竖屏切换（设置里可改成自动旋转）</li><li>前后摄像头切换</li></ol>
+<g class="n"><circle cx="16" cy="21" r="6"/><text x="16" y="24">1</text><circle cx="33" cy="58" r="6"/><text x="33" y="61">2</text><circle cx="156" cy="58" r="6"/><text x="156" y="61">3</text><circle cx="184" cy="58" r="6"/><text x="184" y="61">4</text>
+<circle cx="50" cy="256" r="6"/><text x="50" y="259">5</text><circle cx="108" cy="264" r="6"/><text x="108" y="267">6</text><circle cx="148" cy="257" r="6"/><text x="148" y="260">7</text><circle cx="200" cy="226" r="6"/><text x="200" y="229">8</text>
+<circle cx="24" cy="271" r="6"/><text x="24" y="274">9</text><circle cx="52" cy="322" r="6"/><text x="52" y="325">10</text><circle cx="110" cy="326" r="6"/><text x="110" y="329">11</text><circle cx="148" cy="322" r="6"/><text x="148" y="325">12</text><circle cx="167" cy="322" r="6"/><text x="167" y="325">13</text><circle cx="186" cy="322" r="6"/><text x="186" y="325">14</text></g></svg>
+<ol class="mls"><li>信息栏：EV、快门、ISO、滤镜（横屏多焦段、分辨率）</li><li>画幅比例 / 分辨率</li><li>闪光灯（录像时为补光灯；前置是白屏闪光）</li><li>菜单（右上角 ⟳ 刷新，红 ✕ 关闭）</li><li>变焦 − / ＋：打开默认主摄 1×；按住 − 缩到 1× 以下会自动换到超广角（最小 0.5×），再按 ＋ 回到 1× 会自动换回主摄</li><li>滤镜窗：左右滑切换，点一下打开滤镜条</li><li>特效：鱼眼、对称、九宫格等</li><li>快门旋钮（见下）</li><li>EV 曝光补偿</li><li>拍照 / 录像</li><li>快门键</li><li>相册</li><li>横竖屏切换（设置里可改成自动旋转）</li><li>前后摄像头切换</li></ol>
 <p class="mtip">滤镜条、特效条、菜单打开时，点它们以外的地方就会关闭。</p></section>
 
 <section><h3>快门旋钮</h3>
@@ -1181,7 +1181,7 @@ const MANUAL=`
 <li>显示不对时：MENU → ⟳ 刷新</li><li>相机权限：Safari「网站设置 → 相机 → 允许」后自动开机</li><li>联网打开过一次后可离线使用（需要仓库里的 sw.js）</li><li class="megg"><i>寻找一个十字架在菜单的角落</i></li></ul></section>
 
 <section><h3>更新记录</h3><ul class="mls">
-<li>10/31：编辑里新增「文字」（16 种字体，含中文打印机字体、哥特、宋体）；相册新增「拼图」（横拼 / 竖拼 / 四、六、八、九宫格）</li><li>10/29：修复叠图 / 私密相册选择照片时缩略图挤成一条条；FX 键按下不再发光</li><li>10/29：多重曝光，最多 5 张（MENU → 相机里选张数）；FX 键改成红字圆形实体键；修复编辑里叠图选第二张照片时闪退 / 照片挤在一起</li><li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
+<li>11/3：去掉广角 / 主摄切换键，打开默认主摄 1×，用变焦键自动切换镜头（0.5× 超广角）</li><li>10/31：编辑里新增「文字」（16 种字体，含中文打印机字体、哥特、宋体）；相册新增「拼图」（横拼 / 竖拼 / 四、六、八、九宫格）</li><li>10/29：修复叠图 / 私密相册选择照片时缩略图挤成一条条；FX 键按下不再发光</li><li>10/29：多重曝光，最多 5 张（MENU → 相机里选张数）；FX 键改成红字圆形实体键；修复编辑里叠图选第二张照片时闪退 / 照片挤在一起</li><li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
 function openManual(){cam.classList.remove('menu');let m=document.getElementById('man');
   if(!m){m=document.createElement('div');m.id='man';m.innerHTML='<div class="manh"><b>使用说明</b><button class="btn xclose" id="manx">✕</button></div><div class="manb"></div>';document.body.append(m);
     m.querySelector('#manx').onclick=()=>m.style.display='none';
@@ -1565,15 +1565,16 @@ function pickLens(f,sel){const L=lenses.filter(x=>x.f===f),u=L.find(x=>x.k==='u'
   if(!f)return{id:w?w.id:null,k:1,mm:24};
   if(u&&w)return{id:w.id,k:1,mm:23};
   return{id:w?w.id:null,k:sel==='w'?1:1.25,mm:23}}
-const lzKey=()=>facing==='user'?'lzF':'lzB';
-function updLens(){const sel=S[lzKey()]||'m',f=facing==='user';
-  $('#lw').classList.toggle('act',sel==='w');$('#lm').classList.toggle('act',sel!=='w');
-  const noU=!f&&lenses.some(x=>x.label)&&!lenses.some(x=>!x.f&&x.k==='u');$('#lw').classList.toggle('dis',noU)}
-function setLens(sel){if(recing()||!on)return;const f=facing==='user';
-  if(sel==='w'&&$('#lw').classList.contains('dis')){S[lzKey()]='m';updLens();return}
-  S[lzKey()]=sel;save();const p=pickLens(f,sel),cur=track&&track.getSettings?track.getSettings().deviceId:null;
-  lensK=p.k;curMM=p.mm;updLens();if(p.id&&p.id!==cur){lensId=p.id;start()}}
-$('#lw').onclick=()=>setLens('w');$('#lm').onclick=()=>setLens('m');
+/* lenses follow the zoom: back camera starts on the main lens at 1×, zooming below 1× switches to the ultra-wide (0.5×) and back */
+let lensSel='m',lensBusy=false,uwFail=false;
+const hasUW=()=>facing!=='user'&&!uwFail&&lenses.some(x=>!x.f&&x.k==='u');
+const zMin=()=>hasUW()&&!(recing()&&lensSel==='m')?.5:1/(lensSel==='w'&&facing!=='user'?2:(pickLens(facing==='user','m').k||1));
+function updLens(){}
+function setLens(sel){if(recing()||!on||lensBusy)return;const f=facing==='user';
+  lensSel=sel;const p=pickLens(f,sel),cur=track&&track.getSettings?track.getSettings().deviceId:null;
+  if(p.id&&p.id!==cur){lensId=p.id;lensBusy=true;Promise.resolve(start()).finally(()=>{lensBusy=false})}else{lensK=sel==='w'&&!f?2:p.k;curMM=p.mm}}
+function autoLens(){if(!on||lensBusy||recing()||facing==='user'||!hasUW())return;
+  if(lensSel==='m'&&zt<.98)setLens('w');else if(lensSel==='w'&&zt>=1)setLens('m')}
 async function start(){
   if(stream)stream.getTracks().forEach(t=>t.stop());
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){pwMsg('此环境不支持摄像头，请用 Chrome / Edge / Safari 打开 https 链接。');return}
@@ -1588,9 +1589,9 @@ async function start(){
   try{hasTorch=!!(track.getCapabilities&&track.getCapabilities().torch)}catch(e){hasTorch=false}
   applyLight();
   await refreshLenses();
-  {const f=facing==='user',p=pickLens(f,S[lzKey()]||'m'),cur2=track.getSettings?track.getSettings().deviceId:null;
+  {const f=facing==='user',p=pickLens(f,lensSel),cur2=track.getSettings?track.getSettings().deviceId:null;
    if(p.id&&cur2&&cur2!==p.id&&!lensRetry){lensRetry=true;lensId=p.id;start();return}
-   lensRetry=false;const ok=!p.id||cur2===p.id;lensK=ok?p.k:1;curMM=ok?p.mm:mmOf(track.label);updLens()}
+   lensRetry=false;const ok=!p.id||cur2===p.id;lensK=ok?(lensSel==='w'&&!f?2:p.k):1;curMM=ok?p.mm:mmOf(track.label);if(!ok&&lensSel==='w'){lensSel='m';uwFail=true;zt=Math.max(zt,1);lensK=pickLens(f,'m').k;curMM=24}}
 }
 function pwMsg(s){$('#pw').classList.remove('off');$('#pw').firstElementChild.textContent=s}
 $('#pwb').onclick=()=>{applyMic();start()};
@@ -1650,8 +1651,8 @@ addEventListener('resize',()=>{if(mob&&innerWidth>innerHeight){nativeRot=true;if
    iso=Math.max(50,Math.min(3200,iso));let shTxt='1/'+near(TS,1/t);
    const si2=dialIdx();if(si2>0){const tm=1/SHV[si2],T0=t*iso,iso2=Math.max(50,Math.min(3200,T0/tm));shGainT=Math.max(1/8,Math.min(tm>=.5?2:4,tm*iso2/T0));iso=iso2;shTxt=SHV[si2]>=1?'1/'+SHV[si2]:(1/SHV[si2])+'"'}else shGainT=1;
    tx('iev','EV '+(e>0?'+':e<0?'−':'±')+Math.abs(e).toFixed(1));tx('ish',shTxt);tx('iiso','ISO '+near(IS,iso));
-   tx('ifl',bmOn?'Black Metal':((typeof FO!=='undefined'&&FO[fi])||''));tx('imm',Math.round(curMM*zc*lensK)+'mm');tx('irs',RES[si]+'p')},250)}
-$('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';lensId=null;start()};
+   tx('ifl',bmOn?'Black Metal':((typeof FO!=='undefined'&&FO[fi])||''));tx('imm',Math.round(curMM*Math.max(1,zc*lensK))+'mm');tx('irs',RES[si]+'p')},250)}
+$('#fl').onclick=()=>{if(recing())return;facing=facing==='user'?'environment':'user';lensId=null;lensSel='m';zt=zc=1;start()};
 
 /* zoom + exposure + flash / light */
 function zb(id,d){const e=$(id);
@@ -1712,7 +1713,7 @@ function ov(T){
   if(live&&it.zm&&(zdir||Math.abs(zt-zc)>.005||performance.now()-zT<1500)){
     const n=Math.max(0,Math.min(8,Math.round(Math.log(zc)/Math.log(6)*8)));
     tx2('W ['+'#'.repeat(n)+'-'.repeat(8-n)+'] T',W/2,H-m-ls*2.4,'center');
-    tx2(Math.round(curMM*zc*lensK)+'mm',W/2,H-m-ls*3.5,'center');
+    tx2(Math.round(curMM*Math.max(1,zc*lensK))+'mm',W/2,H-m-ls*3.5,'center');
   }
   if(live&&performance.now()-evT<1500)tx2('EV '+(ev>0?'+':'')+ev.toFixed(1),W/2,m,'center');
   const d=new Date();
@@ -1729,7 +1730,7 @@ function loop(ts){
   }
   if(!on||vid.readyState<2||ts-last<33||!size())return;
   const dt=Math.min(.1,(ts-last)/1000);last=ts;const T=ts/1000;
-  if(zdir){zt=Math.min(6,Math.max(1,zt*Math.exp(zdir*dt*.85)));zT=performance.now()}
+  if(zdir){zt=Math.min(6,Math.max(zMin(),zt*Math.exp(zdir*dt*.85)));zT=performance.now();autoLens()}
   const lz=Math.log(zc),lt=Math.log(zt);
   zc=Math.exp(lz+(lt-lz)*(1-Math.exp(-dt*7)));if(Math.abs(zc-zt)<.002)zc=zt;
   $('#zr').textContent=zc.toFixed(1)+'×';
@@ -1741,7 +1742,7 @@ function loop(ts){
   if(PP.skk>0||PP.bkk>0){
     [1,3,4].forEach(n=>{gl.activeTexture(gl.TEXTURE0+n);gl.bindTexture(gl.TEXTURE_2D,null)});gl.activeTexture(gl.TEXTURE0);
     gl.useProgram(pb);gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.viewport(0,0,BN,BN);
-    gl.uniform2f(UB.r,cw,ch);gl.uniform2f(UB.cr,cr[0],cr[1]);gl.uniform2f(UB.st,S.stx,S.sty);gl.uniform1f(UB.m,mv);gl.uniform1f(UB.z,zc*lensK);
+    gl.uniform2f(UB.r,cw,ch);gl.uniform2f(UB.cr,cr[0],cr[1]);gl.uniform2f(UB.st,S.stx,S.sty);gl.uniform1f(UB.m,mv);gl.uniform1f(UB.z,Math.max(1,zc*lensK));
     gl.uniform1f(UB.wf,S.fx||0);gl.uniform1f(UB.rot,rot);gl.uniform1f(UB.fp,fpv);gl.uniform1f(UB.ex,exv);{const sE=1-(1-PP.skt)*.4;gl.uniform1f(UB.skt,Math.min(PP.skk>0?sE:1,PP.bkk>0?PP.bkt:1));gl.uniform1f(UB.sk2,sE)}gl.uniform1f(UB.ska,PP.ska);
     gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,btx);gl.activeTexture(gl.TEXTURE0);
@@ -1763,7 +1764,7 @@ function loop(ts){
   if(PP.srk>0){
     [1,2,5].forEach(n=>{gl.activeTexture(gl.TEXTURE0+n);gl.bindTexture(gl.TEXTURE_2D,null)});gl.activeTexture(gl.TEXTURE0);
     gl.useProgram(pb);gl.bindFramebuffer(gl.FRAMEBUFFER,SM5.f);gl.viewport(0,0,BN,BN);
-    gl.uniform2f(UB.r,cw,ch);gl.uniform2f(UB.cr,cr[0],cr[1]);gl.uniform2f(UB.st,S.stx,S.sty);gl.uniform1f(UB.m,mv);gl.uniform1f(UB.z,zc*lensK);gl.uniform1f(UB.wf,S.fx||0);
+    gl.uniform2f(UB.r,cw,ch);gl.uniform2f(UB.cr,cr[0],cr[1]);gl.uniform2f(UB.st,S.stx,S.sty);gl.uniform1f(UB.m,mv);gl.uniform1f(UB.z,Math.max(1,zc*lensK));gl.uniform1f(UB.wf,S.fx||0);
     gl.uniform1f(UB.rot,rot);gl.uniform1f(UB.fp,fpv);gl.uniform1f(UB.ex,exv);gl.uniform1f(UB.skt,PP.srt);gl.uniform1f(UB.sk2,PP.srt);gl.uniform1f(UB.ska,0);
     gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,SM5.t);gl.activeTexture(gl.TEXTURE0);
@@ -1778,7 +1779,7 @@ function loop(ts){
   gl.useProgram(pg);gl.viewport(0,0,cw,ch);
   gl.uniform1f(UL.wf,S.fx||0);gl.uniform1f(UL.srk,PP.srk||0);
   gl.uniform2f(UL.r,cw,ch);gl.uniform2f(UL.cr,cr[0],cr[1]);gl.uniform2f(UL.st,S.stx,S.sty);gl.uniform1f(UL.T,T%1000);
-  gl.uniform1f(UL.m,mv);gl.uniform1f(UL.z,zc*lensK);
+  gl.uniform1f(UL.m,mv);gl.uniform1f(UL.z,Math.max(1,zc*lensK));
   gl.uniform1f(UL.fb,Math.min(Math.abs(zt-zc)*.0015,.008));
   gl.uniform1f(UL.F,fi);gl.uniform1f(UL.rot,rot);
   gl.uniform1f(UL.ex,exv);gl.uniform1f(UL.fx,flashFx);gl.uniform1f(UL.fd,shotFD);gl.uniform1f(UL.fp,fpv);gl.uniform1f(UL.lf,lightFx);
