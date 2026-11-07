@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1099,7 +1100,7 @@ addReset(pS);
 const pM=mkPane('相机');
 head(pM,'多重曝光 · 张数');addChips(pM,['2 张','3 张','4 张','5 张'],()=>Math.min(3,Math.max(0,(S.dxn||2)-2)),i=>{S.dxn=i+2;save();typeof dxUI==='function'&&dxUI()});
 head(pM,'多重曝光 · 混合方式');addChips(pM,DXM.map(x=>x[1]),()=>S.dxm|0,i=>{S.dxm=i;save()});
-note(pM,'在特效条里打开「多重曝光」，张数在上面选（2～5 张）。每拍一张都会半透明留在取景框上，取景框下方有透明度滑块，拍满张数后自动合成保存，中途按「✕ 重拍」从头来。混合方式拍到一半改也会立刻生效。叠加：越叠越亮，最像胶片；平均：各占一份；变亮 / 变暗：每处保留更亮 / 更暗的那张。水印只会出现一次。');
+note(pM,'在特效条里打开「多重曝光」，张数在上面选（2～5 张）。每拍一张都会半透明留在取景框上，取景框下方有透明度滑块，拍满张数后自动合成保存；没拍满也可以按「保存」直接存下已经拍的；中途按「✕ 重拍」从头来。混合方式拍到一半改也会立刻生效。叠加：越叠越亮，最像胶片；平均：各占一份；变亮 / 变暗：每处保留更亮 / 更暗的那张。水印只会出现一次。');
 head(pM,'取景辅助');addToggle(pM,'九宫格',S,'grid',()=>updGrid());
 head(pM,'开机');addToggle(pM,'打开页面自动开机',S,'autoOn');
 note(pM,'允许过一次相机后，之后打开页面会自动开机，不再停在 POWER。如果 Safari 仍然每次都问，请在「设置 → App → Safari → 相机」或网页地址栏「ᴀA → 网站设置 → 相机」里改成「允许」。');
@@ -1154,7 +1155,7 @@ const MANUAL=`
 
 <section><h3>滤镜 & 特效</h3>
 <svg viewBox="0 0 220 70" class="mdg"><rect x="70" y="8" width="80" height="50" rx="6" class="o"/><rect x="76" y="14" width="68" height="38" rx="3" class="v"/><text x="110" y="37" class="t">DV</text><path d="M60 33h-40M28 27l-8 6 8 6M160 33h40M192 27l8 6-8 6" class="a"/><text x="110" y="68" class="t">左右滑 = 换滤镜　点 = 列表</text></svg>
-<ul class="mls"><li>22+ 种滤镜：VHS、夜视、CRT、胶片、富士、徕卡、Portra、HP5、拍立得…</li><li>多重曝光：特效条第一个「多重曝光」→ 每拍一张都留下残影，取景框下方有透明度滑块 → 拍满张数自动合成保存；张数（2～5）和混合方式在 MENU → 相机 → 多重曝光（✕ 重拍可重来）</li><li>特效（红字 FX 圆键）：鱼眼、挤压、左右/上下对称、四宫格、九宫格、漩涡、万花筒、光隧道、拉伸、马赛克</li></ul></section>
+<ul class="mls"><li>22+ 种滤镜：VHS、夜视、CRT、胶片、富士、徕卡、Portra、HP5、拍立得…</li><li>多重曝光：特效条第一个「多重曝光」→ 每拍一张都留下残影，取景框下方有透明度滑块 → 拍满张数自动合成保存，没拍满也能按「保存」提前存；张数（2～5）和混合方式在 MENU → 相机 → 多重曝光（✕ 重拍可重来）</li><li>特效（红字 FX 圆键）：鱼眼、挤压、左右/上下对称、四宫格、九宫格、漩涡、万花筒、光隧道、拉伸、马赛克</li></ul></section>
 
 <section><h3>菜单各页</h3><ul class="mls">
 <li><b>画质</b>：分辨率、画幅、拉伸、清晰度</li><li><b>色彩</b>：白平衡、饱和度等</li>
@@ -1183,7 +1184,7 @@ const MANUAL=`
 <li>显示不对时：MENU → ⟳ 刷新</li><li>相机权限：Safari「网站设置 → 相机 → 允许」后自动开机</li><li>联网打开过一次后可离线使用（需要仓库里的 sw.js）</li><li class="megg"><i>寻找一个十字架在菜单的角落</i></li></ul></section>
 
 <section><h3>更新记录</h3><ul class="mls">
-<li>11/6：前置恢复广角 / 主摄切换键（后置仍用变焦键自动切换）；更新后打开会在取景框上方提示「已更新」</li><li>11/5：修复前置按缩小键没法到广角</li><li>11/3：去掉广角 / 主摄切换键，打开默认主摄 1×，用变焦键自动切换镜头（0.5× 超广角）</li><li>10/31：编辑里新增「文字」（16 种字体，含中文打印机字体、哥特、宋体）；相册新增「拼图」（横拼 / 竖拼 / 四、六、八、九宫格）</li><li>10/29：修复叠图 / 私密相册选择照片时缩略图挤成一条条；FX 键按下不再发光</li><li>10/29：多重曝光，最多 5 张（MENU → 相机里选张数）；FX 键改成红字圆形实体键；修复编辑里叠图选第二张照片时闪退 / 照片挤在一起</li><li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
+<li>11/7：多重曝光没拍满也能按「保存」提前保存</li><li>11/6：前置恢复广角 / 主摄切换键（后置仍用变焦键自动切换）；更新后打开会在取景框上方提示「已更新」</li><li>11/5：修复前置按缩小键没法到广角</li><li>11/3：去掉广角 / 主摄切换键，打开默认主摄 1×，用变焦键自动切换镜头（0.5× 超广角）</li><li>10/31：编辑里新增「文字」（16 种字体，含中文打印机字体、哥特、宋体）；相册新增「拼图」（横拼 / 竖拼 / 四、六、八、九宫格）</li><li>10/29：修复叠图 / 私密相册选择照片时缩略图挤成一条条；FX 键按下不再发光</li><li>10/29：多重曝光，最多 5 张（MENU → 相机里选张数）；FX 键改成红字圆形实体键；修复编辑里叠图选第二张照片时闪退 / 照片挤在一起</li><li>10/28：双重曝光（相机里拍两次 / 编辑里叠图）；特效按钮重新设计</li><li>10/28：修复一个特殊模式在横屏时比例错乱；那个模式的信息栏换了新样式</li><li>10/27：水印电量改成图标；照片里不再出现变焦条和 EV 提示（只在取景框显示）；信息栏滤镜名改英文；横竖屏默认改回手动按钮（不再每次询问权限）；相册关闭后释放内存，退出相册不再卡顿</li><li>10/26：说明书；拍立得滤镜 / 相框；布局与尺寸（拖动编辑）；星芒；镜头特效；快门旋钮；横屏双手布局；传输；离线；图标</li></ul></section>`;
 function openManual(){cam.classList.remove('menu');let m=document.getElementById('man');
   if(!m){m=document.createElement('div');m.id='man';m.innerHTML='<div class="manh"><b>使用说明</b><button class="btn xclose" id="manx">✕</button></div><div class="manb"></div>';document.body.append(m);
     m.querySelector('#manx').onclick=()=>m.style.display='none';
@@ -1360,8 +1361,8 @@ const FXI=['<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M6.
  FXN.forEach((n,i)=>{const b=document.createElement('button');b.className='tile';b.dataset.i=i;b.innerHTML='<span class="sw xi">'+FXI[i]+'</span><span class="nm">'+n+'</span>';b.onclick=()=>{S.fx=i;save();syncFX()};xs.append(b)});
 }
 function syncFX(){$('#xstrip').querySelectorAll('[data-i]').forEach(b=>b.classList.toggle('sel',+b.dataset.i===(S.fx||0)));const dt=$('#xstrip .dxt');dt&&dt.classList.toggle('sel',!!S.dx);$('#fxb').classList.toggle('act',!!S.fx||!!S.dx||cam.classList.contains('xpick'))}
-function dxUI(){let o=document.getElementById('dxo');if(!o){o=document.createElement('div');o.id='dxo';o.innerHTML='<button class="btn" id="dxr">✕ 重拍</button><span>透明度</span><input type="range" id="dxa" min=".15" max=".85" step=".01"><i id="dxv"></i>';$('.lcd').append(o);
-  o.querySelector('#dxr').onclick=()=>{DX.first=null;DX.n=0;dxUI()};o.querySelector('#dxa').oninput=e=>{S.dxa=+e.target.value;o.querySelector('#dxv').textContent=Math.round(S.dxa*100)+'%';save()}}
+function dxUI(){let o=document.getElementById('dxo');if(!o){o=document.createElement('div');o.id='dxo';o.innerHTML='<button class="btn" id="dxr">✕ 重拍</button><button class="btn" id="dxs">保存</button><span>透明度</span><input type="range" id="dxa" min=".15" max=".85" step=".01"><i id="dxv"></i>';$('.lcd').append(o);
+  o.querySelector('#dxr').onclick=()=>{DX.first=null;DX.n=0;dxUI()};o.querySelector('#dxs').onclick=()=>{if(DX.first&&on)DX.fin=1};o.querySelector('#dxa').oninput=e=>{S.dxa=+e.target.value;o.querySelector('#dxv').textContent=Math.round(S.dxa*100)+'%';save()}}
   o.querySelector('#dxa').value=S.dxa||.5;o.querySelector('#dxv').textContent=Math.round((S.dxa||.5)*100)+'%';o.style.display=DX.first?'flex':'none';
   let t=document.getElementById('dxt');if(!t){t=document.createElement('div');t.id='dxt';$('.lcd').append(t)}t.style.display=S.dx&&mode==='photo'?'':'none';{const N=Math.min(5,Math.max(2,S.dxn||2));t.textContent='多重曝光 · 第 '+Math.min(N,(DX.n|0)+1)+' / '+N+' 张'}}
 $('#fxb').onclick=()=>{cam.classList.remove('fpick');$('#fb').classList.remove('act');cam.classList.toggle('xpick');syncFX()};syncFX();setTimeout(dxUI,0);
@@ -1799,14 +1800,15 @@ function loop(ts){
      else{/* long exposure: lights paint trails that fade slowly */ax.globalAlpha=Math.min(.12,.09/tt);ax.fillStyle='#000';ax.fillRect(0,0,W,H);ax.globalAlpha=1;
        ax.globalCompositeOperation='lighten';ax.drawImage(gc,0,0,W,H);ax.globalCompositeOperation='source-over';ax.globalAlpha=.06;ax.drawImage(gc,0,0,W,H);ax.globalAlpha=1}
      oc.drawImage(A,0,0)}}
-  if(DX.first&&mode==='photo'){oc.save();oc.globalAlpha=S.dxa||.5;oc.globalCompositeOperation=(DXM[S.dxm|0]||DXM[0])[0];oc.drawImage(DX.first,0,0,W,H);oc.restore()}/* ghost of shot #1 (watermark is drawn after, only once) */
-  if(shotReq&&S.dx&&mode==='photo'&&(DX.n|0)+1<Math.min(5,Math.max(2,S.dxn||2))){shotReq=0;flashFx=0;shotFD=2;/* multiple exposure: keep the merged frame so far (no watermark), don't save yet */
+  if(DX.fin){DX.fin=0;if(DX.first&&mode==='photo'){oc.drawImage(DX.first,0,0,W,H);shotReq=1;DX.save=1}}/* 保存: keep only what's been shot so far */
+  else if(DX.first&&mode==='photo'){oc.save();oc.globalAlpha=S.dxa||.5;oc.globalCompositeOperation=(DXM[S.dxm|0]||DXM[0])[0];oc.drawImage(DX.first,0,0,W,H);oc.restore()}/* ghost of shot #1 (watermark is drawn after, only once) */
+  if(shotReq&&!DX.save&&S.dx&&mode==='photo'&&(DX.n|0)+1<Math.min(5,Math.max(2,S.dxn||2))){shotReq=0;flashFx=0;shotFD=2;/* multiple exposure: keep the merged frame so far (no watermark), don't save yet */
     const c=document.createElement('canvas');c.width=out.width;c.height=out.height;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(out,0,0);DX.first=c;DX.n=(DX.n|0)+1;dxUI();
     if(torchOn){torchOn=false;try{track.applyConstraints({advanced:[{torch:false}]}).catch(()=>{})}catch(e){}}}
   ov(T);
   if(S.grid){const g=$('#grid'),bw=out.clientWidth,bh=out.clientHeight,k=Math.min(bw/W,bh/H),iw=W*k,ih=H*k;
     g.style.left=((bw-iw)/2+out.offsetLeft)+'px';g.style.top=((bh-ih)/2+out.offsetTop)+'px';g.style.width=iw+'px';g.style.height=ih+'px'}
-  if(shotReq){shotReq=0;flashFx=0;shotFD=2;const wasDX=!!DX.first;
+  if(shotReq){shotReq=0;flashFx=0;shotFD=2;DX.save=0;const wasDX=!!DX.first;
     out.toBlob(b=>{if(b)addItem('img',b);
       if(torchOn){torchOn=false;try{track.applyConstraints({advanced:[{torch:false}]}).catch(()=>{})}catch(e){}}},'image/jpeg',.92);if(wasDX){DX.first=null;DX.n=0;dxUI()}}
 }
@@ -2669,7 +2671,7 @@ $('#bcl').onclick=()=>{const L=[...selSet].map(id=>items.find(x=>x.id===id)).fil
  ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
  document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false})}
 /* "已更新" note above the viewfinder, once after each new version (not on first install) */
-const APPV='2026-11-06';
+const APPV='2026-11-07';
 try{const pv=localStorage.getItem('dvV'),old=pv||localStorage.getItem('dvS');localStorage.setItem('dvV',APPV);
   if(old&&pv!==APPV){const n=$('#updn');n.textContent='已更新';setTimeout(()=>n.classList.add('on'),400);const off=()=>n.classList.remove('on');setTimeout(off,3700);n.onclick=off}}catch(e){}
 /* offline: register service worker (sw.js next to index.html) */
